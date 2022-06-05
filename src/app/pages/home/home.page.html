@@ -1,0 +1,33 @@
+<app-header  [titulo]="titulo"></app-header>
+
+<ion-content color="medium" fullscreen="fullscreen" padding="padding">
+  
+    <ion-list lines="none" >
+        <ng-container *ngFor="let m of menu; let i = index;" >
+            <ion-item *ngIf="tienePermiso(m)" (click)="navegar(m,i)">
+                <span *ngIf="m.Icon.length > 0"><i slot="start" [class]="m.Icon"></i></span>
+                <span *ngIf="m.Icon.length == 0"><img [src]="m.Img"></span>
+                <ion-label>{{ m.Name }}</ion-label>
+            </ion-item>
+        </ng-container>
+    </ion-list>
+
+</ion-content>
+
+<ion-footer no-shadow no-border>
+        <ion-buttons>
+            <ion-button (click)="logOut()" *ngIf="!submenu" class="derecha">
+                <!-- <ion-icon  mode="ios" name="log-out"></ion-icon> -->
+                <span><ion-img src="../../assets/img/Cerrar_sesion.png"></ion-img></span>
+            </ion-button>
+            <ion-button class="izquierda" (click)="navegarPadre()" *ngIf="submenu && navPadre">
+                <!-- <ion-icon  name="arrow-round-back"></ion-icon> -->
+                <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+            </ion-button>
+            <ion-button class="izquierda" (click)="navegarHijo()" *ngIf="submenu && navHijo">
+                <!-- <ion-icon name="arrow-round-back"></ion-icon> -->
+                <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+            </ion-button>
+        </ion-buttons>
+        <img src="../../../assets/img/logo-ecolec.png">
+</ion-footer>

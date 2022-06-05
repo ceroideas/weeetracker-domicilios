@@ -1,0 +1,100 @@
+<app-header [titulo]="titulo"></app-header>
+
+<ion-content padding color="medium"  fullscreen="fullscreen">
+
+  <ion-grid *ngIf="!verDetalle">
+    <form [formGroup]="myForm" #formulario="ngForm" novalidate>
+      <ion-row>
+
+        <ion-col size="12" *ngIf="usuario.centros">
+          <ion-item lines="none">
+            <ion-label position="floating">Centro:</ion-label>
+            <ion-select (ionChange)="obtenerCentro($event)" cancelText="Cancelar" interface="action-sheet"
+              formControlName="centro" name="centro" placeholder="Listado de centros del usuario">
+              <ion-select-option *ngFor="let centro of usuario.centros" [value]="centro.PidDireccionTercero">
+                {{ centro.Nombre }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <p class="error" ion-text *ngIf="myForm.get('centro').hasError('required') && myForm.get('centro').touched;">
+          {{ 'FORMULARIO.REQUERIDO' | translate }}</p>
+
+      </ion-row>
+    </form>
+    <ion-row *ngIf="visualizarTabla">
+      <ion-col size="12">
+        <ion-item lines="none">
+          <ion-label position="floating">Total:</ion-label>
+          <ion-input type="number" disabled>{{ totalStock }}</ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col class="fila" size="12">
+        <ion-grid class="tabla">
+          <ion-row class="cabecera">
+            <ion-col>
+              Residuo
+            </ion-col>
+            <ion-col text-right>
+              Cantidad
+            </ion-col>
+          </ion-row>
+          <ion-row class="filas" [ngClass]="{'marcada': i == detalleStock}"
+            *ngFor="let item of stock.listaStock;let i = index;" (click)="detalle(i)">
+            <ion-col>
+              {{ item.nombre }}
+            </ion-col>
+            <ion-col text-right>
+              {{ item.cantidad }}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+      <ion-col size="12" text-center>
+        <ion-button class="boton" [disabled]="!detalleStockBtn" (click)="verDetalleEtiqueta()">Ver detalle</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="verDetalle">
+    <ion-row>
+      <ion-col size="12">
+        <ion-item lines="none">
+          <ion-label position="floating">Total {{residuo.nombre}}:</ion-label>
+          <ion-input type="number" disabled>{{ residuo.cantidad }}</ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col class="fila" size="12">
+        <ion-grid class="tabla">
+          <ion-row class="cabecera">
+            <ion-col>
+              Etiqueta
+            </ion-col>
+          </ion-row>
+          <!-- Completar con datos reales -->
+          <ion-row class="filas" [ngClass]="{'marcada': i == listaEtiqueta}"
+            *ngFor="let item of residuos; let i = index;" (click)="detalleEtiqueta(i)">
+            <ion-col>
+              {{ item.pidRaee }}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+      <ion-col size="12" text-center>
+        <ion-button class="boton" [disabled]="!detalleEtiquetakBtn" (click)="verEtiqueta()">Ver detalle</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+
+<ion-footer no-border>
+    <ion-buttons>
+      <ion-button class="izquierda" *ngIf="!verDetalle" style="padding-left: 15px;" (click)="atras()">
+        <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+      </ion-button>
+      <ion-button class="izquierda" *ngIf="verDetalle" style="padding-left: 15px;" (click)="verDetalle = false">
+        <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+      </ion-button>
+    </ion-buttons>
+    <img src="../../../assets/img/logo-ecolec.png">
+</ion-footer>

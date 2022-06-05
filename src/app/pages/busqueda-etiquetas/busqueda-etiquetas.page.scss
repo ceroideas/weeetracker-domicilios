@@ -1,0 +1,50 @@
+form ion-buttons{
+    height: 100%;
+    position:relative;
+    margin-left: 10%;
+}
+form ion-buttons ion-button{
+    position: relative;
+    bottom: -23%;
+    font-size: 5vw;
+    height: 5vh;
+}
+
+ion-icon{
+    font-size: 10vw !important;
+}
+
+.buscar ion-button{
+    width: 30% !important;
+    height: 5vh;
+    font-size: 4vw;
+}
+
+.buscar{
+    margin-top: 15px;
+}
+
+.buscar ion-col{
+    text-align: center !important;
+}
+.buscar ion-button{
+    font-weight: bold;
+}
+.fila{
+    margin-top: 5% !important;
+}
+.fila ion-label{
+    margin-bottom: 5% !important;
+}
+.marcada{
+    background: grey !important;
+}
+.boton{
+    min-width: 50%;
+    max-width: 50%;
+    font-size: 4vw !important;
+    min-height: 6vh;
+}
+.filas{
+    padding: 2%;
+}

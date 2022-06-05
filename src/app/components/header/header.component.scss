@@ -1,0 +1,35 @@
+img{
+    width: 70%;
+    margin: 10px auto 10px auto;
+    max-width: 450px;
+}
+ion-title{
+    font-size: 3vw;
+    color: white;
+}
+.ios.title-ios.hydrated{
+    position: relative;
+    padding: 0;
+}
+ion-header{
+    overflow: hidden;
+    z-index: 100;
+}
+ion-header{
+    padding: 5% 0 10px 0;
+    text-align: center;
+}
+.ios.header-ios.hydrated {
+    padding: 8% 0 0px 0;
+}
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (-webkit-min-device-pixel-ratio: 1)  {
+    img{
+        width: 50%;
+    }
+    .ios.header-ios.hydrated {
+        padding: 4% 0 0px 0;
+    }
+}

@@ -1,0 +1,87 @@
+<app-header titulo="Consulta de solicitudes"></app-header>
+
+<ion-content padding color="medium"  fullscreen="fullscreen">
+
+  <form #formulario="ngForm" >
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-label position="floating">Solicitud</ion-label>
+          <ion-item  lines="none" readonly>{{ solicitud.cod }}</ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label position="floating">Albarán</ion-label>
+          <ion-item  lines="none" readonly>{{ solicitud.albaranOrigen }}</ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label position="floating">Fecha Solicitud:</ion-label>
+          <ion-item  lines="none" readonly>{{ solicitud.fechaSolicitud }}</ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label position="floating">Estado</ion-label>
+          <ion-item  lines="none" readonly>{{ estado }}</ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label position="floating">Fecha Anulacion:</ion-label>
+          <ion-item  lines="none" readonly>{{ solicitud.fechaAnulacion }}</ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label position="floating">Fecha Recogida</ion-label>
+          <ion-item  lines="none" readonly>{{ solicitud.fechaRecogida }}</ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <ion-label position="floating">Operador logistico</ion-label>
+          <ion-item  lines="none" readonly>{{ solicitud.nombreTerceroAsignado }}</ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-item  lines="none" readonly>{{ solicitud.descripcion }}</ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <ion-label position="floating">Observaciónes</ion-label>
+          <ion-item   lines="none" readonly>{{ solicitud.observaciones }}</ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-grid class="tabla">
+            <ion-row class="cabecera">
+              <ion-col>
+                Residuo
+              </ion-col>
+              <ion-col>
+                Contenedor
+              </ion-col>
+              <ion-col text-right>
+                Cantidad
+              </ion-col>
+            </ion-row>
+            <ion-row *ngFor="let item of solicitud.linea">
+              <ion-col>
+                {{ item.resEspeNombre }}
+              </ion-col>
+              <ion-col>
+                {{ item.tipoContNombre }}
+              </ion-col>
+              <ion-col text-right>
+                {{ item.uni }}
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </form>
+
+</ion-content>
+
+<ion-footer no-border>
+    <ion-buttons>
+      <ion-button class="izquierda" style="padding-left: 15px;" (click)="atras()">
+        <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+      </ion-button>
+    </ion-buttons>
+    <img src="../../../assets/img/logo-ecolec.png">
+</ion-footer>

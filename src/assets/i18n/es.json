@@ -1,0 +1,61 @@
+{
+    "IDENTIFICACION":{
+        "FORMATONOOK" : "Formato no válido",
+        "EXISTEETIQUETA" : "Esta etiqueta ya ha sido utilizada con anterioridad. Utilice otra etiqueta."
+    },
+
+    "LOGIN" : {
+        "ERROR" : "Usuario / Contraseña no válida"
+    },
+
+    "ENTRADASALIDA":{
+        "NOEXISTEETIQUETA" : "Esta etiqueta no puede registrarse en la salida, ya que no tiene una entrada registrada",
+        "ERRORENTRADA" : "No se ha podido registrar la entrada de esta etiqueta",
+        "ERRORSALIDA" : "No se ha podido registrar la salida de esta etiqueta",
+        "ERRORALTA" : "No se ha podido realizar el alta",
+        "ERRORTIENEENTRADA" : "Esta etiqueta ya tiene una entrada registrada",
+        "ERRORNOTIENEENTRADA" : " No se puede realizar una salida si la etiqueta no ha entrado al mismo centro",
+        "ERRORTIENESALIDA" : "Esta etiqueta ya ha sido registrada en otra salida",
+        "ENTRADAOK" : "Entrada registrada correctamente. ¿Desea registrar otra entrada?",
+        "SALIDAOK" : "Salida registrada correctamente. ¿Desea registrar otra salida?"
+    },
+
+    "SPINNER" : {
+        "BUSCANDO" : "Buscando ...",
+        "GUARDANDO" : "Guardando ...",
+        "CARGANDO" : "Cargando ...",
+        "CONSULTANDO" : "Consultando"
+     },
+
+    "BUSQUEDAETIQUETAS" : {
+        "NOEXISTEETIQUETA" : "La etiqueta no existe",
+        "NOEXISTEALBARAN" : "El albaran no existe"
+    },
+
+    "FORMULARIO":{
+        "REQUERIDO" : "* Campo requerido",
+        "LONGITUD" : "* Formato no valido, el tamaño tiene que ser de {{ value }} caracteres numericos y comenzar por 18410708",
+        "LONGITUDMAX" : "* Longitud maxima de {{ value }} caracteres"
+    },
+
+    "ALTASOLICITUD":{
+        "-3" : "Si falta alguno de los datos obligatorios.",
+        "-4" : "No se ha podido crear la solicitud de recogida. El número unidades esta fuera de rango.",
+        "-5" : "Se produce cualquier otro error.",
+        "-6" : "Existe otra solicitud con la misma fecha, origen y fracción.",
+        "-7" : "Los datos de la línea no están activos."
+    },
+
+    "ALERTA":{
+        "CABECERA" : "WEEE TRACKER"
+    },
+    
+    "VALIDARSOLICITUD" :{
+        "OK" : "Solicitud {{ value }} marcada como atendida"
+    },
+
+    "ERROR":{
+        "ERROR01" : "Error al generar la solicitud"
+    }
+
+}

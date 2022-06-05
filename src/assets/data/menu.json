@@ -1,0 +1,117 @@
+[
+    {
+        "Icon": "",
+        "Img":"../../assets/img/Gestion_de_residuos.png",
+        "Name": "Gestión de residuos",
+        "SidPerfil": [
+            "D",
+            "E",
+            "P"
+        ],
+        "Children": [
+            {
+                "Icon": "",
+                "Img": "../../assets/img/Identificar_domicilio.png",
+                "Name": "Identificar residuos en domicilio",
+                "SidPerfil": [
+                    "D"
+                ],
+                "RedirecTo": "/identificacion-residuos"
+            },
+            {
+                "Icon": "",
+                "Img": "../../assets/img/Identificar_establecimiento.png",
+                "Name": "Identificar residuos en establecimientos",
+                "SidPerfil": [
+                    "E"
+                ],
+                "RedirecTo": "/identificacion-residuos"
+            },
+            {
+                "Icon": "",
+                "Img": "../../assets/img/Entradas_salidas.png",
+                "Name": "Registrar entradas / salidas de residuos en plataformas",
+                "SidPerfil": [
+                    "P"
+                ],
+                "Children": [
+                    {
+                        "Icon": "",
+                        "Img": "../../assets/img/Plataforma_Entrada.png",
+                        "Name": "Entrada en plataforma",
+                        "SidPerfil": [
+                            "P"
+                        ],
+                        "RedirecTo": "/entradas-salidas"
+                    },
+                    {
+                        "Icon": "",
+                        "Img": "../../assets/img/Plataforma_Salida.png",
+                        "Name": "Salida de plataforma",
+                        "SidPerfil": [
+                            "P"
+                        ],
+                        "RedirecTo": "entradas-salidas"
+                    }
+                ]
+            },
+            {
+                "Icon": "",
+                "Img": "../../assets/img/Busqueda.png",
+                "Name": "Búsqueda de residuos",
+                "SidPerfil": [
+                    "D",
+                    "P",
+                    "E"
+                ],
+                "RedirecTo": "/busqueda-etiquetas"
+            },
+            {
+                "Icon": "",
+                "Img": "../../assets/img/Stock.png",
+                "Name": "Consulta de Stock",
+                "SidPerfil": [
+                    "P"
+                ],
+                "RedirecTo": "/consulta-stock"
+            }
+        ]
+    },
+    {
+        "Icon": "",
+        "Img": "../../assets/img/Solicitud_de_recogida.png",
+        "Name": "Solicitudes de recogida",
+        "SidPerfil": [
+            "S"
+        ],
+        "Children": [
+            {
+                "Icon": "",
+                "Img":"../../assets/img/Nueva_solicitud.png",
+                "Name": "Nueva Solicitud",
+                "SidPerfil": [
+                    "S"
+                ],
+                "RedirecTo": "/nueva-solicitud"
+            },
+            {
+                "Icon": "",
+                "Img":"../../assets/img/Consulta-solicitud.png",
+                "Name": "Consulta del estado de solicitudes",
+                "SidPerfil": [
+                    "S"
+                ],
+                "RedirecTo": "/consulta-solicitud"
+            },
+            {
+                "Icon": "",
+                "Img":"../../assets/img/Validar-solicitud.png",
+                "Name": "Validación de recogidas",
+                "SidPerfil": [
+                    "S"
+                ],
+                "RedirecTo": "/consulta-solicitud"
+            }
+        ]
+    }
+]

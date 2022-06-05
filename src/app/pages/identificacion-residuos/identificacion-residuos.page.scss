@@ -1,0 +1,45 @@
+.firma ion-button {
+    width: 100%;
+    height: 25vh;
+    border: 1px solid #0D553E;
+    -webkit-box-shadow: 11px 10px 5px 0px rgba(13,85,62,0.75);
+    -moz-box-shadow: 11px 10px 5px 0px rgba(13,85,62,0.75);
+    box-shadow: 11px 10px 5px 0px rgba(13,85,62,0.75);
+    margin-top: 12%;
+}
+
+.firma .item-inner{
+    border: none !important;
+}
+ion-buttons{
+    width: 100%;
+}
+
+ion-icon{
+    font-size: 10vw !important;
+}
+
+ion-select-option{
+    padding: 10px 0 !important;
+}
+
+.firma ion-button{
+    background: white;
+}
+
+/*Botones papelera y lector */
+form ion-buttons{
+    height: 100%;
+    position:relative;
+    margin-left: 10%;
+}
+form ion-buttons ion-button{
+    position: relative;
+    bottom: -23%;
+    font-size: 5vw;
+    height: 5vh;
+}
+.listImg ion-button{
+    bottom: 0 !important;
+    color: white;
+}

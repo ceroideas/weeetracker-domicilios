@@ -1,0 +1,54 @@
+<app-header titulo="Detalle de etiqueta"></app-header>
+
+
+<ion-content padding color="medium"  fullscreen="fullscreen">
+
+  <ion-grid>
+    <form>
+      <ion-row>
+        <ion-col size="12">
+          <ion-label position="floating">Etiqueta:</ion-label>
+          <ion-item lines="none"  readonly>{{ residuo.pidRaee }}</ion-item>
+        </ion-col>
+        <!-- <ion-col size="12">
+            <ion-label position="floating">Albaran:</ion-label>
+            <ion-item readonly>ALB/01-2019</ion-item>
+        </ion-col> -->
+        <ion-col size="12">
+            <ion-label position="floating">Residuo:</ion-label>
+            <ion-item lines="none" readonly>{{ res }}</ion-item>
+        </ion-col>
+        <ion-col size="12">
+            <ion-label position="floating">Marca:</ion-label>
+            <ion-item lines="none" readonly>{{ marca }}</ion-item>
+        </ion-col>
+        <ion-col size="12">
+            <ion-label position="floating">Num Serie:</ion-label>
+            <ion-item lines="none" readonly>{{ residuo.serie }}</ion-item>
+        </ion-col>
+        <ion-col size="12">
+            <ion-label position="floating">Posible destino:</ion-label>
+            <ion-item lines="none" readonly>{{ destino }}</ion-item>
+        </ion-col>
+        <ion-col class="canibalizado" size="12">
+            <ion-label position="floating">Canibalizado:</ion-label>
+            <ion-toggle color="dark" name="canibalizado" [(ngModel)]="residuo.canibalizado" disabled></ion-toggle>
+        </ion-col>
+        <ion-col size="12">
+            <ion-label position="floating">Estado:</ion-label>
+            <ion-item lines="none" readonly>{{ residuo.nombre }}</ion-item>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-grid>
+
+</ion-content>
+
+<ion-footer no-border>
+      <ion-buttons >
+        <ion-button class="izquierda" style="padding-left: 15px;" (click)="atras()">
+          <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+        </ion-button>
+      </ion-buttons>
+      <img src="../../../assets/img/logo-ecolec.png">
+  </ion-footer>

@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  message : '',
+  apiUrl : 'https://api.weee-tracker.com/'
 };
