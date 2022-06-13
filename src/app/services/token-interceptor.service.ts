@@ -29,7 +29,7 @@ export class TokenInterceptorService implements HttpInterceptor {
       .pipe(
         switchMap(token => {
           if (token) {
-            request = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + token) });
+            request = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + token.split('.')[0]) });
           }
 
           if (!request.headers.has('Content-Type')) {

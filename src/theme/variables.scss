@@ -109,10 +109,11 @@ ion-footer{
 }
 
 ion-footer img{
-    width: 30%;
+    width: 33%;
     padding-bottom: 5px;
     position: relative;
-    bottom: 32px;
+    bottom: 56px;
+    filter: invert(100%);
 }
 
 .ios ion-footer ion-buttons ion-icon{
@@ -277,11 +278,11 @@ ion-item{
     --background: transparent !important;
 }
 ion-footer .imgLogin {
-    width: 30%;
-    position: absolute;
-    left: 50%;
-   // top: -40px;
-    transform: translateX(-50%);
+    width: 33%;
+    padding-bottom: 5px;
+    position: relative;
+    bottom: -21px;
+    filter: invert(100%);
 }
 
 ion-label{

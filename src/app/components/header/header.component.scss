@@ -3,9 +3,12 @@ img{
     margin: 10px auto 10px auto;
     max-width: 450px;
 }
-ion-title{
+ion-label{
+    display: block;
     font-size: 3vw;
     color: white;
+    width: 80vw;
+    margin: auto;
 }
 .ios.title-ios.hydrated{
     position: relative;
@@ -14,6 +17,9 @@ ion-title{
 ion-header{
     overflow: hidden;
     z-index: 100;
+    .ion-text-wrap {
+        white-space: unset !important;
+    }
 }
 ion-header{
     padding: 5% 0 10px 0;

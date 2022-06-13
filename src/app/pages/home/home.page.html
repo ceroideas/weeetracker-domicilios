@@ -7,7 +7,7 @@
             <ion-item *ngIf="tienePermiso(m)" (click)="navegar(m,i)">
                 <span *ngIf="m.Icon.length > 0"><i slot="start" [class]="m.Icon"></i></span>
                 <span *ngIf="m.Icon.length == 0"><img [src]="m.Img"></span>
-                <ion-label>{{ m.Name }}</ion-label>
+                <ion-label>{{ m.Login }}</ion-label>
             </ion-item>
         </ng-container>
     </ion-list>

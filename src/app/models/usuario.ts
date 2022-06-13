@@ -15,6 +15,8 @@ export class Usuario{
 
     tercero:Tercero;
 
+    responsabilidades:any;
+
     tipoTercero:number;
 
     estado:number;
@@ -26,4 +28,6 @@ export class Usuario{
     centros:Centro[];
 
     residuos:ResiduoEspecifico[];    
+
+    direcciones:any;
 }
