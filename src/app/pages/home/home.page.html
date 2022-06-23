@@ -7,10 +7,64 @@
             <ion-item *ngIf="tienePermiso(m)" (click)="navegar(m,i)">
                 <span *ngIf="m.Icon.length > 0"><i slot="start" [class]="m.Icon"></i></span>
                 <span *ngIf="m.Icon.length == 0"><img [src]="m.Img"></span>
-                <ion-label>{{ m.Login }}</ion-label>
+                <!-- <ion-label>{{ m.Login }}</ion-label> -->
             </ion-item>
         </ng-container>
     </ion-list>
+
+    <ion-row *ngIf="usuario">
+        <ion-col size="6"
+        *ngIf="(usuario?.responsabilidades | checkResp:'CSR') ||
+            (usuario?.responsabilidades | checkResp:'SSR')"
+        >
+            <ion-button class="ecobtn"
+            size="large" style="font-size: 14px;" expand="block">NUEVA RECOGIDA</ion-button>
+        </ion-col>
+
+        <ion-col size="6"
+        *ngIf="(usuario?.responsabilidades | checkResp:'RED') ||
+            (usuario?.responsabilidades | checkResp:'REF')"
+        >
+            <ion-button class="ecobtn"
+            size="large" style="font-size: 14px;" expand="block">NUEVA RECEPCIÓN</ion-button>
+        </ion-col>
+
+        <ion-col size="6"
+        *ngIf="usuario?.responsabilidades | checkResp:'REX'"
+        >
+            <ion-button class="ecobtn"
+            size="large" style="font-size: 14px;" expand="block">NUEVA ENTREGA</ion-button>
+        </ion-col>
+
+        <ion-col size="6"
+        *ngIf="usuario?.responsabilidades | checkResp:'END'"
+        >
+            <ion-button class="ecobtn"
+            size="large" style="font-size: 14px;" expand="block">N. ENTREGA DIRECTA</ion-button>
+        </ion-col>
+
+        <ion-col size="6">
+            <ion-button class="ecobtn"
+            size="large" style="font-size: 14px;" expand="block">CONSULTAR STOCK</ion-button>
+        </ion-col>
+
+        <ion-col size="6">
+            <ion-button class="ecobtn"
+            size="large" style="font-size: 14px;" expand="block">PESAR RAEE</ion-button>
+        </ion-col>
+
+        <ion-col size="6"
+        *ngIf="(usuario?.responsabilidades | checkResp:'CSR') ||
+            (usuario?.responsabilidades | checkResp:'SSR')"
+        >
+            <ion-button class="ecobtn"
+            size="large" style="font-size: 14px;" expand="block">OPERATIVAS <br> REALIZADAS</ion-button>
+        </ion-col>
+
+        <ion-col size="6">
+            <ion-button class="ecobtn" size="large" style="font-size: 14px;" expand="block">REUTILIZAR RAEE</ion-button>
+        </ion-col>
+    </ion-row>
 
 </ion-content>
 

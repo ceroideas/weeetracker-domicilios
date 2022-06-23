@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Identificacion } from '../models/identificacion';
 
@@ -84,10 +84,25 @@ export class ConsultasService {
   validacionSolicitud(solicitud){
     return this.http.post(apiUrl + '/solicitud/validacion', solicitud);
   }
+
+  getConfigInformation(gestor, centro){
+    return this.http.get(apiUrl + '/users/config/'+gestor+'/'+centro);
+  }
   
   fechaActualSolicitud() {
     let fecha: Date = new Date();
     return fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear();
+  }
+
+
+  getXML() {
+    const headers = new HttpHeaders()
+        .set('Content-Type', 'text/xml') 
+        .append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS') 
+        .append('Access-Control-Allow-Origin', '*')
+        .append('Access-Control-Allow-Headers', "Access-Control-Allow-Headers, Access-Control-Allow-Origin, Access-Control-Request-Method");
+
+    return this.http.get('/assets/CONFIG.xml',{headers: headers, responseType: 'text'});
   }
 
 }

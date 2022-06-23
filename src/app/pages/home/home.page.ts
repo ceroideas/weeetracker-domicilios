@@ -37,7 +37,7 @@ export class HomePage implements OnInit {
   async cargarDatos() {
     this.usuario = await this.usuarioService.cargarToken();
     this.titulo = this.usuario.tercero.Nombre;
-    console.log(this.usuario);
+    console.log(this.usuario.responsabilidades);
     this.menuService.getMenuOpts().subscribe(res => {
       this.menu = res;
       this.menuAux = this.menu;

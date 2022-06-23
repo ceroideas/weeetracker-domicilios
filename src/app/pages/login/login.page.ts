@@ -6,6 +6,7 @@ import { Usuario } from 'src/app/models/usuario';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from 'src/environments/environment';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { ConsultasService } from '../../services/consultas.service';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +25,7 @@ export class LoginPage implements OnInit {
   constructor(private usuarioService: UsuarioService,
     private translate: TranslateService,
     private navCtrl: NavController,
+    private consultas: ConsultasService,
     private inAppBrowser : InAppBrowser
   ) {
     if(environment.message){
@@ -43,7 +45,28 @@ export class LoginPage implements OnInit {
     this.nombreUsuario();
   }
 
+  terminal;
+  direccion;
+  nombre;
+
   ngOnInit() {
+
+    this.consultas.getXML().subscribe((data:any)=>{
+      let parser = new DOMParser();
+      let xmlDoc = parser.parseFromString(data,"text/xml");
+
+      console.log(xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue, xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue);
+
+      this.consultas.getConfigInformation(xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue, xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue)
+      .subscribe((data:any)=>{
+        this.terminal = xmlDoc.getElementsByTagName("PDA")[0].childNodes[0].nodeValue;
+        this.direccion = data.config._centro.direccion;
+        this.nombre = data.config._gestor.nombre;
+      })
+    })
+
+    // console.log(xmlDoc.getElementsByTagName("PDA")[0].childNodes[0].nodeValue);
+    
   }
 
   ionViewWillEnter() {

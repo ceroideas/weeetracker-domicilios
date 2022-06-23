@@ -2,6 +2,18 @@
 
 <ion-content color="medium" padding="padding" fullscreen="fullscreen">
     <ion-grid fixed="fixed">
+
+        <div *ngIf="terminal" style="line-height: 32px; padding: 0 20px;">
+            
+            <label style="color: #fff; font-size: 20px;">Terminal: {{terminal}} <br></label>
+
+            <label style="color: #fff; font-size: 20px;">Gestor: {{direccion}} <br></label>
+
+            <label style="color: #fff; font-size: 20px;">Centro: {{nombre}} <br></label>
+
+        </div>
+
+
         <form #formulario="ngForm">
             <ion-row>
 
