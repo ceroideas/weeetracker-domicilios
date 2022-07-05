@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from 'src/app/models/usuario';
 import { Centro } from 'src/app/models/centro';
-import { UsuarioService } from 'src/app/services/usuario.service';
 import { Residuo } from 'src/app/models/residuos';
+import { UsuarioService } from 'src/app/services/usuario.service';
 import { Location } from '@angular/common';
 import { AlertController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';

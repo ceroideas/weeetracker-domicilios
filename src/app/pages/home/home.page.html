@@ -17,7 +17,7 @@
         *ngIf="(usuario?.responsabilidades | checkResp:'CSR') ||
             (usuario?.responsabilidades | checkResp:'SSR')"
         >
-            <ion-button class="ecobtn"
+            <ion-button [routerLink]="['/nueva-recogida']" class="ecobtn"
             size="large" style="font-size: 14px;" expand="block">NUEVA RECOGIDA</ion-button>
         </ion-col>
 

@@ -45,11 +45,11 @@ export class HomePage implements OnInit {
   }
 
   tienePermiso(menu: Menu) {
-    for (let i = 0; i < this.usuario.perfiles.length; i++) {
+    /*for (let i = 0; i < this.usuario.perfiles.length; i++) {
       if (menu.SidPerfil.includes(this.usuario.perfiles[i].SidPerfil)) {
         return true;
       }
-    }
+    }*/
     return false;
     // return true;
   }

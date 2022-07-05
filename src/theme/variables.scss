@@ -316,6 +316,12 @@ ion-select{
 
 input {
     padding: 9px !important;
+    color: #000 !important;
+}
+
+.left-label {
+    margin: 11px 0;
+    display: block;
 }
 
 .keyboard-is-open ion-footer {
@@ -426,4 +432,37 @@ and (-webkit-device-pixel-ratio : 3) {
 .ecobtn {
     --background: #284e15 !important;
     height: 60px;
+}
+
+.ion-no-margin
+{
+    --margin-start: 0 !important;
+    --margin-end: 0 !important;
+    --margin-top: 0 !important;
+    --margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.mb-2 {
+    margin-bottom: 8px !important;
+}
+
+ion-modal.selectGestor {
+  --height: 50%;
+  --width: 95%;
+  --border-radius: 16px;
+  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+ion-modal.selectGestor::part(backdrop) {
+  background: rgba(209, 213, 219);
+  opacity: 1;
+}
+
+ion-modal.selectGestor ion-toolbar {
+  --background: #284e15;
+  --color: white;
 }

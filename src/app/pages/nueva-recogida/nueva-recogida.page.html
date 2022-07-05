@@ -1,0 +1,41 @@
+<app-header  [titulo]="titulo"></app-header>
+
+<ion-content color="medium" fullscreen="fullscreen" padding="padding">
+
+  <form [formGroup]="myForm" #formulario="ngForm" novalidate>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <ion-label>Fecha de recogida:</ion-label>
+          <ion-item lines="none" class="ion-no-padding" style="--inner-padding-end: 0 !important">
+            <ion-datetime style="width: 100%; max-width: 100%;"
+            presentation="date"
+            displayFormat="DD-MM-YYYY" formControlName="date"></ion-datetime>
+          </ion-item>
+        </ion-col>
+        <p class="error" ion-text *ngIf="myForm.get('date').hasError('required') && myForm.get('date').touched;">
+          {{ 'FORMULARIO.REQUERIDO' | translate }}</p>
+
+      </ion-row>
+
+    </ion-grid>
+  </form>
+
+</ion-content>
+
+<ion-footer no-shadow no-border>
+        <ion-buttons>
+            <!-- <ion-button (click)="logOut()" *ngIf="!submenu" class="derecha">
+                <span><ion-img src="../../assets/img/Cerrar_sesion.png"></ion-img></span>
+            </ion-button> -->
+            <ion-button class="derecha" (click)="adelante()">
+                <!-- <ion-icon name="arrow-round-back"></ion-icon> -->
+                <span><ion-img src="../../assets/img/Derecha.png"></ion-img></span>
+            </ion-button>
+            <ion-button class="izquierda" (click)="atras()">
+                <!-- <ion-icon  name="arrow-round-back"></ion-icon> -->
+                <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+            </ion-button>
+        </ion-buttons>
+        <img src="../../../assets/img/logo-ecolec.png">
+</ion-footer>

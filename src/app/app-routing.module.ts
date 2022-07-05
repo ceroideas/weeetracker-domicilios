@@ -13,6 +13,10 @@ const routes: Routes = [
   { path: 'identificacion-residuos', loadChildren: () => import('./pages/identificacion-residuos/identificacion-residuos.module').then(m => m.IdentificacionResiduosPageModule) },
   { path: 'detalle-etiqueta', loadChildren: () => import('./pages/detalle-etiqueta/detalle-etiqueta.module').then(m => m.DetalleEtiquetaPageModule) },
   { path: 'detalle-solicitud', loadChildren: () => import('./pages/detalle-solicitud/detalle-solicitud.module').then(m => m.DetalleSolicitudPageModule) },
+  {
+    path: 'nueva-recogida',
+    loadChildren: () => import('./pages/nueva-recogida/nueva-recogida.module').then( m => m.NuevaRecogidaPageModule)
+  },
 ];
 
 /*const routes: Routes = [

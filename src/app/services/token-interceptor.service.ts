@@ -29,7 +29,7 @@ export class TokenInterceptorService implements HttpInterceptor {
       .pipe(
         switchMap(token => {
           if (token) {
-            request = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + token.split('.')[0]) });
+            request = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + token) });
           }
 
           if (!request.headers.has('Content-Type')) {
@@ -39,6 +39,7 @@ export class TokenInterceptorService implements HttpInterceptor {
 
           return next.handle(request).pipe(
             map((event: HttpEvent<any>) => {
+              console.log(request);
               if (event instanceof HttpResponse) {
                 // do nothing for now
                 // console.log('event--->>>', event);
@@ -47,7 +48,7 @@ export class TokenInterceptorService implements HttpInterceptor {
             }),
             catchError((error: HttpErrorResponse) => {
               const status = error.status;
-              const reason = error && error.error.reason ? error.error.reason : '';
+              // const reason = error && error.error.reason ? error.error.reason : '';
               return throwError(error);
             })
           );

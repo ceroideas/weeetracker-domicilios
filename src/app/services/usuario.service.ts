@@ -35,14 +35,14 @@ export class UsuarioService {
     this.usuario.id = token.Id;
     this.usuario.estado = token.Estado;
     this.usuario.login = token.Login;
-    this.usuario.tipoTercero = token.TipoTercero;
+    // this.usuario.tipoTercero = token.TipoTercero;
     this.usuario.tercero = JSON.parse(token.Tercero);
     this.usuario.responsabilidades = JSON.parse(token.Resps);
     this.usuario.centros = JSON.parse(token.Centros);
     this.usuario.marcas = JSON.parse(token.Marcas);
-    this.usuario.perfiles = JSON.parse(token.Perfiles);
+    // this.usuario.perfiles = JSON.parse(token.Perfiles);
     this.usuario.residuos = JSON.parse(token.Residuos);
-    this.usuario.direcciones = JSON.parse(token.Direcciones).DireccionesTerceros;
+    // this.usuario.direcciones = JSON.parse(token.Direcciones).DireccionesTerceros;
     this.storage.set('usuario', this.usuario);
     this.storage.set('login', this.usuario.login);
   }

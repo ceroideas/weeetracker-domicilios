@@ -85,6 +85,18 @@ export class ConsultasService {
     return this.http.post(apiUrl + '/solicitud/validacion', solicitud);
   }
 
+  buscarCentro(data){
+    return this.http.post(apiUrl + '/solicitud/findCentros', data);
+  }
+  nuevoOrigen(data){
+    return this.http.post(apiUrl + '/solicitud/nuevoOrigen', data);
+  }
+
+  centroData(idCentro)
+  {
+    return this.http.get(apiUrl + '/solicitud/infoTercero/'+idCentro);
+  }
+
   getConfigInformation(gestor, centro){
     return this.http.get(apiUrl + '/users/config/'+gestor+'/'+centro);
   }
@@ -103,6 +115,21 @@ export class ConsultasService {
         .append('Access-Control-Allow-Headers', "Access-Control-Allow-Headers, Access-Control-Allow-Origin, Access-Control-Request-Method");
 
     return this.http.get('/assets/CONFIG.xml',{headers: headers, responseType: 'text'});
+  }
+
+  getPaises()
+  {
+    return this.http.get(apiUrl + '/solicitud/getPaises');
+  }
+
+  getProvincias(idPais)
+  {
+    return this.http.get(apiUrl + '/solicitud/getProvincias/'+idPais);
+  }
+
+  getMunicipios(idProd)
+  {
+    return this.http.get(apiUrl + '/solicitud/getMunicipios/'+idProd);
   }
 
 }
