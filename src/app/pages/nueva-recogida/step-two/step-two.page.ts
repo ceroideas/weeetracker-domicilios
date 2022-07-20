@@ -81,13 +81,26 @@ export class StepTwoPage implements OnInit {
 
     this.events.destroy('changeOrigin');
     this.events.subscribe('changeOrigin',(direccion)=>{
-      this.myForm.patchValue({
-        centro: direccion.nombre,
-        localidad: direccion.nombreMunicipio,
-        direccion: direccion.direccion,
-        provincia: direccion.nombreProvincia,
-        pais: direccion.nombrePais,
-      })
+
+      this.loadingCtrl.create({message: "Obteniendo ubicación de centro"}).then(l=>{
+          l.present();
+
+        this.consultaService.ubicacionCentro(
+          {pais:direccion.sidPais, provincia: direccion.sidProvincia, municipio:direccion.sidMunicipio}).subscribe((data1:any)=>{
+
+          this.myForm.patchValue({
+            centro: direccion.nombre,
+            localidad: data1['ubicacion']['_municipio'].nombre,
+            direccion: direccion.direccion,
+            provincia: data1['ubicacion']['_provincia'].nombre,
+            pais: data1['ubicacion']['_pais'].nombre,
+          });
+
+          l.dismiss();
+
+        });
+      });
+
     });
   }
 
@@ -113,14 +126,14 @@ export class StepTwoPage implements OnInit {
 
   buscar()
   {
-    if (!this.myForm.value.nombre || !this.myForm.value.nif) {
-      return this.alertCtrl.create({message:"Debe escribir parte del Nombre y el NIF para buscar", buttons: ['Ok']}).then(a=>{
+    if (!this.myForm.value.nombre && !this.myForm.value.nif) {
+      return this.alertCtrl.create({message:"Debe escribir parte del Nombre o del NIF para buscar", buttons: ['Ok']}).then(a=>{
         a.present();
       });
     }
     this.loadingCtrl.create({message:"Buscando centros..."}).then(l=>{
       l.present();
-      this.consultaService.buscarCentro({nombre:this.myForm.value.nombre, nif: this.myForm.value.nif}).subscribe((data:any)=>{
+      this.consultaService.buscarCentro({nombre:this.myForm.value.nombre, nif: this.myForm.value.nif, tercero: 1337}).subscribe((data:any)=>{
 
         l.dismiss();
 
@@ -156,6 +169,12 @@ export class StepTwoPage implements OnInit {
           });
         }
 
+      },err=>{
+        l.dismiss();
+
+        return this.alertCtrl.create({message:"Ha ocurrido un error, por favor intenta nuevamente", buttons: ['Ok']}).then(a=>{
+          a.present();
+        });
       })
     })
   }
@@ -184,7 +203,29 @@ export class StepTwoPage implements OnInit {
         this.gestor = data.info.centro;
         this.direcciones = data.info.direcciones;
 
-        this.myForm.patchValue({
+        this.loadingCtrl.create({message: "Obteniendo ubicación de centro"}).then(l=>{
+          l.present();
+
+          this.consultaService.ubicacionCentro(
+            {pais:this.direcciones[0].sidPais, provincia: this.direcciones[0].sidProvincia, municipio:this.direcciones[0].sidMunicipio}).subscribe((data1:any)=>{
+
+            this.myForm.patchValue({
+              nombre: centro.nombre,
+              nif: centro.nif,
+              nombre_comercial: centro.nombreComercial,
+              centro: this.direcciones[0].nombre,
+              localidad: data1['ubicacion']['_municipio'].nombre,
+              direccion: this.direcciones[0].direccion,
+              provincia: data1['ubicacion']['_provincia'].nombre,
+              pais: data1['ubicacion']['_pais'].nombre,
+            });
+
+            l.dismiss();
+
+          });
+
+        })
+        /*this.myForm.patchValue({
           nombre: centro.nombre,
           nif: centro.nif,
           nombre_comercial: centro.nombreComercial,
@@ -193,7 +234,9 @@ export class StepTwoPage implements OnInit {
           direccion: this.direcciones[0].direccion,
           provincia: this.direcciones[0].nombreProvincia,
           pais: this.direcciones[0].nombrePais,
-        })
+        })*/
+      },err=>{
+        l.dismiss();
       })
 
     })

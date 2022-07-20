@@ -96,9 +96,18 @@ export class ConsultasService {
   {
     return this.http.get(apiUrl + '/solicitud/infoTercero/'+idCentro);
   }
+  ubicacionCentro(data)
+  {
+    return this.http.post(apiUrl + '/solicitud/centroUbicacion',data);
+  }
 
   getConfigInformation(gestor, centro){
     return this.http.get(apiUrl + '/users/config/'+gestor+'/'+centro);
+  }
+
+  // solo si es un dispositivo zebra
+  listarUsuarios(centro){
+    return this.http.get(apiUrl + '/users/listar/'+centro);
   }
   
   fechaActualSolicitud() {
@@ -107,14 +116,14 @@ export class ConsultasService {
   }
 
 
-  getXML() {
+  getXML(path) {
     const headers = new HttpHeaders()
         .set('Content-Type', 'text/xml') 
         .append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS') 
         .append('Access-Control-Allow-Origin', '*')
         .append('Access-Control-Allow-Headers', "Access-Control-Allow-Headers, Access-Control-Allow-Origin, Access-Control-Request-Method");
 
-    return this.http.get('/assets/CONFIG.xml',{headers: headers, responseType: 'text'});
+    return this.http.get(path,{headers: headers, responseType: 'text'});
   }
 
   getPaises()

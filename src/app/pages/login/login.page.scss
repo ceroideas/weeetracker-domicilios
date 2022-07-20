@@ -14,7 +14,7 @@ ion-button {
 }
 
 ion-icon {
-    font-size: 10vw !important;
+    font-size: 40px !important;
     color: white;
 }
 
@@ -24,7 +24,7 @@ ion-footer{
 
 .izquierda {
     left: 10px;
-    top: 26px !important;
+    top: 6px !important;
    // transform: translateY(-50%);
 }
 ion-button{
@@ -38,7 +38,7 @@ and (-webkit-min-device-pixel-ratio: 1)  {
         top:50px !important;
     }
     ion-footer .imgLogin{
-        bottom: 20px;
+        bottom: -10px;
     }
     .izquierda{
         top: 5px !important;

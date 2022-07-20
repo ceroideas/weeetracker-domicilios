@@ -105,15 +105,16 @@ ion-footer ion-icon{
 
 ion-footer{
     max-height: 75px;
-    height: 100%;
+    height: 50px;
 }
 
 ion-footer img{
-    width: 33%;
+    width: 25%;
     padding-bottom: 5px;
     position: relative;
-    bottom: 56px;
+    bottom: 63px;
     filter: invert(100%);
+    width: 100px;
 }
 
 .ios ion-footer ion-buttons ion-icon{
@@ -134,7 +135,7 @@ ion-footer ion-button{
 }
 ion-footer .izquierda{
     position: absolute;
-    top: 40px !important;
+    top: 25px !important;
     padding-left: 0 !important;
     left: 15px;
 }
@@ -175,7 +176,7 @@ signature-pad{
 
 .derecha{
     position: absolute;
-    top:40px !important;
+    top:25px !important;
     right: 15px;
 }
 
@@ -240,7 +241,7 @@ ion-toggle{
 
 /* Texto Responsivo */
 ion-label{
-    font-size: 3vw !important;
+    font-size: 16px !important;
     opacity: 1 !important;
 }
 form p{
@@ -278,11 +279,12 @@ ion-item{
     --background: transparent !important;
 }
 ion-footer .imgLogin {
-    width: 33%;
+    width: 25%;
     padding-bottom: 5px;
     position: relative;
-    bottom: -21px;
+    bottom: -13px;
     filter: invert(100%);
+    max-width: 100px;
 }
 
 ion-label{
@@ -322,6 +324,7 @@ input {
 .left-label {
     margin: 11px 0;
     display: block;
+    font-size: 14px;
 }
 
 .keyboard-is-open ion-footer {
@@ -398,16 +401,16 @@ ion-item{
   and (max-device-width : 1024px) 
   and (-webkit-min-device-pixel-ratio: 1)  {
       ion-footer{
-          min-height: 120px;
+          min-height: 30px;
       }
       .derecha{
-          top:50px !important;
+          top:25px !important;
       }
       ion-footer .izquierda{
-          top: 50px !important;
+          top: 25px !important;
       }
       ion-footer img{
-          bottom: 60px;
+          bottom: 26px;
       }
       ion-footer .centrar{
           top: 49px !important;
@@ -422,7 +425,7 @@ and (-webkit-device-pixel-ratio : 3) {
         top:30px !important;
     }
     ion-footer .izquierda{
-        top: 30px !important;
+        top: 25px !important;
     }
     ion-footer img{
         bottom: 55px;

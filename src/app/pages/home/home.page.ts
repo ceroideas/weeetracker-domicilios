@@ -5,6 +5,7 @@ import { Router, NavigationExtras } from '@angular/router';
 import { NavController, Platform } from '@ionic/angular';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { Usuario } from 'src/app/models/usuario';
+import { EventsService } from 'src/app/services/events.service';
 
 @Component({
   selector: 'app-home',
@@ -26,6 +27,7 @@ export class HomePage implements OnInit {
     private router: Router,
     private navCtrl: NavController,
     private usuarioService: UsuarioService,
+    private events: EventsService,
     private platform : Platform) {
 
   }
@@ -89,6 +91,7 @@ export class HomePage implements OnInit {
   logOut() {
     this.usuarioService.eliminarToken();
     this.navCtrl.navigateRoot("/login");
+    this.events.publish('loadPostLogout');
   }
 
 }

@@ -7,25 +7,40 @@ import { TranslateService } from '@ngx-translate/core';
 import { environment } from 'src/environments/environment';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { ConsultasService } from '../../services/consultas.service';
+import { EventsService } from '../../services/events.service';
+
+import { File } from '@awesome-cordova-plugins/file/ngx';
+
+import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
+  providers: [File,Camera]
 })
 export class LoginPage implements OnInit {
 
   usuario: string;
+  usuarios: any;
+  usuario_centro: any;
   password: string;
   usuarioObj: Usuario = new Usuario();
   message : string = "";
   helper = new JwtHelperService();
   mostrarFooter : boolean = true;
+  loading;
+
+  loaded;
 
   constructor(private usuarioService: UsuarioService,
     private translate: TranslateService,
     private navCtrl: NavController,
     private consultas: ConsultasService,
+    private loadingCtrl: LoadingController,
+    private file: File,
+    private camera: Camera,
+    private events: EventsService,
     private inAppBrowser : InAppBrowser
   ) {
     if(environment.message){
@@ -49,21 +64,93 @@ export class LoginPage implements OnInit {
   direccion;
   nombre;
 
+  /*photo()
+  {
+    const options: CameraOptions = {
+      quality: 100,
+      sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+
+    this.camera.getPicture(options).then((imageData) => {
+     // imageData is either a base64 encoded string or a file URI
+     // If it's base64 (DATA_URL):
+     console.log("imageData",imageData);
+     // let base64Image = 'data:image/jpeg;base64,' + imageData;
+    }, (err) => {
+     // Handle error
+    });
+  }*/
+
   ngOnInit() {
 
-    this.consultas.getXML().subscribe((data:any)=>{
-      let parser = new DOMParser();
-      let xmlDoc = parser.parseFromString(data,"text/xml");
+    this.events.destroy('setLoaded');
+    this.events.subscribe('setLoaded',()=>{
+      this.loaded = true;
+    });
 
-      console.log(xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue, xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue);
+    this.events.destroy('getConfigInformation');
+    this.events.subscribe('getConfigInformation',(config:any)=>{
 
-      this.consultas.getConfigInformation(xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue, xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue)
-      .subscribe((data:any)=>{
-        this.terminal = xmlDoc.getElementsByTagName("PDA")[0].childNodes[0].nodeValue;
-        this.direccion = data.config._centro.direccion;
-        this.nombre = data.config._gestor.nombre;
+      console.log(config);
+
+      this.consultas.getConfigInformation(config.gestor, config.centro)
+        .subscribe((data:any)=>{
+          console.log(data);
+          this.terminal = config.pda;
+          this.direccion = data.config._centro.direccion;
+          this.nombre = data.config._gestor.nombre;
+          this.loaded = true;
+
+          this.consultas.listarUsuarios(config.centro).subscribe((data:any)=>{
+
+            this.loadingCtrl.dismiss();
+            
+            console.log(data);
+
+            this.usuarios = data.users;
+
+          })
+        })
+
+    });
+
+    /*this.loading = this.loadingCtrl.create({message:"Obteniendo información del dispositivo..."}).then(a=>{
+      
+      // a.present();
+
+      let path:any;
+
+      this.file.checkDir('/storage/emulated/0/Android/data/com.ecolec.weeetracker/files/','config').then(_ => {
+        
+        console.log('Directory exists 1');
+
+        path = this.file.dataDirectory+'/config/CONFIG.xml';
+
+        console.log(path);
+
+        this.consultas.getXML(path).subscribe((data:any)=>{
+          let parser = new DOMParser();
+          let xmlDoc = parser.parseFromString(data,"text/xml");
+
+          console.log(xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue, xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue);
+
+          this.consultas.getConfigInformation(xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue, xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue)
+          .subscribe((data:any)=>{
+            this.terminal = xmlDoc.getElementsByTagName("PDA")[0].childNodes[0].nodeValue;
+            this.direccion = data.config._centro.direccion;
+            this.nombre = data.config._gestor.nombre;
+          })
+        })
+
       })
-    })
+      .catch(err =>{console.log('no existe el directorio')});
+
+
+    })*/
+
 
     // console.log(xmlDoc.getElementsByTagName("PDA")[0].childNodes[0].nodeValue);
     
@@ -97,6 +184,34 @@ export class LoginPage implements OnInit {
       // loading.dismiss(); 
       this.usuarioService.mostrarAlerta(this.translate.instant("LOGIN.ERROR"));
     });
+  }
+
+  async acceso()
+  {
+    await this.usuarioService.mostrarSpinner(this.translate.instant("SPINNER.CARGANDO"));
+    this.usuarioService.loginWithId(this.usuario_centro).subscribe(async (res: any) => {
+
+      /* Obtenemos el usuario */
+      let decodeToken: any = this.helper.decodeToken(res.token);
+      console.log(decodeToken);
+
+      await this.usuarioService.guardarUsuario(decodeToken);
+      await this.usuarioService.guardarToken(res.token)
+      this.usuario = "";
+      this.password = "";
+      this.navCtrl.navigateForward("/home");
+      this.usuarioService.cerrarSpinner();
+      // loading.dismiss(); 
+    }, async error => {
+      this.usuarioService.cerrarSpinner();
+      // loading.dismiss(); 
+      this.usuarioService.mostrarAlerta(this.translate.instant("LOGIN.ERROR"));
+    });
+  }
+
+  changeEvent(e)
+  {
+    this.usuario_centro = e.detail.value;
   }
 
   

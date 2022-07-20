@@ -48,20 +48,25 @@ export class StepTwoAltPage implements OnInit {
       nombre: [this.gestor ? this.gestor.nombre : '', Validators.required],
       nif: [this.gestor ? this.gestor.nif : '', Validators.required],
 
-      codigo_postal: ['',Validators.required],
-      // phone_contacto: ['',Validators.required],
-      nombre_comercial: [this.gestor ? this.gestor.nombre_comercial : '',Validators.required],
-      centro: ['',Validators.required],
+      // codigo_postal: ['',Validators.required],
+      // nombre_comercial: [this.gestor ? this.gestor.nombre_comercial : '',Validators.required],
+      // centro: ['',Validators.required],
+      contacto: ['',Validators.required],
+      tlfn_contacto: ['',Validators.required],
       direccion: ['',Validators.required],
       pais: ['',Validators.required],
       provincia: ['',Validators.required],
       localidad: ['',Validators.required],
+      codNima: [''],
+      insRp: [''],
+      insRnP: [''],
     });
 
     this.getPaises();
   }
 
   ngOnInit() {
+
   }
 
   adelante()
@@ -81,6 +86,9 @@ export class StepTwoAltPage implements OnInit {
       Inventario: 1,
       UsoRefTercero: 0,
       TipoDireccion: "Punto de Recogida",
+      codNima: val.codNima,
+      insRp: val.insRp,
+      insRnP: val.insRnP,
     }
 
     this.consultaService.nuevoOrigen(data).subscribe((data:any)=>{
@@ -98,6 +106,11 @@ export class StepTwoAltPage implements OnInit {
   {
     this.consultaService.getPaises().subscribe((data:any)=>{
       this.paises = data.paises;
+
+      this.myForm.patchValue({
+        pais: 2473
+      })
+      this.getProvincias(2473);
     })
   }
 

@@ -5,16 +5,15 @@
 
         <div *ngIf="terminal" style="line-height: 32px; padding: 0 20px;">
             
-            <label style="color: #fff; font-size: 20px;">Terminal: {{terminal}} <br></label>
+            <label style="color: #fff; font-size: 16px;">Terminal: {{terminal}} <br></label>
 
-            <label style="color: #fff; font-size: 20px;">Gestor: {{direccion}} <br></label>
+            <label style="color: #fff; font-size: 16px;">Gestor: {{direccion}} <br></label>
 
-            <label style="color: #fff; font-size: 20px;">Centro: {{nombre}} <br></label>
+            <label style="color: #fff; font-size: 16px;">Centro: {{nombre}} <br></label>
 
         </div>
 
-
-        <form #formulario="ngForm">
+        <form #formulario="ngForm" *ngIf="!terminal && loaded">
             <ion-row>
 
                 <ion-col size="12">
@@ -36,9 +35,39 @@
                 <ion-col size="12" text-center>
                     <ion-button (click)="login()" class="boton" [disabled]="formulario.invalid">
                         <ion-icon ios="people" md="people"></ion-icon>Acceder</ion-button>
+
+
+                        <!-- <ion-button (click)="photo()" class="boton">
+                        <ion-icon ios="people" md="people"></ion-icon>Foto</ion-button> -->
                 </ion-col>
             </ion-row>
         </form>
+
+
+        <div *ngIf="terminal && loaded">
+            <ion-row>
+
+                <ion-col size="12">
+                    <ion-item lines="none">
+                        <ion-label position="floating">Usuario</ion-label>
+                        <ion-select (ionChange)="changeEvent($event)" [(ngModel)]="usuario_centro">
+                            <ion-select-option *ngFor="let u of usuarios" [value]="u.pidContactoDireccionTercero">{{u.nombre+' '+u.apellidos}}</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+
+            </ion-row>
+            <ion-row>
+                <ion-col size="12" text-center>
+                    <ion-button (click)="acceso()" class="boton">
+                        <ion-icon ios="people" md="people"></ion-icon>Acceder</ion-button>
+
+
+                        <!-- <ion-button (click)="photo()" class="boton">
+                        <ion-icon ios="people" md="people"></ion-icon>Foto</ion-button> -->
+                </ion-col>
+            </ion-row>
+        </div>
     </ion-grid>
 </ion-content>
 
@@ -46,5 +75,5 @@
 <ion-footer no-border>
     <ion-icon class="izquierda" name="help-circle-outline" (click)="abrir()"></ion-icon>
     <img class="imgLogin" src="../../../assets/img/logo-ecolec.png">
-    <p style="position: absolute;top: 13px;right: 15px;">{{message}} V 1.0.0</p>
+    <p style="position: absolute;top: 2px;right: 15px;">{{message}} V 1.0.0</p>
 </ion-footer>

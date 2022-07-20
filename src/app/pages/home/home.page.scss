@@ -10,7 +10,7 @@ ion-item{
 }
 .derecha{
     position: absolute;
-    top: 40px !important;
+    top: 25px !important;
     right: 15px;
 }
 
@@ -29,17 +29,17 @@ span {
 
 span ion-img, span img{
     width: 12vw;
-    height: 11vw;
+    height: 40px;
 }
 @media only screen 
 and (min-device-width : 768px) 
 and (max-device-width : 1024px) 
 and (-webkit-min-device-pixel-ratio: 1)  {
     .derecha{
-        top:50px !important;
+        top:25px !important;
     }
     .izquierda{
-        top: 50px !important;
+        top: 25px !important;
     }
 }
 @media only screen 
@@ -47,9 +47,9 @@ and (min-device-width : 375px)
 and (max-device-width : 812px)
 and (-webkit-device-pixel-ratio : 3) {
     .derecha{
-        top:30px !important;
+        top:25px !important;
     }
     .izquierda{
-        top: 30px !important;
+        top: 25px !important;
     }
 }

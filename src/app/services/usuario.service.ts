@@ -30,6 +30,9 @@ export class UsuarioService {
   login(usuario: string, password: string) {
     return this.http.post(apiUrl + '/users/login', { Login: usuario, Password: password }, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
   }
+  loginWithId(id: number) {
+    return this.http.get(apiUrl + '/users/loginWithId/'+id);
+  }
 
   async guardarUsuario(token) {
     this.usuario.id = token.Id;
