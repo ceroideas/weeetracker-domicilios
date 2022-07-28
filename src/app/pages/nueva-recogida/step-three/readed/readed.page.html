@@ -1,0 +1,162 @@
+<app-header  [titulo]="titulo"></app-header>
+
+<ion-content color="medium" fullscreen="fullscreen" padding="padding">
+
+  <form [formGroup]="myForm" #formulario="ngForm" novalidate>
+    <ion-grid>
+
+      <ion-row>
+        
+        <ion-col size="12">
+
+            <ion-row>
+              <ion-col size="4">
+                <ion-label class="left-label">Etiqueta:</ion-label>
+              </ion-col>
+              <ion-col size="8">
+                <ion-input class="ion-no-margin mb-2" [readonly]="true" formControlName="etiqueta"></ion-input>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="4">
+                <ion-label class="left-label">Fracción:</ion-label>
+                <ion-select class="ion-no-margin mb-2" formControlName="fraccion">
+                  <ion-select-option *ngFor="let f of fracciones" [value]="f.pidFraccion">{{f.nombre}}</ion-select-option>
+                </ion-select>
+              </ion-col>
+              <ion-col size="8">
+                <ion-label class="left-label">Residuo:</ion-label>
+                <ion-select (ionChange)="especificos()" class="ion-no-margin mb-2" formControlName="residuo">
+                  <ion-select-option *ngFor="let r of residuos" [value]="r.Id">{{r.Nombre}}</ion-select-option>
+                </ion-select>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="4">
+                <ion-label class="left-label">R. Específico:</ion-label>
+              </ion-col>
+              <ion-col size="8">
+                <ion-select class="ion-no-margin mb-2" formControlName="residuo_especifico">
+                  <ion-select-option *ngFor="let e of residuos_especificos" [value]="e.pidResiduoEspecifico">{{e.nombre}}</ion-select-option>
+                </ion-select>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="4">
+                <ion-label class="left-label">Marca:</ion-label>
+              </ion-col>
+              <ion-col size="8">
+                <ion-select class="ion-no-margin mb-2" formControlName="marca">
+                  <ion-select-option *ngFor="let m of marcas" [value]="m.pidMarca">{{m.Nombre}}</ion-select-option>
+                </ion-select>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="4">
+                <ion-label class="left-label">T. Contenedor:</ion-label>
+              </ion-col>
+              <ion-col size="8">
+                <ion-select class="ion-no-margin mb-2" formControlName="tipo_contenedor">
+                  <ion-select-option *ngFor="let c of contenedores" [value]="c.pidTipoContenedor">{{c.nombre}}</ion-select-option>
+                </ion-select>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="4">
+                <ion-label class="left-label">Canibalizado:</ion-label>
+              </ion-col>
+              <ion-col size="8">
+                <ion-checkbox style="position: relative; top: 8px;"
+                formControlName="canibalizado"></ion-checkbox>
+              </ion-col>
+            </ion-row>
+
+            <ion-radio-group formControlName="estado_raee">
+              <ion-row>
+                <ion-col size="6">
+                  <ion-label>Reciclaje:</ion-label>
+                  <ion-radio value="reciclaje" style="position: relative; top: 4px; margin-left: 8px;"></ion-radio>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-label>Reutilización:</ion-label>
+                  <ion-radio value="reutilizacion" style="position: relative; top: 4px; margin-left: 8px;"></ion-radio>
+                </ion-col>
+              </ion-row>
+            </ion-radio-group>
+
+            <br>
+            <br>
+
+            <ion-row>
+              <ion-col size="2">
+                <ion-label class="left-label">REF:</ion-label>
+              </ion-col>
+              <ion-col size="6">
+                <ion-input class="ion-no-margin mb-2" [readonly]="readonly" formControlName="ref"></ion-input>
+              </ion-col>
+
+              <ion-col size="4">
+                <ion-icon (click)="removeRef()" style="position: relative; height: 24px; top: 6px;" name="trash"></ion-icon>
+                <ion-icon (click)="openScanner()" style="position: relative; height: 24px; top: 6px;" name="scan"></ion-icon>
+              </ion-col>
+            </ion-row>
+              
+        </ion-col>
+
+      </ion-row>
+
+      <br>
+
+      <div *ngIf="previews.length">
+
+          <ion-row *ngFor="let p of previews">
+
+            <ion-col size="6" style="text-align: left;">
+              <img [src]="p" alt="" style="border-radius: 65px; height:65px; width:65px"><br>
+              
+            </ion-col>
+            <ion-col size="6">
+
+              <ion-icon style="position: relative; height: 32px; top: 10px;" name="trash"></ion-icon>
+
+            </ion-col>
+          
+          </ion-row>
+          
+
+      <br>
+      </div>
+
+
+      <div style="text-align: center;">
+        <input id="file" capture="user" accept="image/*" type="file" (change)="onFileChanged($event)" style="display: none;">
+
+        <label for="file" (click)="foto()" class="ecobtn"><ion-icon name="camera"></ion-icon></label>
+      </div>
+
+
+    </ion-grid>
+  </form>
+
+</ion-content>
+
+<ion-footer no-shadow no-border>
+        <ion-buttons>
+            <!-- <ion-button (click)="logOut()" *ngIf="!submenu" class="derecha">
+                <span><ion-img src="../../assets/img/Cerrar_sesion.png"></ion-img></span>
+            </ion-button> -->
+            <ion-button class="derecha" (click)="adelante()">
+                <span><ion-img src="../../assets/img/Derecha.png"></ion-img></span>
+            </ion-button>
+            <ion-button class="izquierda" (click)="atras()">
+                <!-- <ion-icon  name="arrow-round-back"></ion-icon> -->
+                <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+            </ion-button>
+        </ion-buttons>
+        <img src="../../../assets/img/logo-ecolec.png">
+</ion-footer>

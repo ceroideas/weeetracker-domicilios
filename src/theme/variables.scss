@@ -469,3 +469,11 @@ ion-modal.selectGestor ion-toolbar {
   --background: #284e15;
   --color: white;
 }
+
+.alert-radio-label.sc-ion-alert-md {
+  white-space: normal !important;
+}
+
+.alert-tappable.sc-ion-alert-md {
+    height: 10vh;
+}

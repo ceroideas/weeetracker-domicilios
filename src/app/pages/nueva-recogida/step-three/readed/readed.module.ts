@@ -2,32 +2,31 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TokenInterceptorService } from '../../../services/token-interceptor.service';
+import { TokenInterceptorService } from '../../../../services/token-interceptor.service';
 
 import { IonicModule } from '@ionic/angular';
 
-import { StepTwoPageRoutingModule } from './step-two-routing.module';
+import { ReadedPageRoutingModule } from './readed-routing.module';
 
 import { ComponentsModule } from 'src/app/components/components.module';
-import { StepTwoPage } from './step-two.page';
-import { TranslateModule } from '@ngx-translate/core';
+
+import { ReadedPage } from './readed.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    TranslateModule,
     ReactiveFormsModule,
     ComponentsModule,
     HttpClientModule,
-    StepTwoPageRoutingModule
+    ReadedPageRoutingModule
   ],
   providers: [{
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
       multi: true
   }],
-  declarations: [StepTwoPage]
+  declarations: [ReadedPage]
 })
-export class StepTwoPageModule {}
+export class ReadedPageModule {}

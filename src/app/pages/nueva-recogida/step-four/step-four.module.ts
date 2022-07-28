@@ -6,28 +6,26 @@ import { TokenInterceptorService } from '../../../services/token-interceptor.ser
 
 import { IonicModule } from '@ionic/angular';
 
-import { StepTwoPageRoutingModule } from './step-two-routing.module';
+import { StepFourPageRoutingModule } from './step-four-routing.module';
 
+import { StepFourPage } from './step-four.page';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { StepTwoPage } from './step-two.page';
-import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    TranslateModule,
     ReactiveFormsModule,
     ComponentsModule,
     HttpClientModule,
-    StepTwoPageRoutingModule
+    StepFourPageRoutingModule
   ],
   providers: [{
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
       multi: true
   }],
-  declarations: [StepTwoPage]
+  declarations: [StepFourPage]
 })
-export class StepTwoPageModule {}
+export class StepFourPageModule {}

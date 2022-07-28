@@ -1,0 +1,45 @@
+html, body, ion-app, ion-content, ion-page, .nav-decor {
+  // background-color: transparent !important;
+  // --background: transparent;
+  // background: transparent !important;
+}
+
+#fondo {
+	// --background: transparent;
+ //  background: transparent !important;
+}
+
+ion-content {
+  --background: transparent !important;
+  background: transparent !important;
+}
+
+
+img {
+	opacity: 0.5;
+	max-width: 95%;
+	max-height: calc(98% - 100px);
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	/* bring your own prefixes */
+	transform: translate(-50%, -50%);
+}
+
+.text-semitrans {
+  position: absolute;
+  display: block;
+  padding: 10px;
+  color: #fff;
+  text-align: center;
+  width: 70%;
+  left: 0;
+  bottom: 0;
+  top: -80px;
+  right: 0;
+  height: fit-content;
+  background: rgba(0,0,0,.5);
+  margin: auto;
+  border-radius: 3px;
+  line-height: 1.5;
+}

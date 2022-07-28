@@ -12,7 +12,7 @@ import { IdentificacionService } from './services/identificacion.service';
 import { Keyboard } from '@awesome-cordova-plugins/keyboard/ngx';
 
 import { File } from '@awesome-cordova-plugins/file/ngx';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
+// import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 
 import { ConsultasService } from './services/consultas.service';
 
@@ -24,7 +24,7 @@ import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  providers: [File,WebView,FileTransfer,AndroidPermissions]
+  providers: [File,WebView,/*FileTransfer,*/AndroidPermissions]
 })
 
 export class AppComponent {
@@ -41,7 +41,7 @@ export class AppComponent {
     private identificacionService : IdentificacionService,
     private keyboard : Keyboard,
     private webview: WebView,
-    private transfer: FileTransfer,
+    // private transfer: FileTransfer,
     private events: EventsService,
     private loadingCtrl: LoadingController,
     private androidPermissions: AndroidPermissions,

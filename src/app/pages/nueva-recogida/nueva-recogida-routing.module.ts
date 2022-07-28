@@ -27,6 +27,22 @@ const routes: Routes = [
   {
     path: 'modal-origenes',
     loadChildren: () => import('./modal-origenes/modal-origenes.module').then( m => m.ModalOrigenesPageModule)
+  },
+  {
+    path: 'step-three',
+    loadChildren: () => import('./step-three/step-three.module').then( m => m.StepThreePageModule)
+  },
+  {
+    path: 'qr',
+    loadChildren: () => import('./qr/qr.module').then( m => m.QrPageModule)
+  },
+  {
+    path: 'step-four',
+    loadChildren: () => import('./step-four/step-four.module').then( m => m.StepFourPageModule)
+  },
+  {
+    path: 'step-five',
+    loadChildren: () => import('./step-five/step-five.module').then( m => m.StepFivePageModule)
   }
 ];
 

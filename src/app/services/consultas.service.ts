@@ -18,6 +18,10 @@ export class ConsultasService {
     let etiquetaObj = { Etiqueta: etiqueta };
     return this.http.post(apiUrl + '/residuo', etiquetaObj);
   }
+  GetRaee(etiqueta: string) {
+    let etiquetaObj = { Etiqueta: etiqueta };
+    return this.http.post(apiUrl + '/residuo/GetRaee', etiquetaObj);
+  }
 
   getConsultaResiduo(idTercero, idCentro, idResiduo) {
     let residuo = { idTercero: idTercero, idCentro: idCentro, idResiduo: idResiduo };
@@ -61,9 +65,21 @@ export class ConsultasService {
     return this.http.post(apiUrl + '/stock', stock);
   }
 
+  contenedores() {
+    return this.http.get(apiUrl + '/residuo/contenedores');
+  }
+  fracciones() {
+    return this.http.get(apiUrl + '/residuo/fracciones');
+  }
+
   fechaActual() {
     let fecha: Date = new Date();
     return fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear() + " " + fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
+  }
+
+  especificos(id)
+  {
+    return this.http.get(apiUrl + '/residuo/especificos/'+id);
   }
 
   //Solicitudes

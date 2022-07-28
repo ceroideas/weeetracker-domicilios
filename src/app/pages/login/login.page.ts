@@ -38,7 +38,7 @@ export class LoginPage implements OnInit {
     private navCtrl: NavController,
     private consultas: ConsultasService,
     private loadingCtrl: LoadingController,
-    private file: File,
+    public file: File,
     private camera: Camera,
     private events: EventsService,
     private inAppBrowser : InAppBrowser
@@ -63,10 +63,12 @@ export class LoginPage implements OnInit {
   terminal;
   direccion;
   nombre;
+  exist = "";
 
-  /*photo()
+  photo()
   {
-    const options: CameraOptions = {
+    this.navCtrl.navigateForward('/nueva-recogida/qr');
+    /*const options: CameraOptions = {
       quality: 100,
       sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
       destinationType: this.camera.DestinationType.FILE_URI,
@@ -81,10 +83,14 @@ export class LoginPage implements OnInit {
      // let base64Image = 'data:image/jpeg;base64,' + imageData;
     }, (err) => {
      // Handle error
-    });
-  }*/
+    });*/
+  }
 
   ngOnInit() {
+
+    this.consultas.getIdentificacion("18410708002022559").subscribe(data=>{
+      console.log(data)
+    });
 
     this.events.destroy('setLoaded');
     this.events.subscribe('setLoaded',()=>{
@@ -116,6 +122,14 @@ export class LoginPage implements OnInit {
         })
 
     });
+
+    // this.file.checkDir('/storage/emulated/0/','config').then(_=>{
+    //   this.exist+=" | existe config / ";
+    // });
+
+    // this.file.checkDir('/storage/emulated/','0').then(_=>{
+    //   this.exist+=" | existe emulated / ";
+    // });
 
     /*this.loading = this.loadingCtrl.create({message:"Obteniendo información del dispositivo..."}).then(a=>{
       

@@ -9,6 +9,7 @@ import { ConsultasService } from 'src/app/services/consultas.service';
 import { ModalGestoresPage } from '../modal-gestores/modal-gestores.page';
 import { ModalOrigenesPage } from '../modal-origenes/modal-origenes.page';
 import { EventsService } from '../../../services/events.service';
+import { Usuario } from 'src/app/models/usuario';
 
 declare var moment:any;
 
@@ -25,9 +26,11 @@ export class StepTwoPage implements OnInit {
 
   date = localStorage.getItem('date');
 
+  usuario: Usuario = new Usuario();
+
   solicitud = JSON.parse(localStorage.getItem('solicitud')) ? JSON.parse(localStorage.getItem('solicitud'))['response'] : null;
   gestor = JSON.parse(localStorage.getItem('solicitud')) ? JSON.parse(localStorage.getItem('solicitud'))['response'] : null;
-  direcciones = JSON.parse(localStorage.getItem('solicitud')) ? JSON.parse(localStorage.getItem('solicitud'))['direcciones'] : null;
+  direcciones = null;
 
   constructor(private usuarioService: UsuarioService,
     private consultaService: ConsultasService,
@@ -42,17 +45,29 @@ export class StepTwoPage implements OnInit {
     private alertCtrl: AlertController,) {
 
     this.myForm = this.fb.group({
-      pidSolicitud: [this.solicitud ? this.solicitud.sid : '', Validators.required],
+      pidSolicitud: [this.solicitud ? this.solicitud.sid : ''],
       nombre: [this.solicitud ? this.solicitud.tnombre : '', Validators.required],
       nif: [this.solicitud ? this.solicitud.tNIF : '', Validators.required],
 
-      nombre_comercial: [this.solicitud ? this.solicitud.tnombreComercial : '',Validators.required],
-      centro: [this.solicitud ? this.solicitud.nombre : '',Validators.required],
-      localidad: [this.solicitud ? this.solicitud.municipio : '',Validators.required],
-      direccion: [this.solicitud ? this.solicitud.direccion : '',Validators.required],
-      provincia: [this.solicitud ? this.solicitud.provincia : '',Validators.required],
-      pais: [this.solicitud ? this.solicitud.pais : '',Validators.required],
+      nombre_comercial: [/*this.solicitud ? this.solicitud.tnombreComercial : ''*/'',Validators.required],
+      centro: [/*this.solicitud ? this.solicitud.nombre : ''*/'',Validators.required],
+      localidad: [/*this.solicitud ? this.solicitud.municipio : ''*/'',Validators.required],
+      direccion: [/*this.solicitud ? this.solicitud.direccion : ''*/'',Validators.required],
+      provincia: [/*this.solicitud ? this.solicitud.provincia : ''*/'',Validators.required],
+      pais: [/*this.solicitud ? this.solicitud.pais : ''*/'',Validators.required],
     });
+
+    this.cargarUsuario();
+
+    if (localStorage.getItem('buscarDirecciones')) {
+      localStorage.removeItem('buscarDirecciones')
+      this.sendToSearch(this.solicitud.tercero);
+    }
+  }
+  async cargarUsuario()
+  {
+    this.usuario = await this.usuarioService.cargarToken();
+    console.log(this.usuario);
   }
 
   ngOnInit() {
@@ -106,7 +121,10 @@ export class StepTwoPage implements OnInit {
 
   adelante()
   {
-    
+    if (!this.myForm.valid) {
+      return this.alertCtrl.create({message:"Por favor, seleccione un origen válido.", buttons: ["Ok"]}).then(a=>a.present());
+    }
+    this.nav.navigateForward('/nueva-recogida/step-three')
   }
 
   atras() {
@@ -133,7 +151,7 @@ export class StepTwoPage implements OnInit {
     }
     this.loadingCtrl.create({message:"Buscando centros..."}).then(l=>{
       l.present();
-      this.consultaService.buscarCentro({nombre:this.myForm.value.nombre, nif: this.myForm.value.nif, tercero: 1337}).subscribe((data:any)=>{
+      this.consultaService.buscarCentro({nombre:this.myForm.value.nombre, nif: this.myForm.value.nif, tercero: this.usuario.tercero.PidTercero}).subscribe((data:any)=>{
 
         l.dismiss();
 

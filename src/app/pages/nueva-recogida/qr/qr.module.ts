@@ -2,32 +2,25 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TokenInterceptorService } from '../../../services/token-interceptor.service';
 
 import { IonicModule } from '@ionic/angular';
 
-import { StepTwoPageRoutingModule } from './step-two-routing.module';
-
 import { ComponentsModule } from 'src/app/components/components.module';
-import { StepTwoPage } from './step-two.page';
-import { TranslateModule } from '@ngx-translate/core';
+
+import { QrPageRoutingModule } from './qr-routing.module';
+
+import { QrPage } from './qr.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    TranslateModule,
     ReactiveFormsModule,
     ComponentsModule,
     HttpClientModule,
-    StepTwoPageRoutingModule
+    QrPageRoutingModule
   ],
-  providers: [{
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptorService,
-      multi: true
-  }],
-  declarations: [StepTwoPage]
+  declarations: [QrPage]
 })
-export class StepTwoPageModule {}
+export class QrPageModule {}

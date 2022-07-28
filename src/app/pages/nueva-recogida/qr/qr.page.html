@@ -1,0 +1,34 @@
+<app-header  [titulo]="titulo"></app-header>
+
+<ion-content color="medium" fullscreen="fullscreen" padding="padding">
+
+  <ion-grid>
+
+      <ion-row>
+        
+        <ion-col>
+
+            <ion-row>
+              <ion-col size="12">
+                <ion-label class="left-label">Etiqueta</ion-label>
+                <ion-input class="ion-no-margin mb-2" type="text" [(ngModel)]="etiqueta"></ion-input>
+
+                <ion-button (click)="buscar()" class="ecobtn">Busqueda manual</ion-button>
+              </ion-col>
+            </ion-row>
+
+          </ion-col>
+
+      </ion-row>
+
+  </ion-grid>
+
+  <!-- <ion-icon name="close-circle-outline" (click)="nav.back()" style="position: absolute; color: #fff; font-size: 24px; top: 32px; left: 32px;"></ion-icon>
+
+  <img *ngIf="scanner" src="assets/scanner.png" alt=""> -->
+
+  <!-- <span class="text-semitrans" *ngIf="semitrans">
+    Enfoque el código de barra en el centro. La lectura durará menos de 1 segundo.
+  </span> -->
+
+</ion-content>
