@@ -30,8 +30,8 @@ export class UsuarioService {
   login(usuario: string, password: string) {
     return this.http.post(apiUrl + '/users/login', { Login: usuario, Password: password }, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
   }
-  loginWithId(id: number) {
-    return this.http.get(apiUrl + '/users/loginWithId/'+id);
+  loginWithId(id: number, dt: number) {
+    return this.http.get(apiUrl + '/users/loginWithId/'+id+'/'+dt);
   }
 
   async guardarUsuario(token) {
@@ -39,6 +39,9 @@ export class UsuarioService {
     this.usuario.estado = token.Estado;
     this.usuario.login = token.Login;
     // this.usuario.tipoTercero = token.TipoTercero;
+    this.usuario.dtercero = JSON.parse(token.DTercero);
+    this.usuario.terminal = JSON.parse(token.Terminal);
+    this.usuario.sidsig = JSON.parse(token.SidSIG);
     this.usuario.tercero = JSON.parse(token.Tercero);
     this.usuario.responsabilidades = JSON.parse(token.Resps);
     this.usuario.centros = JSON.parse(token.Centros);

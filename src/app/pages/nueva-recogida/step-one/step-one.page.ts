@@ -53,6 +53,7 @@ export class StepOnePage implements OnInit {
   adelante()
   {
     if (this.myForm.value.type == 'request') {
+      localStorage.setItem('tipo_operativa','CSR');
       if (!this.myForm.value.request_n) {
         this.alertCtrl.create({message:"Debe escribir el número de la Solicitud", buttons:["Ok"]}).then(a=>a.present());
       }else{
@@ -63,7 +64,8 @@ export class StepOnePage implements OnInit {
           let solicitud = {
             pidSolicitud: this.myForm.value.request_n,
             fecha: localStorage.getItem('date')+' 00:00:00.0000',
-            tercero: this.usuario.tercero.PidTercero
+            tercero: this.usuario.tercero.PidTercero,
+            dtercero: localStorage.getItem('centro_config') ? localStorage.getItem('centro_config') : localStorage.getItem('centro')
           };
           this.consultaService.validacionSolicitud(solicitud).subscribe((res:any) => {
 
@@ -84,6 +86,7 @@ export class StepOnePage implements OnInit {
 
       }
     }else{
+      localStorage.setItem('tipo_operativa','SSR');
       localStorage.removeItem('solicitud');
       this.nav.navigateForward('/nueva-recogida/step-two');
     }

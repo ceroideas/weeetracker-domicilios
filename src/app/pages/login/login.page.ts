@@ -9,15 +9,19 @@ import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { ConsultasService } from '../../services/consultas.service';
 import { EventsService } from '../../services/events.service';
 
-import { File } from '@awesome-cordova-plugins/file/ngx';
+// import { File } from '@awesome-cordova-plugins/file/ngx';
+
+declare var $: any;
 
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
+
+import { FTP } from '@awesome-cordova-plugins/ftp/ngx';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  providers: [File,Camera]
+  // providers: [File]
 })
 export class LoginPage implements OnInit {
 
@@ -38,8 +42,9 @@ export class LoginPage implements OnInit {
     private navCtrl: NavController,
     private consultas: ConsultasService,
     private loadingCtrl: LoadingController,
-    public file: File,
+    // public file: File,
     private camera: Camera,
+    // private fTP: FTP,
     private events: EventsService,
     private inAppBrowser : InAppBrowser
   ) {
@@ -58,6 +63,11 @@ export class LoginPage implements OnInit {
     }
 
     this.nombreUsuario();
+
+    // this.consultas.upload({Nombre:"Prueba", Tipo: 1, ArchivoCodificado: "iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAJUlEQVR42u3NQQEAAAQEsJNcdFLw2gqsMukcK4lEIpFIJBLJS7KG6yVo40DbTgAAAABJRU5ErkJggg=="})
+    // .subscribe(data=>{
+    //   console.log(data);
+    // })
   }
 
   terminal;
@@ -88,9 +98,15 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
 
-    this.consultas.getIdentificacion("18410708002022559").subscribe(data=>{
+    // setTimeout(()=>{
+
+    //   this.ftp();
+
+    // },3000)
+
+    /*this.consultas.getIdentificacion("18410708002022559").subscribe(data=>{
       console.log(data)
-    });
+    });*/
 
     this.events.destroy('setLoaded');
     this.events.subscribe('setLoaded',()=>{
@@ -123,7 +139,7 @@ export class LoginPage implements OnInit {
 
     });
 
-    // this.file.checkDir('/storage/emulated/0/','config').then(_=>{
+    // this.file.checkDir(this.file.externalRootDirectory,'CONFIG').then(_=>{
     //   this.exist+=" | existe config / ";
     // });
 
@@ -186,6 +202,10 @@ export class LoginPage implements OnInit {
       let decodeToken: any = this.helper.decodeToken(res.token);
       console.log(decodeToken);
 
+      if (!localStorage.getItem('centro_config')) {
+        localStorage.setItem('centro',decodeToken.DTercero);
+      }
+
       await this.usuarioService.guardarUsuario(decodeToken);
       await this.usuarioService.guardarToken(res.token)
       this.usuario = "";
@@ -203,7 +223,7 @@ export class LoginPage implements OnInit {
   async acceso()
   {
     await this.usuarioService.mostrarSpinner(this.translate.instant("SPINNER.CARGANDO"));
-    this.usuarioService.loginWithId(this.usuario_centro).subscribe(async (res: any) => {
+    this.usuarioService.loginWithId(this.usuario_centro,parseInt(localStorage.getItem('centro_config'))).subscribe(async (res: any) => {
 
       /* Obtenemos el usuario */
       let decodeToken: any = this.helper.decodeToken(res.token);

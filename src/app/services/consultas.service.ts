@@ -5,11 +5,14 @@ import { Identificacion } from '../models/identificacion';
 
 const apiUrl = environment.apiUrl;
 
+declare var $:any;
+
 @Injectable({
   providedIn: 'root'
 })
 export class ConsultasService {
 
+  url = environment.apiUrl;
 
   constructor(private http: HttpClient) {
   }
@@ -80,6 +83,10 @@ export class ConsultasService {
   especificos(id)
   {
     return this.http.get(apiUrl + '/residuo/especificos/'+id);
+  }
+  todosEspecificos()
+  {
+    return this.http.get(apiUrl + '/residuo/todosEspecificos');
   }
 
   //Solicitudes
@@ -152,9 +159,59 @@ export class ConsultasService {
     return this.http.get(apiUrl + '/solicitud/getProvincias/'+idPais);
   }
 
+  recuperarCertificado(initial)
+  {
+    return this.http.get(apiUrl + '/solicitud/recuperarCertificado/'+initial);
+  }
+
   getMunicipios(idProd)
   {
     return this.http.get(apiUrl + '/solicitud/getMunicipios/'+idProd);
+  }
+
+  upload(data)
+  {
+    return this.http.post(apiUrl + '/file/upload',data);
+  }
+  FTPUpload(data)
+  {
+    return this.http.post(apiUrl + '/file/FTPUpload',data);
+  }
+
+  uploadFTP(url)
+  {
+    fetch(url)
+    .then((res:any) => res.blob())
+    .then((myBlob)=>{
+
+      console.log(myBlob);
+
+      var file = new File([myBlob], "name.jpg",{
+        type: myBlob.type,
+      });
+
+      let formData = new FormData();
+
+      formData.append('File',file);
+
+      $.ajax({
+        url: this.url+'/file/FTPUpload',
+        type: 'POST',
+        contentType: false,
+        processData: false,
+        data: formData,
+      })
+      .done(function(data) {
+        console.log(data);
+      })
+      .fail(function() {
+        console.log("error");
+      })
+      .always(function() {
+        console.log("complete");
+      });
+
+    })
   }
 
 }

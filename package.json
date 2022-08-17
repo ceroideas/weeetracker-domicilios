@@ -24,7 +24,9 @@
     "@awesome-cordova-plugins/barcode-scanner": "^5.43.0",
     "@awesome-cordova-plugins/camera": "^5.43.0",
     "@awesome-cordova-plugins/core": "^5.43.0",
+    "@awesome-cordova-plugins/device": "^5.44.0",
     "@awesome-cordova-plugins/file": "^5.44.0",
+    "@awesome-cordova-plugins/ftp": "^5.44.0",
     "@awesome-cordova-plugins/geolocation": "^5.43.0",
     "@awesome-cordova-plugins/in-app-browser": "^5.43.0",
     "@awesome-cordova-plugins/ionic-webview": "^5.44.0",
@@ -32,6 +34,7 @@
     "@awesome-cordova-plugins/screen-orientation": "^5.43.0",
     "@awesome-cordova-plugins/splash-screen": "^5.43.0",
     "@awesome-cordova-plugins/status-bar": "^5.43.0",
+    "@ionic-native/device": "^5.36.0",
     "@ionic/angular": "^6.0.0",
     "@ionic/cordova-builders": "^6.1.0",
     "@ionic/storage": "^3.0.6",
@@ -61,11 +64,13 @@
     "@types/node": "^12.11.1",
     "@typescript-eslint/eslint-plugin": "5.3.0",
     "@typescript-eslint/parser": "5.3.0",
+    "com-darryncampbell-cordova-plugin-intent": "^2.2.0",
     "cordova-android": "^10.1.2",
     "cordova-plugin-android-permissions": "^1.1.3",
     "cordova-plugin-camera": "^6.0.0",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-file": "^7.0.0",
+    "cordova-plugin-ftp": "^1.2.1",
     "cordova-plugin-geolocation": "^4.1.0",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^5.0.0",
@@ -106,7 +111,9 @@
       },
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-file-transfer": {},
-      "cordova-plugin-android-permissions": {}
+      "cordova-plugin-android-permissions": {},
+      "com-darryncampbell-cordova-plugin-intent": {},
+      "cordova-plugin-ftp": {}
     },
     "platforms": [
       "android"

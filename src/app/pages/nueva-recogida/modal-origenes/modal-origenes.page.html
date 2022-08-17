@@ -9,7 +9,7 @@
   <ion-list>
     
     <ion-item *ngFor="let c of origenes" (click)="select(c)">
-      {{c.direccion}} - {{c.codigoPostal}}
+      {{c.direccion}}, {{c.codigoPostal}} - {{c.nombreMunicipio}}, {{c.nombreProvincia}}, {{c.nombrePais}}
     </ion-item>
 
   </ion-list>

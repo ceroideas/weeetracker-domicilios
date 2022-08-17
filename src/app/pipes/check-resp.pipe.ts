@@ -5,11 +5,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class CheckRespPipe implements PipeTransform {
 
-  transform(resps: [], value: string): any {
+  transform(resps: any, value: string): any {
     if (!resps) {
       return false;
     }
-    return resps.find(x=>x == value);
+    return resps.find(x=>x.TipoOperacion == value);
   }
 
 }

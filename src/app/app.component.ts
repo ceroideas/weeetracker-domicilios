@@ -114,10 +114,10 @@ export class AppComponent {
   {
     this.estaLogeado().then(a=>{
       if (!a) {
-      let path = this.fileNavigator.externalRootDirectory+'Android/data/com.ecolec.weeetracker/files/config/config.xml';
+      let path = this.fileNavigator.externalRootDirectory+'CONFIG/CONFIG.XML';
         // path = this.webview.convertFileSrc(path);
         
-        this.fileNavigator.checkDir(this.fileNavigator.externalRootDirectory+'Android/data/com.ecolec.weeetracker/files/','config').then(_ => {
+        this.fileNavigator.checkDir(this.fileNavigator.externalRootDirectory,'CONFIG').then(_ => {
         // this.fileNavigator.checkDir('file:///','config').then(_ => {
           // console.log(path,this.webview.convertFileSrc(path));
           console.log('directorio encontrado',this.webview.convertFileSrc(path),path.replace('file://','_app_file_'))
@@ -148,7 +148,11 @@ export class AppComponent {
               let parser = new DOMParser();
               let xmlDoc = parser.parseFromString(data,"text/xml");
 
+              console.log(xmlDoc);
+
               console.log(xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue, xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue);
+
+              localStorage.setItem('centro_config',xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue);
 
               this.events.publish('getConfigInformation',({
                 gestor:xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue,

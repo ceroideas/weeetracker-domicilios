@@ -10,6 +10,7 @@ import { StepFivePageRoutingModule } from './step-five-routing.module';
 
 import { StepFivePage } from './step-five.page';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { PipesModule } from '../../../pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
     ReactiveFormsModule,
     ComponentsModule,
     HttpClientModule,
+    PipesModule,
     StepFivePageRoutingModule
   ],
   providers: [{

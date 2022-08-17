@@ -43,6 +43,10 @@ const routes: Routes = [
   {
     path: 'step-five',
     loadChildren: () => import('./step-five/step-five.module').then( m => m.StepFivePageModule)
+  },
+  {
+    path: 'step-six',
+    loadChildren: () => import('./step-six/step-six.module').then( m => m.StepSixPageModule)
   }
 ];
 

@@ -26,6 +26,8 @@ export class StepThreePage implements OnInit {
 
   date = localStorage.getItem('date');
 
+  lecturas = [];
+
   constructor(private usuarioService: UsuarioService,
     private consultaService: ConsultasService,
     private _location: Location,
@@ -50,6 +52,13 @@ export class StepThreePage implements OnInit {
   }
 
   ngOnInit() {
+
+    this.lecturas = localStorage.getItem('lecturas') ? JSON.parse(localStorage.getItem('lecturas')) : [];
+
+    this.events.destroy('getLecturas');
+    this.events.subscribe('getLecturas',data=>{
+      this.lecturas = localStorage.getItem('lecturas') ? JSON.parse(localStorage.getItem('lecturas')) : [];
+    });
 
     this.events.destroy('lectura');
     this.events.subscribe('lectura',data=>{
@@ -103,7 +112,8 @@ export class StepThreePage implements OnInit {
   }
 
   atras() {
-    this._location.back();
+    this.nav.navigateRoot('/home');
+    // this._location.back();
   }
 
 }

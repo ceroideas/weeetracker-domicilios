@@ -11,14 +11,19 @@ import { ModalOrigenesPage } from '../../modal-origenes/modal-origenes.page';
 import { EventsService } from '../../../../services/events.service';
 import { Usuario } from 'src/app/models/usuario';
 import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
+
+
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
+// import { FTP } from '@awesome-cordova-plugins/ftp/ngx';
+
+declare var $:any;
 
 
 @Component({
   selector: 'app-readed',
   templateUrl: './readed.page.html',
   styleUrls: ['./readed.page.scss'],
-  providers: [BarcodeScanner]
+  providers: [BarcodeScanner/*, FTP*/]
 })
 export class ReadedPage implements OnInit {
 
@@ -30,6 +35,7 @@ export class ReadedPage implements OnInit {
   usuario: Usuario = new Usuario();
 
   contenedores:any;
+  contenedores_aux:any;
   residuos:any;
   residuos_especificos:any;
   marcas:any;
@@ -39,6 +45,8 @@ export class ReadedPage implements OnInit {
 
   photos:any = [];
   previews:any = [];
+
+  to = 'forward';
 
   // solicitud = JSON.parse(localStorage.getItem('solicitud')) ? JSON.parse(localStorage.getItem('solicitud'))['response'] : null;
   // gestor = JSON.parse(localStorage.getItem('solicitud')) ? JSON.parse(localStorage.getItem('solicitud'))['response'] : null;
@@ -56,6 +64,7 @@ export class ReadedPage implements OnInit {
     private translate: TranslateService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
+    // private fTP: FTP,
     private barcodeScanner: BarcodeScanner) {
 
     this.myForm = this.fb.group({
@@ -67,13 +76,15 @@ export class ReadedPage implements OnInit {
       marca: ['',Validators.required],
       tipo_contenedor: ['',Validators.required],
       canibalizado: [false,Validators.required],
-      estado_raee: ['reciclaje',Validators.required],
+      estado_raee: ['1',Validators.required],
       ref: ['',Validators.required],
     });
 
     this.cargarUsuario();
 
     this.checkEtiqueta();
+
+    // this.ftp();
   }
 
   async cargarUsuario()
@@ -82,6 +93,8 @@ export class ReadedPage implements OnInit {
     console.log(this.usuario);
     this.residuos = this.usuario.residuos;
     this.marcas = this.usuario.marcas;
+
+    console.log(this.usuario.marcas)
 
     if (localStorage.getItem('etiqueta_objeto')) {
       let etiqueta = JSON.parse(localStorage.getItem('etiqueta_objeto'));
@@ -92,6 +105,15 @@ export class ReadedPage implements OnInit {
         canibalizado: etiqueta.canibalizado
       });
     }
+
+    let fracciones = [];
+
+    for (let i of this.usuario.responsabilidades) {
+      fracciones.push(i.SidFraccion)
+    }
+
+    this.loadFracciones(fracciones.filter(this.onlyUnique));
+    this.loadContenedores();
   }
 
   checkEtiqueta()
@@ -101,6 +123,29 @@ export class ReadedPage implements OnInit {
 
       
     }
+  }
+
+  changeFraccion()
+  {
+    let contenedores = [];
+    this.contenedores = [];
+
+    for (let i of this.usuario.responsabilidades) {
+      if (i.SidFraccion == this.myForm.value.fraccion) {
+        contenedores.push(i.SidTipoContenedor)
+      }
+    }
+
+    for (let i of this.contenedores_aux)
+    {
+      if (contenedores.find(x => x == i.pidTipoContenedor) != undefined) {
+        this.contenedores.push(i);
+      }
+    }
+
+    this.myForm.patchValue({
+      tipo_contenedor: null
+    })
   }
 
   especificos()
@@ -122,9 +167,31 @@ export class ReadedPage implements OnInit {
     },100)
   }
 
+  onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+
   ngOnInit() {
-    this.consultaService.fracciones().subscribe(data=>{
-      this.fracciones = data;
+    
+  }
+
+  loadFracciones(f)
+  {
+    function filtro(a,b,c)
+    {
+      for(let j of f)
+      {
+        if (j == a.pidFraccion) {
+          return a;
+        }
+      }
+    }
+    this.consultaService.fracciones().subscribe((data:any)=>{
+
+      let data1 = data.filter(filtro)
+      console.log(data1)
+
+      this.fracciones = data1;
 
       if (localStorage.getItem('etiqueta_objeto')) {
         let etiqueta = JSON.parse(localStorage.getItem('etiqueta_objeto'));
@@ -133,15 +200,23 @@ export class ReadedPage implements OnInit {
         });
       }
     })
+  }
+
+  loadContenedores()
+  {
     this.consultaService.contenedores().subscribe(data=>{
-      this.contenedores = data;
-      if (localStorage.getItem('etiqueta_objeto')) {
-        let etiqueta = JSON.parse(localStorage.getItem('etiqueta_objeto'));
-        this.myForm.patchValue({
-          contenedor: etiqueta.sidTipoContenedor
-        });
-      }
+      this.contenedores_aux = data;
     })
+  }
+
+  checkContenedor()
+  {
+    if (localStorage.getItem('etiqueta_objeto')) {
+      let etiqueta = JSON.parse(localStorage.getItem('etiqueta_objeto'));
+      this.myForm.patchValue({
+        contenedor: etiqueta.sidTipoContenedor
+      });
+    }
   }
 
   atras() {
@@ -208,6 +283,20 @@ export class ReadedPage implements OnInit {
     }
   }
 
+  saveAndBack()
+  {
+    this.to = 'forward';
+    return this.alertCtrl.create({message:"¿Quiere guardar la información y leer otra etiqueta?.",
+        buttons: [{
+          text:"Si",
+          handler:()=>{
+            this.to = 'back';
+            this.adelante();
+          }},{
+            text:"No"
+          }]}).then(a=>a.present());
+  }
+
   adelante()
   {
     if (!this.myForm.valid) {
@@ -225,12 +314,31 @@ export class ReadedPage implements OnInit {
           }]}).then(a=>a.present());
     }
 
+    localStorage.setItem('photos',JSON.stringify(this.photos));
+
     this.continuar();
   }
 
   continuar()
   {
-    this.nav.navigateForward('/nueva-recogida/step-four');
+    let lecturas = localStorage.getItem('lecturas') ? JSON.parse(localStorage.getItem('lecturas')) : [];
+
+    let photos:any = null;
+
+    if (localStorage.getItem('photos')) {
+      photos = JSON.stringify(localStorage.getItem('photos'));
+      localStorage.removeItem('photos');
+    }
+
+    lecturas.push({values: this.myForm.value, photos: photos});
+
+    localStorage.setItem('lecturas',JSON.stringify(lecturas));
+    this.events.publish('getLecturas');
+    if (this.to == 'forward') {
+      this.nav.navigateForward('/nueva-recogida/step-three/summary');
+    }else{
+      this._location.back();
+    }
   }
 
   removeRef()
@@ -255,5 +363,79 @@ export class ReadedPage implements OnInit {
        this.readonly = false;
     });
   }
+
+  deleteImage(i)
+  {
+    this.photos.splice(i,1);
+  }
+
+  /*ftp()
+  {
+    this.fTP.connect('85.208.21.142', 'tuweb', '5wb*08Te')
+    .then((res: any) => {
+      console.log('Login successful ceroideas', res);
+
+      this.fTP.ls('/').then(a=>{
+        console.log(a);
+      })
+
+    })
+    .catch((error: any) => console.error(error));
+  }
+
+  async uploadFTP(path)
+  {
+    let name = path.split('/').reverse()[0];
+
+    await this.fTP.upload(path,'/test/'+name).subscribe(p=>{
+
+      if (p == 1) {
+          console.debug("Ftp4es6: upload percent=100%");
+          console.info("Ftp4es6: upload finish");
+      } else {
+          console.debug("Ftp4es6: upload percent=" + p * 100 + "%");
+      }
+
+    },err=>{
+      console.log(err)
+    })
+  }*/
+
+  takephoto()
+  {
+    if (this.photos.length >= 4) {
+      return this.alertCtrl.create({message:"Solo puede subir 4 fotos.", buttons: ["Ok"]}).then(a=>a.present());
+    }
+    
+    const options: CameraOptions = {
+      quality: 50,
+      sourceType: this.camera.PictureSourceType.CAMERA,
+      // destinationType: this.camera.DestinationType.FILE_URI,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+
+    this.camera.getPicture(options).then((imageData) => {
+
+     this.photos.push({path: imageData});
+     // this.previews.push({path: imageData/*, preview: imageData.replace('file://','_app_file_')*/});
+
+     // this.uploadFTP(imageData);
+
+    }, (err) => {
+     // Handle error
+    });
+  }
+
+  /*async uploadPhotos()
+  {
+    for(let i of this.photos)
+    {
+      await this.uploadFTP(i.path);
+    }
+
+    this.photos = [];
+  }*/
 
 }

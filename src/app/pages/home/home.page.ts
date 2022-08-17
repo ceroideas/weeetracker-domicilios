@@ -34,6 +34,7 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.cargarDatos();
+    localStorage.removeItem('lecturas');
   }
 
   async cargarDatos() {
@@ -91,6 +92,7 @@ export class HomePage implements OnInit {
   logOut() {
     this.usuarioService.eliminarToken();
     this.navCtrl.navigateRoot("/login");
+    localStorage.removeItem('centro');
     this.events.publish('loadPostLogout');
   }
 

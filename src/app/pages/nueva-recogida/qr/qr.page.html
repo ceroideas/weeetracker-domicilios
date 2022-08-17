@@ -9,11 +9,17 @@
         <ion-col>
 
             <ion-row>
-              <ion-col size="12">
+              <ion-col size="12" *ngIf="!zebra">
                 <ion-label class="left-label">Etiqueta</ion-label>
                 <ion-input class="ion-no-margin mb-2" type="text" [(ngModel)]="etiqueta"></ion-input>
 
                 <ion-button (click)="buscar()" class="ecobtn">Busqueda manual</ion-button>
+              </ion-col>
+
+              <ion-col size="12" *ngIf="zebra" style="text-align: center;">
+                <ion-button color="warning" size="large" (touchstart)="fabDown()" (touchend)="fabUp()">
+                  <ion-icon name="barcode"></ion-icon>
+                </ion-button>
               </ion-col>
             </ion-row>
 

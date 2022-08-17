@@ -4,7 +4,9 @@
     <ion-grid fixed="fixed">
 
 
-        <!-- {{file.externalRootDirectory}} <br> -->
+        <!-- {{file.externalRootDirectory}} <br>
+
+        {{exist}} -->
         
 
         <div *ngIf="terminal" style="line-height: 32px; padding: 0 20px;">
@@ -16,6 +18,8 @@
             <label style="color: #fff; font-size: 16px;">Centro: {{nombre}} <br></label>
 
         </div>
+
+        <!-- <ion-button (click)="takephoto()">CAMARA</ion-button> -->
 
         <form #formulario="ngForm" *ngIf="!terminal && loaded">
             <ion-row>
@@ -73,11 +77,32 @@
             </ion-row>
         </div>
     </ion-grid>
+
+    <!-- <div *ngFor="let p of photos; let i = index;">
+        <img [src]="p.render" alt="" style="width: 100px;"> <br>
+
+        <button (click)="deletephoto(i)"></button>
+    </div> -->
+
+    <!-- <ion-row *ngFor="let p of photos; let i = index">
+
+        <ion-col size="12" style="text-align: left;">
+          <img [src]="'data:image/jpeg;base64,'+p.path" alt="" style="border-radius: 65px; height:65px; width:65px"><br>
+          
+        </ion-col>
+      
+    </ion-row>
+
+    <ion-button (click)="takephoto()">TOMAR FOTO</ion-button> -->
+
+    <!-- <input type="file" (change)="upload($event)"> -->
+
+
 </ion-content>
 
 
 <ion-footer no-border>
     <ion-icon class="izquierda" name="help-circle-outline" (click)="abrir()"></ion-icon>
     <img class="imgLogin" src="../../../assets/img/logo-ecolec.png">
-    <p style="position: absolute;top: 2px;right: 15px;">{{message}} V 1.0.0</p>
+    <p style="position: absolute;top: 2px;right: 15px;">{{message}} V 1.0.1</p>
 </ion-footer>

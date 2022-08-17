@@ -1,0 +1,60 @@
+<app-header  [titulo]="titulo"></app-header>
+
+<ion-content color="medium" fullscreen="fullscreen" padding="padding">
+
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" class="ion-no-padding" style="background-color: #fff; min-height: 400px; overflow: auto;">
+
+            <table style="width: 100%; text-align: left;">
+                
+                <thead style="font-size: 14px;">
+                    <tr>
+                        <th>RFID</th>
+                        <th>Can</th>
+                        <th>R. Espécifico</th>
+                        <th>Cont</th>
+                    </tr>
+                </thead>
+
+                <tbody style="font-size: 10px;">
+                    <tr *ngFor="let l of lecturas" [ngClass]="{'trselected': (selected == l.values.etiqueta)}" (click)="seleccionar(l)">
+                        <td>{{l.values.etiqueta}}</td>
+                        <td>{{l.values.canibalizado ? 'S' : 'N'}}</td>
+                        <td>{{l.values.residuo_especifico | listadoRaee:especificos:'residuo'}}</td>
+                        <td>{{l.values.tipo_contenedor | listadoRaee:contenedores:'contenedor'}}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <div style="text-align: center;" *ngIf="selected">
+        <ion-button (click)="eliminar()" size="small" style="height: 40px;" class="ecobtn">Borrar</ion-button>
+
+        <ion-button (click)="editar()" size="small" style="height: 40px;" class="ecobtn">Mod.RAEE</ion-button>
+    </div>
+
+
+</ion-content>
+
+<ion-footer no-shadow no-border>
+        <ion-buttons>
+            <!-- <ion-button (click)="logOut()" *ngIf="!submenu" class="derecha">
+                <span><ion-img src="../../assets/img/Cerrar_sesion.png"></ion-img></span>
+            </ion-button> -->
+            <ion-button class="derecha" (click)="adelante()">
+                <!-- <ion-icon name="arrow-round-back"></ion-icon> -->
+                <span><ion-img src="../../assets/img/Derecha.png"></ion-img></span>
+            </ion-button>
+            <ion-button class="izquierda" (click)="atras()">
+                <!-- <ion-icon  name="arrow-round-back"></ion-icon> -->
+                <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+            </ion-button>
+        </ion-buttons>
+        <img src="../../../assets/img/logo-ecolec.png">
+</ion-footer>

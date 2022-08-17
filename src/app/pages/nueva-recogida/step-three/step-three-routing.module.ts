@@ -11,6 +11,14 @@ const routes: Routes = [
   {
     path: 'readed',
     loadChildren: () => import('./readed/readed.module').then( m => m.ReadedPageModule)
+  },
+  {
+    path: 'summary',
+    loadChildren: () => import('./summary/summary.module').then( m => m.SummaryPageModule)
+  },
+  {
+    path: 'edit-read',
+    loadChildren: () => import('./edit-read/edit-read.module').then( m => m.EditReadPageModule)
   }
 ];
 

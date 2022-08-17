@@ -55,6 +55,9 @@ export class StepTwoPage implements OnInit {
       direccion: [/*this.solicitud ? this.solicitud.direccion : ''*/'',Validators.required],
       provincia: [/*this.solicitud ? this.solicitud.provincia : ''*/'',Validators.required],
       pais: [/*this.solicitud ? this.solicitud.pais : ''*/'',Validators.required],
+      codNima: ['',Validators.required],
+      insRP: ['',Validators.required],
+      insRnP: ['',Validators.required],
     });
 
     this.cargarUsuario();
@@ -76,8 +79,9 @@ export class StepTwoPage implements OnInit {
     this.events.subscribe('nuevoOrigen',(data:any)=>{
       // this.solicitud = data.centro;
       // this.gestor = data.centro;
+      localStorage.setItem('nuevoOrigen','1');
       this.direcciones = data.direcciones;
-      let last = this.direcciones.length;
+      let last = this.direcciones.length-1;
 
       this.myForm.patchValue({
         centro: this.direcciones[last].nombre,
@@ -85,6 +89,9 @@ export class StepTwoPage implements OnInit {
         direccion: this.direcciones[last].direccion,
         provincia: this.direcciones[last].nombreProvincia,
         pais: this.direcciones[last].nombrePais,
+        codNima: this.direcciones[last].codNima,
+        insRP: this.direcciones[last].insRP,
+        insRnP: this.direcciones[last].insRnP,
       })
     });
 
@@ -103,12 +110,17 @@ export class StepTwoPage implements OnInit {
         this.consultaService.ubicacionCentro(
           {pais:direccion.sidPais, provincia: direccion.sidProvincia, municipio:direccion.sidMunicipio}).subscribe((data1:any)=>{
 
+          localStorage.removeItem('nuevoOrigen');
+
           this.myForm.patchValue({
             centro: direccion.nombre,
             localidad: data1['ubicacion']['_municipio'].nombre,
             direccion: direccion.direccion,
             provincia: data1['ubicacion']['_provincia'].nombre,
             pais: data1['ubicacion']['_pais'].nombre,
+            codNima: direccion.codNima,
+            insRP: direccion.insRP,
+            insRnP: direccion.insRnP,
           });
 
           l.dismiss();
@@ -124,6 +136,7 @@ export class StepTwoPage implements OnInit {
     if (!this.myForm.valid) {
       return this.alertCtrl.create({message:"Por favor, seleccione un origen válido.", buttons: ["Ok"]}).then(a=>a.present());
     }
+    localStorage.setItem('origen',JSON.stringify(this.myForm.value));
     this.nav.navigateForward('/nueva-recogida/step-three')
   }
 
@@ -180,6 +193,9 @@ export class StepTwoPage implements OnInit {
             direccion: "",
             provincia: "",
             pais: "",
+            codNima: "",
+            insRP: "",
+            insRnP: "",
           });
 
           return this.alertCtrl.create({message:"No hay resultados que coincidan con tu búsqueda", buttons: ['Ok']}).then(a=>{
@@ -221,6 +237,12 @@ export class StepTwoPage implements OnInit {
         this.gestor = data.info.centro;
         this.direcciones = data.info.direcciones;
 
+        if (!this.direcciones.length) {
+          return this.alertCtrl.create({message:"No hay direcciones que mostrar, por favor, ingrese nuevo origen", buttons: ['Ok']}).then(a=>{
+            a.present();
+          });
+        }
+
         this.loadingCtrl.create({message: "Obteniendo ubicación de centro"}).then(l=>{
           l.present();
 
@@ -236,6 +258,9 @@ export class StepTwoPage implements OnInit {
               direccion: this.direcciones[0].direccion,
               provincia: data1['ubicacion']['_provincia'].nombre,
               pais: data1['ubicacion']['_pais'].nombre,
+              codNima: this.direcciones[0].codNima,
+              insRP: this.direcciones[0].insRP,
+              insRnP: this.direcciones[0].insRnP,
             });
 
             l.dismiss();

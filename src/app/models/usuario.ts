@@ -15,6 +15,10 @@ export class Usuario{
 
     tercero:Tercero;
 
+    dtercero:string;
+    terminal:string;
+    sidsig:string;
+
     responsabilidades:any;
 
     tipoTercero:number;

@@ -472,8 +472,17 @@ ion-modal.selectGestor ion-toolbar {
 
 .alert-radio-label.sc-ion-alert-md {
   white-space: normal !important;
+  font-size: 13px;
 }
 
 .alert-tappable.sc-ion-alert-md {
     height: 10vh;
+}
+
+.floating-text {
+    border: none; 
+    background-color: transparent;
+    input {
+        color: #fff !important;
+    }
 }

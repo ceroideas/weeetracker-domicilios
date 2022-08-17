@@ -45,12 +45,13 @@ export class StepTwoAltPage implements OnInit {
 
     this.myForm = this.fb.group({
       // pidSolicitud: [this.gestor ? this.gestor.sid : '', Validators.required],
+      pidTercero: [this.gestor ? this.gestor.pidTercero : '', Validators.required],
       nombre: [this.gestor ? this.gestor.nombre : '', Validators.required],
       nif: [this.gestor ? this.gestor.nif : '', Validators.required],
 
       // codigo_postal: ['',Validators.required],
       // nombre_comercial: [this.gestor ? this.gestor.nombre_comercial : '',Validators.required],
-      // centro: ['',Validators.required],
+      centro: ['',Validators.required],
       contacto: ['',Validators.required],
       tlfn_contacto: ['',Validators.required],
       direccion: ['',Validators.required],
@@ -79,7 +80,7 @@ export class StepTwoAltPage implements OnInit {
       SidProvincia: val.provincia,
       SidMunicipio: val.localidad,
       SidTercero: this.gestor.pidTercero,
-      CodigoPostal: val.codigo_postal.toString(),
+      // CodigoPostal: val.codigo_postal.toString(),
       Estado: 1,
       TipoVia: "Calle",
       Pesado: 0,
