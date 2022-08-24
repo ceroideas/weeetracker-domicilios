@@ -22,7 +22,7 @@
             </ion-item>
           </ion-radio-group>
 
-          <ion-button *ngIf="lecturas.length" color="dark" size="medium" [routerLink]="['/nueva-recogida/step-three/summary']" expand="block">Ver resumen de lecturas</ion-button>
+          <ion-button *ngIf="lecturas?.length" color="dark" size="medium" [routerLink]="['/nueva-recogida/step-three/summary']" expand="block">Ver resumen de lecturas</ion-button>
         </ion-col>
         <!-- <p class="error" ion-text *ngIf="myForm.get('date').hasError('required') && myForm.get('date').touched;">
           {{ 'FORMULARIO.REQUERIDO' | translate }}</p> -->

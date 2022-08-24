@@ -239,7 +239,7 @@ export class LoginPage implements OnInit {
     }, async error => {
       this.usuarioService.cerrarSpinner();
       // loading.dismiss(); 
-      this.usuarioService.mostrarAlerta(this.translate.instant("LOGIN.ERROR"));
+      this.usuarioService.mostrarAlerta('Usuario no válido');
     });
   }
 

@@ -49,15 +49,15 @@ export class StepTwoPage implements OnInit {
       nombre: [this.solicitud ? this.solicitud.tnombre : '', Validators.required],
       nif: [this.solicitud ? this.solicitud.tNIF : '', Validators.required],
 
-      nombre_comercial: [/*this.solicitud ? this.solicitud.tnombreComercial : ''*/'',Validators.required],
-      centro: [/*this.solicitud ? this.solicitud.nombre : ''*/'',Validators.required],
-      localidad: [/*this.solicitud ? this.solicitud.municipio : ''*/'',Validators.required],
-      direccion: [/*this.solicitud ? this.solicitud.direccion : ''*/'',Validators.required],
-      provincia: [/*this.solicitud ? this.solicitud.provincia : ''*/'',Validators.required],
-      pais: [/*this.solicitud ? this.solicitud.pais : ''*/'',Validators.required],
-      codNima: ['',Validators.required],
-      insRP: ['',Validators.required],
-      insRnP: ['',Validators.required],
+      nombre_comercial: ['',Validators.required],
+      centro: ['',Validators.required],
+      localidad: ['',Validators.required],
+      direccion: ['',Validators.required],
+      provincia: ['',Validators.required],
+      pais: ['',Validators.required],
+      codNima: [''],
+      insRP: [''],
+      insRnP: [''],
     });
 
     this.cargarUsuario();

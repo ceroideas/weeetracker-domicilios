@@ -5,6 +5,7 @@ import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { EventsService } from '../../../services/events.service';
 import { MenuController } from '@ionic/angular';
 import { Device } from '@awesome-cordova-plugins/device/ngx';
+import { Location } from '@angular/common';
 
 import { BarcodeProvider } from '../../../providers/barcode/barcode';
 
@@ -28,10 +29,16 @@ export class QrPage implements OnInit {
 
   zebra = false;
 
+  isCordova = this.platform.is('cordova');
+
+  onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+
   constructor(/*private qrScanner: QRScanner,*/ private barcodeScanner: BarcodeScanner, public nav: NavController, public alertCtrl: AlertController,
     public events: EventsService, private menu: MenuController, public loading: LoadingController,
 
-    private barcodeProvider: BarcodeProvider,
+    private barcodeProvider: BarcodeProvider, public _location: Location,
     private changeDetectorRef: ChangeDetectorRef, private device: Device,
     private alertController: AlertController, private platform: Platform, private toastController: ToastController
     ) {
@@ -186,33 +193,58 @@ export class QrPage implements OnInit {
         //  Update the list of scanned barcodes
         let scannedData = data.scanData.extras["com.symbol.datawedge.data_string"];
         let scannedType = data.scanData.extras["com.symbol.datawedge.label_type"];
+
         // this.scans.unshift({ "data": scannedData, "type": scannedType, "timeAtDecode": data.time });
 
-        this.etiqueta = scannedData;
+        // this.etiqueta = scannedData;
 
-        if (this.validateTicket()) {
+        if (localStorage.getItem('read_type') == 'grupal') {
 
-          let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+          if (this.validateTicket()) {
 
-          if (lecturas) {
+            let lecturas = JSON.parse(localStorage.getItem('lecturas'));
 
-            console.log(this.etiqueta,lecturas);
-            
-            let i = lecturas.findIndex(x=>x.values.etiqueta == this.etiqueta);
+            if (lecturas) {
+              
+              let i = lecturas.findIndex(x=>x.values.etiqueta == scannedData);
 
-            if (i !== -1) {
-              this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
-              .then(a=>a.present());
-              return this.nav.back();
+              if (i !== -1) {
+                return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
+                .then(a=>a.present());
+              }
+
             }
-
+            this.scans.unshift(scannedData);
+            this.scans = this.scans.filter(this.onlyUnique);
+          }else{
+            this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
           }
 
-          this.nav.back();
-          this.events.publish('lectura',this.etiqueta);
         }else{
-          this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
+
+          if (this.validateTicket()) {
+
+            let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+
+            if (lecturas) {
+              
+              let i = lecturas.findIndex(x=>x.values.etiqueta == scannedData);
+
+              if (i !== -1) {
+                return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
+                .then(a=>a.present());
+                this.nav.back();
+              }
+
+            }
+
+            this.nav.back();
+            this.events.publish('lectura',scannedData);
+          }else{
+            this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
+          }
         }
+
 
         //  On older devices, if a scan is received we can assume the profile was correctly configured manually
         //  so remove the yellow highlight.
@@ -244,6 +276,8 @@ export class QrPage implements OnInit {
         sum += parseInt(sp[i]);
       }
     }
+
+    console.log(sum)
 
     if (sum == 10) {
       sum = "0";
@@ -278,31 +312,54 @@ export class QrPage implements OnInit {
       (window.document.querySelector('ion-app') as HTMLElement).classList.remove('cameraView');
       (window.document.querySelector('ion-app') as HTMLElement).classList.add('cameraView2');
 
-      this.etiqueta = barcodeData.text;
+      // this.etiqueta = barcodeData.text;
 
-      if (this.validateTicket()) {
+      if (localStorage.getItem('read_type') == 'grupal') {
 
-        let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+          if (this.validateTicket()) {
 
-        if (lecturas) {
+            let lecturas = JSON.parse(localStorage.getItem('lecturas'));
 
-          console.log(this.etiqueta,lecturas);
-          
-          let i = lecturas.findIndex(x=>x.values.etiqueta == this.etiqueta);
+            if (lecturas) {
+              
+              let i = lecturas.findIndex(x=>x.values.etiqueta == barcodeData.text);
 
-          if (i !== -1) {
-            this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
-            .then(a=>a.present());
-            return this.nav.back();
+              if (i !== -1) {
+                return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
+                .then(a=>a.present());
+              }
+
+            }
+            this.scans.unshift(barcodeData.text);
+            this.scans = this.scans.filter(this.onlyUnique);
+          }else{
+            this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
           }
 
+        }else{ // individual
+
+          if (this.validateTicket()) {
+
+            let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+
+            if (lecturas) {
+              
+              let i = lecturas.findIndex(x=>x.values.etiqueta == barcodeData.text);
+
+              if (i !== -1) {
+                return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
+                .then(a=>a.present());
+                this.nav.back();
+              }
+
+            }
+
+            this.nav.back();
+            this.events.publish('lectura',barcodeData.text);
+          }else{
+            this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
+          }
         }
-      
-        this.nav.back();
-        this.events.publish('lectura',this.etiqueta);
-      }else{
-        this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
-      }
     }).catch(err => {
        this.error = true;
        console.log('Error', err);
@@ -324,32 +381,61 @@ export class QrPage implements OnInit {
       return false;
     }
 
-    if (this.validateTicket()) {
+    if (localStorage.getItem('read_type') == 'grupal') {
 
+      if (this.validateTicket()) {
 
-      let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+        let lecturas = JSON.parse(localStorage.getItem('lecturas'));
 
-      if (lecturas) {
+        if (lecturas) {
+          
+          let i = lecturas.findIndex(x=>x.values.etiqueta == this.etiqueta);
 
-        console.log(this.etiqueta,lecturas);
-        
-        let i = lecturas.findIndex(x=>x.values.etiqueta == this.etiqueta);
+          if (i !== -1) {
+            return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
+            .then(a=>a.present());
+          }
 
-        if (i !== -1) {
-          this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
-          .then(a=>a.present());
-          return this.nav.back();
         }
-
+        this.scans.unshift(this.etiqueta);
+        this.scans = this.scans.filter(this.onlyUnique);
+      }else{
+        this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
       }
 
+    }else{ // individual
 
-      this.nav.back();
-      this.events.publish('lectura',this.etiqueta);
-    }else{
-      this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
+      if (this.validateTicket()) {
+
+        let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+
+        if (lecturas) {
+          
+          let i = lecturas.findIndex(x=>x.values.etiqueta == this.etiqueta);
+
+          if (i !== -1) {
+            return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
+            .then(a=>a.present());
+            this.nav.back();
+          }
+
+        }
+
+        this.nav.back();
+        this.events.publish('lectura',this.etiqueta);
+      }else{
+        this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
+      }
     }
 
+    this.etiqueta = null;
+
+  }
+
+  async groupReads()
+  {
+    this.nav.back();
+    this.events.publish('lecturaGrupal',this.scans);
   }
 
 

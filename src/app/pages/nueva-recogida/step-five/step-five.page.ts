@@ -9,6 +9,8 @@ import { ConsultasService } from 'src/app/services/consultas.service';
 import { Usuario } from 'src/app/models/usuario';
 import { ParamsService } from '../../../services/params.service';
 
+import { Storage } from '@ionic/storage-angular';
+
 declare var SignaturePad:any;
 
 @Component({
@@ -31,6 +33,11 @@ export class StepFivePage implements OnInit {
   canvas;
   signaturePad;
 
+  agrupadas = [];
+  keys = [];
+
+  private _storage: Storage | null = null;
+
   constructor(private usuarioService: UsuarioService,
     private consultas: ConsultasService,
     private _location: Location,
@@ -40,7 +47,8 @@ export class StepFivePage implements OnInit {
     private lectorService: LectorService,
     private translate: TranslateService,
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController,) {
+    private alertCtrl: AlertController,
+    private storage: Storage) {
 
     this.myForm = this.fb.group({
       origen: [this.origen.direccion, Validators.required],
@@ -54,8 +62,6 @@ export class StepFivePage implements OnInit {
 
     this.contenedores = p.contenedores;
     this.especificos = p.especificos;
-
-    this.lecturas = JSON.parse(localStorage.getItem('lecturas'));
 
     /*this.consultas.contenedores().subscribe((data:any)=>{
       this.contenedores = data;
@@ -73,7 +79,7 @@ export class StepFivePage implements OnInit {
     console.log(this.usuario);
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.canvas = document.querySelector("#sign-five");
 
     this.signaturePad = new SignaturePad(this.canvas);
@@ -86,6 +92,15 @@ export class StepFivePage implements OnInit {
       });
     });
     console.log(this.signaturePad);
+
+    const storage = await this.storage.create();
+    this._storage = storage;
+
+    // this.lecturas = JSON.parse(localStorage.getItem('lecturas'));
+    this.lecturas = await this._storage.get('lecturas');
+
+    this.agrupadas = this.consultas.groupBy(this.lecturas,'residuo_especifico');
+    this.keys = Object.keys(this.agrupadas);
   }
 
   clearCanvas()
@@ -101,7 +116,11 @@ export class StepFivePage implements OnInit {
     if (!this.myForm.valid) {
       return this.alertCtrl.create({message:"Por favor, rellene todos los datos.", buttons: ["Ok"]}).then(a=>a.present());
     }
-    localStorage.setItem('firma_transportista',JSON.stringify(this.myForm.value));
+
+    // localStorage.setItem('firma_transportista',JSON.stringify(this.myForm.value));
+
+    this._storage?.set('firma_transportista', this.myForm.value);
+
     this.nav.navigateForward('/nueva-recogida/step-six');
   }
 

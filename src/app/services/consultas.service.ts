@@ -214,4 +214,11 @@ export class ConsultasService {
     })
   }
 
+  groupBy(xs, key) {
+    return xs.reduce(function(rv, x) {
+      (rv[x.values[key]] = rv[x.values[key]] || []).push(x);
+      return rv;
+    }, {});
+  }
+
 }

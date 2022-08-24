@@ -1,6 +1,6 @@
-<app-header  [titulo]="titulo"></app-header>
+<app-header *ngIf="(!isCordova) || (isCordova && !zebra)" [titulo]="titulo"></app-header>
 
-<ion-content color="medium" fullscreen="fullscreen" padding="padding">
+<ion-content *ngIf="(!isCordova) || (isCordova && !zebra)" color="medium" fullscreen="fullscreen" padding="padding">
 
   <ion-grid>
 
@@ -9,21 +9,42 @@
         <ion-col>
 
             <ion-row>
-              <ion-col size="12" *ngIf="!zebra">
+              <ion-col size="12" *ngIf="!zebra && !isCordova">
                 <ion-label class="left-label">Etiqueta</ion-label>
                 <ion-input class="ion-no-margin mb-2" type="text" [(ngModel)]="etiqueta"></ion-input>
 
-                <ion-button (click)="buscar()" class="ecobtn">Busqueda manual</ion-button>
+                <ion-button (click)="buscar()" style="height: 32px;" class="ecobtn">Validar</ion-button>
+                <ion-button (click)="_location.back()" style="height: 32px;" class="ecobtn">Salir</ion-button>
               </ion-col>
 
               <ion-col size="12" *ngIf="zebra" style="text-align: center;">
                 <ion-button color="warning" size="large" (touchstart)="fabDown()" (touchend)="fabUp()">
                   <ion-icon name="barcode"></ion-icon>
-                </ion-button>
+                </ion-button> <br>
+
+                <ion-button (click)="_location.back()" style="height: 32px;" class="ecobtn">Salir</ion-button>
+              </ion-col>
+
+              <ion-col size="12" *ngIf="!zebra && isCordova" style="text-align: center;">
+                <ion-button color="warning" size="large" (click)="prepareQrScanner()">
+                  <ion-icon name="barcode"></ion-icon>
+                </ion-button> <br>
+
+                <ion-button (click)="_location.back()" style="height: 32px;" class="ecobtn">Salir</ion-button>
               </ion-col>
             </ion-row>
 
           </ion-col>
+
+      </ion-row>
+
+      <ion-row *ngIf="scans.length">
+        
+        <ion-col size="12"><h4>Etiquetas leídas</h4></ion-col>
+
+        <ion-col size="12" *ngFor="let s of scans"><li style="padding-bottom: 8px">{{s}}</li></ion-col>
+
+        <ion-button (click)="groupReads()" style="height: 32px;" class="ecobtn">Aceptar</ion-button>
 
       </ion-row>
 

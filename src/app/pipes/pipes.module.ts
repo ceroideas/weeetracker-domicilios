@@ -5,10 +5,6 @@ import { ListadoRaeePipe } from './listado-raee.pipe';
 
 @NgModule({
   declarations: [CortarFechaPipe, CheckRespPipe, ListadoRaeePipe],
-  exports: [
-    CortarFechaPipe,
-    CheckRespPipe,
-    ListadoRaeePipe
-  ]
+  exports: [CortarFechaPipe,CheckRespPipe,ListadoRaeePipe]
 })
 export class PipesModule { }

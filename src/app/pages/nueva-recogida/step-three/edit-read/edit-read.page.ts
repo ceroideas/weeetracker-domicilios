@@ -15,6 +15,9 @@ import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 
 
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
+
+import { Storage } from '@ionic/storage-angular';
+
 // import { FTP } from '@awesome-cordova-plugins/ftp/ngx';
 
 declare var $:any;
@@ -23,6 +26,7 @@ declare var $:any;
   selector: 'app-edit-read',
   templateUrl: './edit-read.page.html',
   styleUrls: ['./edit-read.page.scss'],
+  providers: [BarcodeScanner]
 })
 export class EditReadPage implements OnInit {
   
@@ -57,6 +61,8 @@ export class EditReadPage implements OnInit {
   loadedResiduoEsp = false;
   loadedContenedor = false;
 
+  private _storage: Storage | null = null;
+
   constructor(private usuarioService: UsuarioService,
     private consultaService: ConsultasService,
     private _location: Location,
@@ -71,6 +77,7 @@ export class EditReadPage implements OnInit {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     // private fTP: FTP,
+    private storage: Storage,
     private barcodeScanner: BarcodeScanner) {
 
     this.myForm = this.fb.group({
@@ -79,14 +86,13 @@ export class EditReadPage implements OnInit {
       fraccion: [null ,Validators.required],
       residuo: [null ,Validators.required],
       residuo_especifico: [null ,Validators.required],
-      marca: [null ,Validators.required],
+      marca: [null],
       tipo_contenedor: [null ,Validators.required],
-      canibalizado: [null ,Validators.required],
+      canibalizado: [null],
       estado_raee: [null ,Validators.required],
-      ref: [null ,Validators.required],
+      ref: [null],
     });
 
-    this.especificos();
     this.cargarUsuario();
   }
 
@@ -94,11 +100,11 @@ export class EditReadPage implements OnInit {
   {
     this.myForm.patchValue({
       etiqueta: this.read.values.etiqueta,
-      fraccion: this.read.values.fraccion,
-      residuo: this.read.values.residuo,
-      residuo_especifico: this.read.values.residuo_especifico,
-      marca: this.read.values.marca,
-      tipo_contenedor: this.read.values.tipo_contenedor,
+      // fraccion: this.read.values.fraccion,
+      // residuo: this.read.values.residuo,
+      // residuo_especifico: this.read.values.residuo_especifico,
+      // marca: this.read.values.marca,
+      // tipo_contenedor: this.read.values.tipo_contenedor,
       canibalizado: this.read.values.canibalizado,
       estado_raee: this.read.values.estado_raee,
       ref: this.read.values.ref,
@@ -112,20 +118,15 @@ export class EditReadPage implements OnInit {
     this.marcas = this.usuario.marcas;
 
     if (!this.loadedMarca && !this.loadedResiduo) {
-      this.setValues();
       this.loadedMarca = true;
       this.loadedResiduo = true;
-    }
-
-
-    let fracciones = [];
-
-    for (let i of this.usuario.responsabilidades) {
-      fracciones.push(i.SidFraccion)
+      this.myForm.patchValue({marca: this.read.values.marca});
+      this.myForm.patchValue({residuo: this.read.values.residuo});
+      this.especificos();
+      this.setValues();
     }
 
     this.loadContenedores();
-    this.loadFracciones(fracciones.filter(this.onlyUnique));
   }
 
   changeFraccion()
@@ -159,8 +160,8 @@ export class EditReadPage implements OnInit {
         this.residuos_especificos = data;
 
         if (!this.loadedResiduoEsp) {
-          this.setValues();
           this.loadedResiduoEsp = true;
+          this.myForm.patchValue({residuo_especifico: this.read.values.residuo_especifico});
         }
       })
     },100)
@@ -170,8 +171,9 @@ export class EditReadPage implements OnInit {
     return self.indexOf(value) === index;
   }
 
-  ngOnInit() {
-    
+  async ngOnInit() {
+    const storage = await this.storage.create();
+    this._storage = storage;
   }
 
   loadFracciones(f)
@@ -191,8 +193,10 @@ export class EditReadPage implements OnInit {
       this.fracciones = data1;
 
       if (!this.loadedFraccion) {
-        this.setValues();
         this.loadedFraccion = true;
+        this.myForm.patchValue({fraccion: this.read.values.fraccion});
+        this.changeFraccion();
+        this.myForm.patchValue({tipo_contenedor: this.read.values.tipo_contenedor});
       }
     })
   }
@@ -203,9 +207,12 @@ export class EditReadPage implements OnInit {
       this.contenedores_aux = data;
 
       if (!this.loadedContenedor) {
-        this.changeFraccion();
-        this.setValues();
         this.loadedContenedor = true;
+        let fracciones = [];
+        for (let i of this.usuario.responsabilidades) {
+          fracciones.push(i.SidFraccion)
+        }
+        this.loadFracciones(fracciones.filter(this.onlyUnique));
       }
     })
   }
@@ -252,7 +259,7 @@ export class EditReadPage implements OnInit {
     }
   }
 
-  adelante()
+  async adelante()
   {
     if (!this.myForm.valid) {
       return this.alertCtrl.create({message:"Por favor, complete todos los datos.", buttons: ["Ok"]}).then(a=>a.present());
@@ -269,27 +276,40 @@ export class EditReadPage implements OnInit {
           }]}).then(a=>a.present());
     }
 
-    localStorage.setItem('photos',JSON.stringify(this.photos));
+    // localStorage.setItem('photos',JSON.stringify(this.photos));
+
+    await this._storage?.set('photos', this.photos);
 
     this.continuar();
   }
 
-  continuar()
+  async continuar()
   {
-    let lecturas = localStorage.getItem('lecturas') ? JSON.parse(localStorage.getItem('lecturas')) : [];
+    // let lecturas = localStorage.getItem('lecturas') ? JSON.parse(localStorage.getItem('lecturas')) : [];
+
+    let lecturas = await this.storage.get('lecturas');
+
+    if (!lecturas) {
+      lecturas = [];
+    }
 
     let photos:any = null;
+    const checkphotos = await this._storage.get('photos');
 
-    if (localStorage.getItem('photos')) {
-      photos = JSON.stringify(localStorage.getItem('photos'));
-      localStorage.removeItem('photos');
+    if (checkphotos) {
+      photos = checkphotos;
+      await this._storage.remove('photos');
+      // localStorage.removeItem('photos');
     }
 
     let idx = lecturas.findIndex(x=>x.values.etiqueta == this.read.values.etiqueta);
 
     lecturas[idx] = {values: this.myForm.value, photos: photos};
 
-    localStorage.setItem('lecturas',JSON.stringify(lecturas));
+    // localStorage.setItem('lecturas',JSON.stringify(lecturas));
+    
+    await this._storage?.set('lecturas', lecturas);
+
     this.events.publish('getLecturas');
     this.events.publish('updateLecturas');
     this._location.back();

@@ -9,15 +9,18 @@ import { ConsultasService } from 'src/app/services/consultas.service';
 import { ModalGestoresPage } from '../../modal-gestores/modal-gestores.page';
 import { ModalOrigenesPage } from '../../modal-origenes/modal-origenes.page';
 import { EventsService } from '../../../../services/events.service';
+import { ParamsService } from '../../../../services/params.service';
 import { Usuario } from 'src/app/models/usuario';
 import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 
 
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
+
+import { Storage } from '@ionic/storage-angular';
+
 // import { FTP } from '@awesome-cordova-plugins/ftp/ngx';
 
 declare var $:any;
-
 
 @Component({
   selector: 'app-readed',
@@ -45,12 +48,19 @@ export class ReadedPage implements OnInit {
 
   photos:any = [];
   previews:any = [];
-
   to = 'forward';
-
+  read = this.params.getParam();
   // solicitud = JSON.parse(localStorage.getItem('solicitud')) ? JSON.parse(localStorage.getItem('solicitud'))['response'] : null;
   // gestor = JSON.parse(localStorage.getItem('solicitud')) ? JSON.parse(localStorage.getItem('solicitud'))['response'] : null;
   // direcciones = null;
+
+  loadedFraccion = false;
+  loadedResiduo = false;
+  loadedMarca = false;
+  loadedResiduoEsp = false;
+  loadedContenedor = false;
+
+  private _storage: Storage | null = null;
 
   constructor(private usuarioService: UsuarioService,
     private consultaService: ConsultasService,
@@ -59,12 +69,14 @@ export class ReadedPage implements OnInit {
     private fb: FormBuilder,
     private camera: Camera,
     private events: EventsService,
+    private params: ParamsService,
     private modal: ModalController,
     private lectorService: LectorService,
     private translate: TranslateService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     // private fTP: FTP,
+    private storage: Storage,
     private barcodeScanner: BarcodeScanner) {
 
     this.myForm = this.fb.group({
@@ -73,57 +85,52 @@ export class ReadedPage implements OnInit {
       fraccion: ['FR1',Validators.required],
       residuo: ['',Validators.required],
       residuo_especifico: ['',Validators.required],
-      marca: ['',Validators.required],
+      marca: [''],
       tipo_contenedor: ['',Validators.required],
-      canibalizado: [false,Validators.required],
-      estado_raee: ['1',Validators.required],
-      ref: ['',Validators.required],
+      canibalizado: [null],
+      estado_raee: [1,Validators.required],
+      ref: [''],
     });
 
     this.cargarUsuario();
+  }
 
-    this.checkEtiqueta();
-
-    // this.ftp();
+  setValues()
+  {
+    this.myForm.patchValue({
+      etiqueta: this.read.values.etiqueta,
+      // fraccion: this.read.values.fraccion,
+      // residuo: this.read.values.residuo,
+      // residuo_especifico: this.read.values.residuo_especifico,
+      // marca: this.read.values.marca,
+      // tipo_contenedor: this.read.values.tipo_contenedor,
+      canibalizado: this.read.values.canibalizado,
+      estado_raee: this.read.values.estado_raee,
+      ref: this.read.values.ref,
+    });
   }
 
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
-    console.log(this.usuario);
     this.residuos = this.usuario.residuos;
     this.marcas = this.usuario.marcas;
 
-    console.log(this.usuario.marcas)
+    if (!this.read) {
+      this.especificos();
+    }else{
 
-    if (localStorage.getItem('etiqueta_objeto')) {
-      let etiqueta = JSON.parse(localStorage.getItem('etiqueta_objeto'));
-      console.log("etiqueta",etiqueta);
-      this.myForm.patchValue({
-        marca: etiqueta.sidMarca,
-        residuo: etiqueta.sidResiduo,
-        canibalizado: etiqueta.canibalizado
-      });
+      if (!this.loadedMarca && !this.loadedResiduo) {
+        this.loadedMarca = true;
+        this.loadedResiduo = true;
+        this.myForm.patchValue({marca: this.read.values.marca});
+        this.myForm.patchValue({residuo: this.read.values.residuo});
+        this.setValues();
+      }
     }
 
-    let fracciones = [];
-
-    for (let i of this.usuario.responsabilidades) {
-      fracciones.push(i.SidFraccion)
-    }
-
-    this.loadFracciones(fracciones.filter(this.onlyUnique));
     this.loadContenedores();
-  }
-
-  checkEtiqueta()
-  {
-    if (localStorage.getItem('etiqueta_objeto')) {
-      let etiqueta_objeto = JSON.parse(localStorage.getItem('etiqueta_objeto'));
-
-      
-    }
-  }
+  }   
 
   changeFraccion()
   {
@@ -152,16 +159,14 @@ export class ReadedPage implements OnInit {
   {
     setTimeout(()=>{
 
-      console.log(this.myForm.value);
       this.consultaService.especificos(this.myForm.value.residuo).subscribe(data=>{
-        console.log(data);
         this.residuos_especificos = data;
 
-        if (localStorage.getItem('etiqueta_objeto')) {
-          let etiqueta = JSON.parse(localStorage.getItem('etiqueta_objeto'));
-          this.myForm.patchValue({
-            residuo_especifico: etiqueta.sidResiduoEspecifico
-          });
+        if (!this.read) {
+          if (!this.loadedResiduoEsp) {
+            this.loadedResiduoEsp = true;
+            this.myForm.patchValue({residuo_especifico: this.read.values.residuo_especifico});
+          }
         }
       })
     },100)
@@ -171,8 +176,9 @@ export class ReadedPage implements OnInit {
     return self.indexOf(value) === index;
   }
 
-  ngOnInit() {
-    
+  async ngOnInit() {
+    const storage = await this.storage.create();
+    this._storage = storage;
   }
 
   loadFracciones(f)
@@ -189,15 +195,15 @@ export class ReadedPage implements OnInit {
     this.consultaService.fracciones().subscribe((data:any)=>{
 
       let data1 = data.filter(filtro)
-      console.log(data1)
-
       this.fracciones = data1;
 
-      if (localStorage.getItem('etiqueta_objeto')) {
-        let etiqueta = JSON.parse(localStorage.getItem('etiqueta_objeto'));
-        this.myForm.patchValue({
-          fraccion: etiqueta.sidFraccion
-        });
+      if (this.read) {
+        if (!this.loadedFraccion) {
+          this.loadedFraccion = true;
+          this.myForm.patchValue({fraccion: this.read.values.fraccion});
+          this.changeFraccion();
+          this.myForm.patchValue({tipo_contenedor: this.read.values.tipo_contenedor});
+        }
       }
     })
   }
@@ -206,17 +212,21 @@ export class ReadedPage implements OnInit {
   {
     this.consultaService.contenedores().subscribe(data=>{
       this.contenedores_aux = data;
+
+      if (!this.loadedContenedor) {
+        this.loadedContenedor = true;
+        let fracciones = [];
+        for (let i of this.usuario.responsabilidades) {
+          fracciones.push(i.SidFraccion)
+        }
+        this.loadFracciones(fracciones.filter(this.onlyUnique));
+      }
     })
   }
 
   checkContenedor()
   {
-    if (localStorage.getItem('etiqueta_objeto')) {
-      let etiqueta = JSON.parse(localStorage.getItem('etiqueta_objeto'));
-      this.myForm.patchValue({
-        contenedor: etiqueta.sidTipoContenedor
-      });
-    }
+    
   }
 
   atras() {
@@ -297,7 +307,7 @@ export class ReadedPage implements OnInit {
           }]}).then(a=>a.present());
   }
 
-  adelante()
+  async adelante()
   {
     if (!this.myForm.valid) {
       return this.alertCtrl.create({message:"Por favor, complete todos los datos.", buttons: ["Ok"]}).then(a=>a.present());
@@ -314,30 +324,42 @@ export class ReadedPage implements OnInit {
           }]}).then(a=>a.present());
     }
 
-    localStorage.setItem('photos',JSON.stringify(this.photos));
+    // localStorage.setItem('photos',JSON.stringify(this.photos));
+
+    await this._storage?.set('photos', this.photos);
 
     this.continuar();
   }
 
-  continuar()
+  async continuar()
   {
-    let lecturas = localStorage.getItem('lecturas') ? JSON.parse(localStorage.getItem('lecturas')) : [];
+    // let lecturas = localStorage.getItem('lecturas') ? JSON.parse(localStorage.getItem('lecturas')) : [];
+    let lecturas = await this.storage.get('lecturas');
+
+    if (!lecturas) {
+      lecturas = [];
+    }
 
     let photos:any = null;
+    const checkphotos = await this._storage.get('photos');
 
-    if (localStorage.getItem('photos')) {
-      photos = JSON.stringify(localStorage.getItem('photos'));
-      localStorage.removeItem('photos');
+    if (checkphotos) {
+      photos = checkphotos;
+      await this._storage.remove('photos');
+      // localStorage.removeItem('photos');
     }
 
     lecturas.push({values: this.myForm.value, photos: photos});
 
-    localStorage.setItem('lecturas',JSON.stringify(lecturas));
+    await this._storage?.set('lecturas', lecturas);
+
+    // localStorage.setItem('lecturas',JSON.stringify(lecturas));
     this.events.publish('getLecturas');
     if (this.to == 'forward') {
       this.nav.navigateForward('/nueva-recogida/step-three/summary');
     }else{
       this._location.back();
+      this.events.publish('newRead');
     }
   }
 

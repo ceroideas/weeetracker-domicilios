@@ -33,10 +33,10 @@
             </thead>
 
             <tbody style="font-size: 10px;">
-                <tr *ngFor="let l of lecturas">
-                    <td>{{l.values.residuo_especifico | listadoRaee:especificos:'residuo'}}</td>
-                    <td>{{l.values.canibalizado ? 'S' : 'N'}}</td>
-                    <td>1</td>
+                <tr *ngFor="let obj of keys">
+                    <td>{{agrupadas[obj][0].values.residuo_especifico | listadoRaee:especificos:'residuo'}}</td>
+                    <td>{{agrupadas[obj][0].values.canibalizado ? 'S' : 'N'}}</td>
+                    <td>{{agrupadas[obj].length}}</td>
                 </tr>
             </tbody>
 
