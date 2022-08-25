@@ -186,11 +186,13 @@ export class StepSixPage implements OnInit {
     
     firma_1.nombre = 'Fr'+this.myForm.value.certificado+'_11';
     firma_1.id = this.pidFirma+String(this.contadores.firmas).padStart(4, '0');
+    await this.consultas.uploadFTP(firma_1.firma,firma_1.nombre,'FTPUpload2');
 
     this.contadores.firmas++;
 
     firma_2.nombre = 'Fr'+this.myForm.value.certificado+'_12';
     firma_2.id = this.pidFirma+String(this.contadores.firmas).padStart(4, '0');
+    await this.consultas.uploadFTP(firma_1.firma,firma_1.nombre,'FTPUpload2');
 
     console.log(firma_1,firma_2,this.photos);
 
