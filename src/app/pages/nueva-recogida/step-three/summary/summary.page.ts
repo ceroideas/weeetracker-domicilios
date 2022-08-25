@@ -20,6 +20,8 @@ export class SummaryPage implements OnInit {
   especificos = [];
   selected = null;
 
+  noFwd = false;
+
   private _storage: Storage | null = null;
 
   constructor(private _location: Location,
@@ -56,6 +58,13 @@ export class SummaryPage implements OnInit {
     })
   }
 
+  ionViewDidEnter()
+  {
+    if (localStorage.getItem('noFwd')) {
+      this.noFwd = true;
+    }
+  }
+
   adelante()
   {
     if (this.lecturas.length == 0) {
@@ -75,6 +84,9 @@ export class SummaryPage implements OnInit {
 
   atras()
   {
+    if (this.noFwd) {
+      return this._location.back();
+    }
     this.nav.navigateRoot('/nueva-recogida/step-three');
   }
 
@@ -110,6 +122,11 @@ export class SummaryPage implements OnInit {
     this.params.setParam(this.lecturas.find(x=>x.values.etiqueta == this.selected));
 
     this.nav.navigateForward('/nueva-recogida/step-three/edit-read');
+  }
+
+  ionViewDidLeave()
+  {
+    localStorage.removeItem('noFwd');
   }
 
 }

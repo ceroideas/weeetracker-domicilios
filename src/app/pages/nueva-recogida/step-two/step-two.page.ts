@@ -11,6 +11,8 @@ import { ModalOrigenesPage } from '../modal-origenes/modal-origenes.page';
 import { EventsService } from '../../../services/events.service';
 import { Usuario } from 'src/app/models/usuario';
 
+import { Storage } from '@ionic/storage-angular';
+
 declare var moment:any;
 
 @Component({
@@ -42,6 +44,7 @@ export class StepTwoPage implements OnInit {
     private lectorService: LectorService,
     private translate: TranslateService,
     private loadingCtrl: LoadingController,
+    private storage: Storage,
     private alertCtrl: AlertController,) {
 
     this.myForm = this.fb.group({
@@ -66,6 +69,12 @@ export class StepTwoPage implements OnInit {
       localStorage.removeItem('buscarDirecciones')
       this.sendToSearch(this.solicitud.tercero);
     }
+
+    this.storage.create().then(async (storage)=>{
+      storage.remove('lecturas');
+      storage.remove('firma_origen');
+      storage.remove('firma_transportista');
+    })
   }
   async cargarUsuario()
   {
@@ -74,6 +83,8 @@ export class StepTwoPage implements OnInit {
   }
 
   ngOnInit() {
+
+    localStorage.removeItem('nuevoOrigen');
 
     this.events.destroy('nuevoOrigen');
     this.events.subscribe('nuevoOrigen',(data:any)=>{

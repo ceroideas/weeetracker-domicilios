@@ -164,6 +164,16 @@ export class ConsultasService {
     return this.http.get(apiUrl + '/solicitud/recuperarCertificado/'+initial);
   }
 
+  recuperarCertificadoRAEE(initial)
+  {
+    return this.http.get(apiUrl + '/solicitud/recuperarCertificadoRAEE/'+initial);
+  }
+
+  recuperarCertificadoFotos(initial)
+  {
+    return this.http.get(apiUrl + '/solicitud/recuperarCertificadoFotos/'+initial);
+  }
+
   getMunicipios(idProd)
   {
     return this.http.get(apiUrl + '/solicitud/getMunicipios/'+idProd);
@@ -178,38 +188,44 @@ export class ConsultasService {
     return this.http.post(apiUrl + '/file/FTPUpload',data);
   }
 
-  uploadFTP(url)
+  uploadFTP(url,name,type = 'FTPUpload1')
   {
-    fetch(url)
-    .then((res:any) => res.blob())
-    .then((myBlob)=>{
+    return new Promise((resolve)=>{
 
-      console.log(myBlob);
+      fetch(url)
+      .then((res:any) => res.blob())
+      .then((myBlob)=>{
 
-      var file = new File([myBlob], "name.jpg",{
-        type: myBlob.type,
-      });
+        console.log(myBlob);
 
-      let formData = new FormData();
+        var file = new File([myBlob], name,{
+          type: myBlob.type,
+        });
 
-      formData.append('File',file);
+        let formData = new FormData();
 
-      $.ajax({
-        url: this.url+'/file/FTPUpload',
-        type: 'POST',
-        contentType: false,
-        processData: false,
-        data: formData,
+        formData.append('File',file);
+
+        $.ajax({
+          url: this.url+'/file/'+type,
+          type: 'POST',
+          contentType: false,
+          processData: false,
+          data: formData,
+        })
+        .done(function(data) {
+          console.log(data);
+          resolve(data);
+        })
+        .fail(function() {
+          console.log("error");
+          resolve(null);
+        })
+        .always(function() {
+          console.log("complete");
+        });
+
       })
-      .done(function(data) {
-        console.log(data);
-      })
-      .fail(function() {
-        console.log("error");
-      })
-      .always(function() {
-        console.log("complete");
-      });
 
     })
   }

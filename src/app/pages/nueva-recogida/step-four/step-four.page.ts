@@ -125,8 +125,16 @@ export class StepFourPage implements OnInit {
   }
 
   atras() {
+    this.alertCtrl.create({message:"¿Está seguro de volver atrás? La información de la vista actual se perderá", buttons: [
+    {
+      text:"Si, regresar",
+      handler:()=>{
+        this._location.back();
+      }
+    },{
+      text:"Cancelar"
+    }]}).then(a=>a.present())
     // this.nav.navigateRoot('/nueva-recogida/step-three');
-    this._location.back();
     // this._location.back();
   }
 
