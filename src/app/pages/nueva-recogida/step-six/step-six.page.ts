@@ -121,7 +121,7 @@ export class StepSixPage implements OnInit {
       if (!data.certificado) {
         this.initial2 += '00001';
       }else{
-        this.initial2 += this.padLeft(parseInt(data.certificado.pidRAEECertificado.slice(-5))+1,5);
+        this.initial2 += this.padLeft((parseInt(data.certificado.pidRaeecertificado.slice(-5))+1).toString(),5);
       }
 
       this.myForm.patchValue({
@@ -147,7 +147,7 @@ export class StepSixPage implements OnInit {
   }
 
   async ngOnInit() {
-
+    this.consultas.createLogger('Recogida Completada Success');
   }
 
   padLeft(num, size) {
@@ -163,20 +163,26 @@ export class StepSixPage implements OnInit {
 
     const lecturas = await this._storage.get('lecturas');
     
+    let contadorraee = 0;
     for(let i of lecturas)
     {
       if (i.photos) {
         let contador = 1;
         for(let j of i.photos)
         {
-          let name = "F"+i.values.etiqueta+this.myForm.value.certificado+String(contador).padStart(4, '0');
-          let result = await this.consultas.uploadFTP(j.path,name);
+          let name = "F"+i.values.etiqueta+this.myForm.value.certificado+String(contador).padStart(4, '0')+'.jpg';
+          let result = await this.consultas.uploadFTP(j.path,name,'FTPUploadFotos');
+
+          let pidraeecert = (parseInt( this.myForm.value.certificadoraee )+contadorraee).toString();
+
           this.contadores.fotos++;
           let id = this.pidFoto+String(this.contadores.fotos).padStart(4, '0');
-          this.photos.push({name:name,id:id})
+          this.photos.push({name:name,id:id,pidraee:pidraeecert})
+
           contador++;
         }
       }
+      contadorraee++;
     }
 
     let firma_1 = await this._storage.get('firma_origen');
@@ -184,19 +190,137 @@ export class StepSixPage implements OnInit {
 
     this.contadores.firmas++;
     
-    firma_1.nombre = 'Fr'+this.myForm.value.certificado+'_11';
+    firma_1.archivo = 'Fr'+this.myForm.value.certificado+'_11.png';
     firma_1.id = this.pidFirma+String(this.contadores.firmas).padStart(4, '0');
-    await this.consultas.uploadFTP(firma_1.firma,firma_1.nombre,'FTPUpload2');
+    await this.consultas.uploadFTP(firma_1.firma,firma_1.archivo,'FTPUploadFirmas');
 
     this.contadores.firmas++;
 
-    firma_2.nombre = 'Fr'+this.myForm.value.certificado+'_12';
+    firma_2.archivo = 'Fr'+this.myForm.value.certificado+'_12.png';
     firma_2.id = this.pidFirma+String(this.contadores.firmas).padStart(4, '0');
-    await this.consultas.uploadFTP(firma_1.firma,firma_1.nombre,'FTPUpload2');
+    await this.consultas.uploadFTP(firma_2.firma,firma_2.archivo,'FTPUploadFirmas');
 
-    console.log(firma_1,firma_2,this.photos);
+    let origen = JSON.parse(localStorage.getItem('origen'));
+    let gestor = JSON.parse(localStorage.getItem('gestor'));
+    let fecha = localStorage.getItem('date');
+    let tipo_operativa = localStorage.getItem('tipo_operativa');
 
+    
+    /*console.log(origen);
+    console.log(gestor);
+    console.log(fecha);
+    console.log(tipo_operativa);
+    console.log(firma_1);
+    console.log(firma_2);
+    console.log(this.photos);
+    console.log(lecturas);*/
+
+    let firmas:any = [];
+    let certificado:any = [];
+    let raees:any = [];
+    let raeescertificados:any = [];
+    let fotos:any = [];
+
+    
+    //FirmasCertificado
+    firmas.push({
+      PidFirmaCertificado: firma_1.id,
+      Firma: firma_1.archivo,
+      Nombre: firma_1.nombre,
+    });
+
+    firmas.push({
+      PidFirmaCertificado: firma_2.id,
+      Firma: firma_2.archivo,
+      Nombre: firma_2.nombre,
+    });
+    
+
+
+    
+    //Certificado
+    certificado = {
+      PidCertificado: this.myForm.value.certificado,
+      SidTipoCertificado: 1,
+      SidSig: this.usuario.sidsig,
+      Fecha: fecha,
+      SidSolicitud: origen.pidSolicitud != "" ? origen.pidSolicitud : null,
+      SidTerceroSolicitante: origen.sidTercero,
+      SidDireccionTerceroSolicitante: origen.sidDireccionTercero,
+      SidTerceroDestinatario: this.usuario.tercero.PidTercero,
+      SidDireccionTerceroDestinatario: this.usuario.dtercero,
+      SidEstadoCertificado: 0,
+      SidFirmaProcedencia: firma_1.id,
+      SidFirmaTransporte: firma_2.id,
+      SidFirmaDestino: null,
+      Observaciones: null,
+      SidTipoOperativa: tipo_operativa,
+    };
+
+    
+    for(let l of lecturas)
+    {
+      let contador = 0;
+
+      raees.push({
+          PidRaee: l.values.etiqueta,
+          SidSig: this.usuario.sidsig,
+          SidTipoEtiqueta: 0,
+          SidFraccion: l.values.fraccion,
+          SidResiduo: l.values.residuo,
+          SidResiduoEspecifico: l.values.residuo_especifico,
+          SidMarca: l.values.marca,
+          SidTipoContenedor: l.values.tipo_contenedor,
+          Canibalizado: l.values.canibalizado,
+          SidEstadoRaee: l.values.estado_raee,
+          Estado: 1,
+        })
+
+      raeescertificados.push({
+        PidRaeecertificado: (parseInt(this.myForm.value.certificadoraee)+contador).toString(),
+        SidRaee: l.values.etiqueta,
+        SidCertificado: this.myForm.value.certificado,
+        GpsX: 0,
+        GpsY: 0,
+        SidTipoDeLectora: 3,
+      })
+
+        contador++;
+    }
+
+    
+    for (let p of this.photos) {
+      fotos.push({
+        PidFotoRaeecertificado: p.id,
+        NombreFichero: p.name,
+        SidRaeecertificado: p.pidraee,
+      })
+    }
+
+    console.log(firmas);
+    console.log(certificado);
+    console.log(raees);
+    console.log(raeescertificados);
+    console.log(fotos);
     l.dismiss();
+
+    this.consultas.createLogger('Guardando los datos Success');
+
+    this.loadingCtrl.create({message:"Guardando la información de Recogida"}).then(l=>{
+      l.present();
+
+      this.consultas.informacion({firmas:firmas, certificado:certificado, raees:raees, raeescertificados:raeescertificados, fotos:fotos}).subscribe(data=>{
+        console.log(data);
+
+        this.consultas.createLogger('Datos guardados, regresando al Inicio Success');
+
+        this.nav.navigateRoot('/home');
+
+        this.alertCtrl.create({message:"Información de Recogida guardada exitosamente!", buttons: ['OK']}).then(a=>a.present());
+
+        l.dismiss();
+      })
+    })
   }
 
   atras()
@@ -214,6 +338,7 @@ export class StepSixPage implements OnInit {
 
   summary()
   {
+    this.consultas.createLogger('Ver resumen Success');
     localStorage.setItem('noFwd','1');
     this.nav.navigateForward('/nueva-recogida/step-three/summary');
   }

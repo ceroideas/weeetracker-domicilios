@@ -48,6 +48,7 @@ export class StepOnePage implements OnInit {
   }
 
   ngOnInit() {
+    this.consultaService.createLogger('NUEVA RECOGIDA');
   }
 
   adelante()
@@ -56,6 +57,7 @@ export class StepOnePage implements OnInit {
       localStorage.setItem('tipo_operativa','CSR');
       if (!this.myForm.value.request_n) {
         this.alertCtrl.create({message:"Debe escribir el número de la Solicitud", buttons:["Ok"]}).then(a=>a.present());
+        this.consultaService.createLogger('E | No se ha escrito numero de solicitud');
       }else{
 
         this.loadingCtrl.create().then(l=>{
@@ -72,11 +74,15 @@ export class StepOnePage implements OnInit {
             l.dismiss();
 
             if (!res.solicitud) {
+              this.consultaService.createLogger('E | No se encuentra la Solicitud');
               return this.alertCtrl.create({message:"No se encuentra la Solicitud", buttons:["Ok"]}).then(a=>a.present());
             }
 
             localStorage.setItem('buscarDirecciones','1');
             localStorage.setItem('solicitud',JSON.stringify(res.solicitud));
+            
+            this.consultaService.createLogger('Solicitud Encontrada Success');
+
             this.nav.navigateForward('/nueva-recogida/step-two');
           },err=>{
             console.log(err);
@@ -86,6 +92,7 @@ export class StepOnePage implements OnInit {
 
       }
     }else{
+      this.consultaService.createLogger('Nueva Recogida sin solicitud seleccionada Success');
       localStorage.setItem('tipo_operativa','SSR');
       localStorage.removeItem('solicitud');
       this.nav.navigateForward('/nueva-recogida/step-two');

@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
+import { Platform } from '@ionic/angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Identificacion } from '../models/identificacion';
 
+import { File as _File } from '@awesome-cordova-plugins/file/ngx';
+
 const apiUrl = environment.apiUrl;
 
 declare var $:any;
+declare var moment:any;
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +18,7 @@ export class ConsultasService {
 
   url = environment.apiUrl;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private file: _File, private platform: Platform) {
   }
   
   getIdentificacion(etiqueta: string) {
@@ -188,8 +192,14 @@ export class ConsultasService {
     return this.http.post(apiUrl + '/file/FTPUpload',data);
   }
 
+  informacion(data)
+  {
+    return this.http.post(apiUrl + '/solicitud/informacion',data);
+  }
+
   uploadFTP(url,name,type = 'FTPUpload1')
   {
+    console.log(url);
     return new Promise((resolve)=>{
 
       fetch(url)
@@ -235,6 +245,40 @@ export class ConsultasService {
       (rv[x.values[key]] = rv[x.values[key]] || []).push(x);
       return rv;
     }, {});
+  }
+
+  appendInfo(data)
+  {
+    let path = this.file.externalRootDirectory+'logs';
+    let date = " | "+moment().format('DD-MM-Y HH:mm:ss');
+
+    this.file.checkFile(path,'log.txt').then(response => {
+      this.file.writeFile(path,'log.txt',JSON.stringify(data)+date,{append:true, replace: false});
+    }).catch(err=>{
+      this.file.createFile(path,'log.txt',true).then(response=>{  
+        this.file.writeFile(path,'log.txt',JSON.stringify(data)+date,{append:true, replace: false});
+      })
+    })
+  }
+
+  createLogger(data)
+  {
+    if (this.platform.is('cordova')) {
+      this.file.checkDir(this.file.externalRootDirectory,'logs').then(response => {
+
+        this.appendInfo(data);
+
+      }).catch(err => {
+
+        this.file.createDir(this.file.externalRootDirectory, 'logs', false).then(response => {
+          
+          this.appendInfo(data);
+
+        }).catch(err => {
+          console.log('No se pudo crear'+JSON.stringify(err));
+        }); 
+      });
+    }
   }
 
 }

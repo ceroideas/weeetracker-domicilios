@@ -64,6 +64,8 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(async () => {
+
+      this.consultas.createLogger({nombre:"jorge", apellido:"solano"});
        //Language
        this.translateService.setDefaultLang('es');
        this.translateService.use('es');
@@ -106,6 +108,7 @@ export class AppComponent {
       }
     
       // this.insertarResiduosDomicilio();
+
       
     });
   }
@@ -118,28 +121,8 @@ export class AppComponent {
         // path = this.webview.convertFileSrc(path);
         
         this.fileNavigator.checkDir(this.fileNavigator.externalRootDirectory,'CONFIG').then(_ => {
-        // this.fileNavigator.checkDir('file:///','config').then(_ => {
-          // console.log(path,this.webview.convertFileSrc(path));
-          console.log('directorio encontrado',this.webview.convertFileSrc(path),path.replace('file://','_app_file_'))
 
-          // const fileTransfer: FileTransferObject = this.transfer.create();
-
-          // let options: FileUploadOptions = {
-          //   fileKey: 'file',
-          //   fileName: 'xml.jpg',
-          //   chunkedMode: false,
-          //   mimeType: "text/xml",
-          //   httpMethod: 'POST',
-          //   headers: {}
-          // }
-
-          // fileTransfer.upload(path.replace('file://',''), 'https://betatestpro.com/benbros/public/api/uploadXML', options)
-          //    .then((data) => {
-          //      console.log(data);
-          //    }, (err) => {
-          //      // error
-          //      console.log(err);
-          //    })
+          console.log('directorio encontrado '+(this.webview.convertFileSrc(path)) + path.replace('file://','_app_file_'))
 
           this.loadingCtrl.create({message:"Comprobando PDA"}).then(l=>{
             l.present();
@@ -148,7 +131,7 @@ export class AppComponent {
               let parser = new DOMParser();
               let xmlDoc = parser.parseFromString(data,"text/xml");
 
-              console.log(xmlDoc);
+              console.log(data);
 
               console.log(xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue, xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue);
 
@@ -159,18 +142,14 @@ export class AppComponent {
                 centro:xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue,
                 pda:xmlDoc.getElementsByTagName("PDA")[0].childNodes[0].nodeValue
               }));
-
-              // this.consultas.getConfigInformation(xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue, xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue)
-              // .subscribe((data:any)=>{
-              //   this.terminal = xmlDoc.getElementsByTagName("PDA")[0].childNodes[0].nodeValue;
-              //   this.direccion = data.config._centro.direccion;
-              //   this.nombre = data.config._gestor.nombre;
-              // })
+              /**/
             })
           })
 
         },err=>{
           setTimeout(()=>{
+            console.log("Ha ocurrido un error al leer el archivo Config.XML");
+            alert('Directorio no encontrado')
             this.events.publish('setLoaded');
           },100)
         });
@@ -190,6 +169,8 @@ export class AppComponent {
             let xmlDoc = parser.parseFromString(data,"text/xml");
 
             console.log(xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue, xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue);
+
+            localStorage.setItem('centro_config',xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue);
 
             this.events.publish('getConfigInformation',({
               gestor:xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue,

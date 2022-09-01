@@ -35,6 +35,8 @@ export class SummaryPage implements OnInit {
 
   async ngOnInit() {
 
+    this.consultas.createLogger('Ver Resumen Success');
+
     const storage = await this.storage.create();
     this._storage = storage;
 

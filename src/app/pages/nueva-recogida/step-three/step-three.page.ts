@@ -64,6 +64,8 @@ export class StepThreePage implements OnInit {
 
   async ngOnInit() {
 
+    this.consultaService.createLogger('Seleccionar Tipo de Lectura Success');
+
     const storage = await this.storage.create();
     this._storage = storage;
 
@@ -78,6 +80,7 @@ export class StepThreePage implements OnInit {
 
     this.events.destroy('newRead');
     this.events.subscribe('newRead',data=>{
+      this.consultaService.createLogger('Nueva Lectura Success');
       console.log('new Read')
       this.myForm.patchValue({type:'individual'});
       setTimeout(()=>{
@@ -87,6 +90,7 @@ export class StepThreePage implements OnInit {
 
     this.events.destroy('getLecturas');
     this.events.subscribe('getLecturas',async data=>{
+      this.consultaService.createLogger('Obtener Lecturas Success');
       // this.lecturas = localStorage.getItem('lecturas') ? JSON.parse(localStorage.getItem('lecturas')) : [];
       this.lecturas = await this._storage.get('lecturas');
       if (!this.lecturas) {
@@ -105,9 +109,12 @@ export class StepThreePage implements OnInit {
         
         this.consultaService.GetRaee(data).subscribe((data:any)=>{
 
+          this.consultaService.createLogger('Comprobando Raee Success');
+
           l.dismiss();
 
           if (data) {
+            this.consultaService.createLogger('Residuo ya recogido Success');
             return this.alertCtrl.create({message:"El Residuo ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
           }
 
@@ -147,6 +154,7 @@ export class StepThreePage implements OnInit {
 
               this.nav.navigateForward('/nueva-recogida/step-three/readed');
             },err=>{
+              this.consultaService.createLogger('E | Error al obtener Raee '+JSON.stringify(err));
               l.dismiss();
 
               this.nav.navigateForward('/nueva-recogida/step-three/readed');
@@ -154,6 +162,9 @@ export class StepThreePage implements OnInit {
 
           });
         },err=>{
+          
+          this.consultaService.createLogger('E | Error al obtener Raee '+JSON.stringify(err));
+
           l.dismiss();
         });
 
@@ -171,6 +182,7 @@ export class StepThreePage implements OnInit {
 
         for(let i of data)
         {
+          this.consultaService.createLogger('Comproabar RAEE '+i+' Success');
           await this.comprobarRaee(i);
         }
 
@@ -204,6 +216,7 @@ export class StepThreePage implements OnInit {
           };
 
           if (data) {
+            this.consultaService.createLogger('Residui ya recogido Success');
             this.alertCtrl.create({message:"El Residuo "+i+" ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
             return resolve(true);
           }
@@ -218,6 +231,8 @@ export class StepThreePage implements OnInit {
 
             this.consultaService.getIdentificacion(data[0].sidRaee).subscribe((data:any)=>{
               l.dismiss();
+
+              this.consultaService.createLogger('E | Error al obtener RAEE');
 
               console.log(data);
 

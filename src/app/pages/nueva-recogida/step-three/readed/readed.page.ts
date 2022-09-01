@@ -177,6 +177,8 @@ export class ReadedPage implements OnInit {
   }
 
   async ngOnInit() {
+    this.consultaService.createLogger('Rellenar datos de RAEE success');
+    this.consultaService.createLogger('Completar la carga de informacion para rellenar RAEE success');
     const storage = await this.storage.create();
     this._storage = storage;
   }
@@ -261,6 +263,8 @@ export class ReadedPage implements OnInit {
       return this.alertCtrl.create({message:"Solo puede subir 4 fotos.", buttons: ["Ok"]}).then(a=>a.present());
     }
 
+    this.consultaService.createLogger('Nueva foto RAEE success');
+
 
     const file = event.target.files[0];
 
@@ -313,6 +317,8 @@ export class ReadedPage implements OnInit {
       return this.alertCtrl.create({message:"Por favor, complete todos los datos.", buttons: ["Ok"]}).then(a=>a.present());
     }
 
+    this.consultaService.createLogger('Rellenados datos de RAEE Success');
+
     if (!this.photos.length) {
       return this.alertCtrl.create({message:"¿Quiere continuar sin cargar ninguna imagen a la recogida?.",
         buttons: [{
@@ -335,6 +341,8 @@ export class ReadedPage implements OnInit {
   {
     // let lecturas = localStorage.getItem('lecturas') ? JSON.parse(localStorage.getItem('lecturas')) : [];
     let lecturas = await this.storage.get('lecturas');
+
+    this.consultaService.createLogger('Completada lectura de RAEE Success');
 
     if (!lecturas) {
       lecturas = [];
@@ -388,6 +396,7 @@ export class ReadedPage implements OnInit {
 
   deleteImage(i)
   {
+    this.consultaService.createLogger('Borrar Imagen Success');
     this.photos.splice(i,1);
   }
 

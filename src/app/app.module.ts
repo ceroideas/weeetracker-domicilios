@@ -25,6 +25,9 @@ import { PipesModule } from './pipes/pipes.module';
 import { Keyboard } from '@awesome-cordova-plugins/keyboard/ngx';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 
+import { File } from '@awesome-cordova-plugins/file/ngx';
+
+
 /*export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }*/
@@ -55,6 +58,7 @@ export function createTranslateLoader(http: HttpClient) {
     })
   ],
   providers: [
+    File,
     StatusBar,
     SplashScreen,
     {

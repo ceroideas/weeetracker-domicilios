@@ -96,7 +96,7 @@
             <!-- <ion-button (click)="logOut()" *ngIf="!submenu" class="derecha">
                 <span><ion-img src="../../assets/img/Cerrar_sesion.png"></ion-img></span>
             </ion-button> -->
-            <ion-button class="derecha" (click)="adelante()">
+            <ion-button class="derecha" *ngIf="myForm.value.certificadoraee !== '...'" (click)="adelante()">
                 <!-- <ion-icon name="arrow-round-back"></ion-icon> -->
                 <span><ion-img src="../../assets/img/Derecha.png"></ion-img></span>
             </ion-button>

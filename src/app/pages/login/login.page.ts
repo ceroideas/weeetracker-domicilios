@@ -131,10 +131,14 @@ export class LoginPage implements OnInit {
             this.loadingCtrl.dismiss();
             
             console.log(data);
+            this.consultas.createLogger('ListarUsuarios Success');
 
             this.usuarios = data.users;
 
           })
+        },err=>{
+          console.log(JSON.stringify(err));
+          this.consultas.createLogger('E | ListarUsuarios error '+JSON.stringify(err));
         })
 
     });
@@ -202,6 +206,8 @@ export class LoginPage implements OnInit {
       let decodeToken: any = this.helper.decodeToken(res.token);
       console.log(decodeToken);
 
+      this.consultas.createLogger('Login Success');
+
       if (!localStorage.getItem('centro_config')) {
         localStorage.setItem('centro',decodeToken.DTercero);
       }
@@ -217,17 +223,20 @@ export class LoginPage implements OnInit {
       this.usuarioService.cerrarSpinner();
       // loading.dismiss(); 
       this.usuarioService.mostrarAlerta(this.translate.instant("LOGIN.ERROR"));
+      this.consultas.createLogger('E | Login ERROR');
     });
   }
 
   async acceso()
   {
     await this.usuarioService.mostrarSpinner(this.translate.instant("SPINNER.CARGANDO"));
-    this.usuarioService.loginWithId(this.usuario_centro,parseInt(localStorage.getItem('centro_config'))).subscribe(async (res: any) => {
+    this.usuarioService.loginWithId(this.usuario_centro, this.password, parseInt(localStorage.getItem('centro_config'))).subscribe(async (res: any) => {
 
       /* Obtenemos el usuario */
       let decodeToken: any = this.helper.decodeToken(res.token);
       console.log(decodeToken);
+
+      this.consultas.createLogger('Acceso Terminal Success');
 
       await this.usuarioService.guardarUsuario(decodeToken);
       await this.usuarioService.guardarToken(res.token)
@@ -240,6 +249,7 @@ export class LoginPage implements OnInit {
       this.usuarioService.cerrarSpinner();
       // loading.dismiss(); 
       this.usuarioService.mostrarAlerta('Usuario no válido');
+      this.consultas.createLogger('E | Acceso Terminal ERROR | Usuario no válido');
     });
   }
 

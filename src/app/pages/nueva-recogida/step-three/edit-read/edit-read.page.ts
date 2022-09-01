@@ -172,6 +172,7 @@ export class EditReadPage implements OnInit {
   }
 
   async ngOnInit() {
+    this.consultaService.createLogger('Editar datos de RAEE Success');
     const storage = await this.storage.create();
     this._storage = storage;
   }

@@ -80,6 +80,9 @@ export class StepFourPage implements OnInit {
   }
 
   async ngOnInit() {
+    
+    this.consultas.createLogger('Firma de Origen Success');
+
     this.canvas = document.querySelector("#sign-four");
 
     this.signaturePad = new SignaturePad(this.canvas);

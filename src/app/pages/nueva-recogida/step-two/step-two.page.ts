@@ -52,6 +52,9 @@ export class StepTwoPage implements OnInit {
       nombre: [this.solicitud ? this.solicitud.tnombre : '', Validators.required],
       nif: [this.solicitud ? this.solicitud.tNIF : '', Validators.required],
 
+      sidTercero: [''],
+      sidDireccionTercero: [''],
+
       nombre_comercial: ['',Validators.required],
       centro: ['',Validators.required],
       localidad: ['',Validators.required],
@@ -84,6 +87,8 @@ export class StepTwoPage implements OnInit {
 
   ngOnInit() {
 
+    this.consultaService.createLogger('Seleccionar Origen del Residuo');
+
     localStorage.removeItem('nuevoOrigen');
 
     this.events.destroy('nuevoOrigen');
@@ -95,14 +100,18 @@ export class StepTwoPage implements OnInit {
       let last = this.direcciones.length-1;
 
       this.myForm.patchValue({
-        centro: this.direcciones[last].nombre,
-        localidad: this.direcciones[last].nombreMunicipio,
-        direccion: this.direcciones[last].direccion,
-        provincia: this.direcciones[last].nombreProvincia,
-        pais: this.direcciones[last].nombrePais,
-        codNima: this.direcciones[last].codNima,
-        insRP: this.direcciones[last].insRP,
-        insRnP: this.direcciones[last].insRnP,
+        
+        // sidTercero: null,
+        // sidDireccionTercero: null,
+
+        // centro: this.direcciones[last].nombre,
+        // localidad: this.direcciones[last].nombreMunicipio,
+        // direccion: this.direcciones[last].direccion,
+        // provincia: this.direcciones[last].nombreProvincia,
+        // pais: this.direcciones[last].nombrePais,
+        // codNima: this.direcciones[last].codNima,
+        // insRP: this.direcciones[last].insRP,
+        // insRnP: this.direcciones[last].insRnP,
       })
     });
 
@@ -118,12 +127,18 @@ export class StepTwoPage implements OnInit {
       this.loadingCtrl.create({message: "Obteniendo ubicación de centro"}).then(l=>{
           l.present();
 
+
         this.consultaService.ubicacionCentro(
           {pais:direccion.sidPais, provincia: direccion.sidProvincia, municipio:direccion.sidMunicipio}).subscribe((data1:any)=>{
 
           localStorage.removeItem('nuevoOrigen');
 
+          this.consultaService.createLogger('Ubicacion de centro Success');
           this.myForm.patchValue({
+            
+            // sidTercero: direccion.pidTercero,
+            sidDireccionTercero: direccion.pidDireccionTercero,
+
             centro: direccion.nombre,
             localidad: data1['ubicacion']['_municipio'].nombre,
             direccion: direccion.direccion,
@@ -158,6 +173,7 @@ export class StepTwoPage implements OnInit {
   nuevoOrigen()
   {
     if (!this.gestor) {
+      this.consultaService.createLogger('E | Sin gestor seleccionado');
       return this.alertCtrl.create({message:"No ha seleccionado Gestor", buttons: ['Ok']}).then(a=>{
         a.present();
       });
@@ -169,6 +185,7 @@ export class StepTwoPage implements OnInit {
   buscar()
   {
     if (!this.myForm.value.nombre && !this.myForm.value.nif) {
+      this.consultaService.createLogger('E | Debe escribir nombre o nif para buscar');
       return this.alertCtrl.create({message:"Debe escribir parte del Nombre o del NIF para buscar", buttons: ['Ok']}).then(a=>{
         a.present();
       });
@@ -198,6 +215,9 @@ export class StepTwoPage implements OnInit {
           this.myForm.patchValue({
             // nombre: "",
             // nif: "",
+            sidTercero: "",
+            sidDireccionTercero: "",
+
             nombre_comercial: "",
             centro: "",
             localidad: "",
@@ -216,6 +236,8 @@ export class StepTwoPage implements OnInit {
 
       },err=>{
         l.dismiss();
+
+        this.consultaService.createLogger('E | Error al buscar centro '+JSON.stringify(err));
 
         return this.alertCtrl.create({message:"Ha ocurrido un error, por favor intenta nuevamente", buttons: ['Ok']}).then(a=>{
           a.present();
@@ -242,6 +264,8 @@ export class StepTwoPage implements OnInit {
 
       this.consultaService.centroData(id).subscribe((data:any)=>{
 
+        this.consultaService.createLogger('Informacion del Centro Success');
+
         l.dismiss();
 
         let centro = data.info.centro;
@@ -249,6 +273,7 @@ export class StepTwoPage implements OnInit {
         this.direcciones = data.info.direcciones;
 
         if (!this.direcciones.length) {
+          this.consultaService.createLogger('E | No hay direcciones que mostrar en el origen ERROR');
           return this.alertCtrl.create({message:"No hay direcciones que mostrar, por favor, ingrese nuevo origen", buttons: ['Ok']}).then(a=>{
             a.present();
           });
@@ -260,9 +285,14 @@ export class StepTwoPage implements OnInit {
           this.consultaService.ubicacionCentro(
             {pais:this.direcciones[0].sidPais, provincia: this.direcciones[0].sidProvincia, municipio:this.direcciones[0].sidMunicipio}).subscribe((data1:any)=>{
 
+            this.consultaService.createLogger('Ubicacion Centro conseguida Success');
             this.myForm.patchValue({
               nombre: centro.nombre,
               nif: centro.nif,
+
+              sidTercero: centro.pidTercero,
+              sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+
               nombre_comercial: centro.nombreComercial,
               centro: this.direcciones[0].nombre,
               localidad: data1['ubicacion']['_municipio'].nombre,

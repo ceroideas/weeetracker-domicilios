@@ -80,6 +80,9 @@ export class StepFivePage implements OnInit {
   }
 
   async ngOnInit() {
+    
+    this.consultas.createLogger('Firma de Transportista Success');
+
     this.canvas = document.querySelector("#sign-five");
 
     this.signaturePad = new SignaturePad(this.canvas);
