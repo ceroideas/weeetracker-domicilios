@@ -122,6 +122,8 @@ export class AppComponent {
         
         this.fileNavigator.checkDir(this.fileNavigator.externalRootDirectory,'CONFIG').then(_ => {
 
+          localStorage.setItem('zebra','1');
+
           console.log('directorio encontrado '+(this.webview.convertFileSrc(path)) + path.replace('file://','_app_file_'))
 
           this.loadingCtrl.create({message:"Comprobando PDA"}).then(l=>{
@@ -140,7 +142,8 @@ export class AppComponent {
               this.events.publish('getConfigInformation',({
                 gestor:xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue,
                 centro:xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue,
-                pda:xmlDoc.getElementsByTagName("PDA")[0].childNodes[0].nodeValue
+                pda:xmlDoc.getElementsByTagName("PDA")[0].childNodes[0].nodeValue,
+                sidsig:xmlDoc.getElementsByTagName("SIG")[0].childNodes[0].nodeValue,
               }));
               /**/
             })
@@ -148,8 +151,9 @@ export class AppComponent {
 
         },err=>{
           setTimeout(()=>{
+            localStorage.removeItem('zebra');
             console.log("Ha ocurrido un error al leer el archivo Config.XML");
-            alert('Directorio no encontrado')
+            // alert('Directorio no encontrado')
             this.events.publish('setLoaded');
           },100)
         });
@@ -159,6 +163,7 @@ export class AppComponent {
 
   async configXMLdesktop()
   {
+    localStorage.removeItem('zebra');
     this.estaLogeado().then(a=>{
       if (!a) {
         this.loadingCtrl.create({message:"Comprobando PDA"}).then(l=>{
@@ -175,7 +180,8 @@ export class AppComponent {
             this.events.publish('getConfigInformation',({
               gestor:xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue,
               centro:xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue,
-              pda:xmlDoc.getElementsByTagName("PDA")[0].childNodes[0].nodeValue
+              pda:xmlDoc.getElementsByTagName("PDA")[0].childNodes[0].nodeValue,
+              sidsig:xmlDoc.getElementsByTagName("SIG")[0].childNodes[0].nodeValue,
             }));
 
             // this.consultas.getConfigInformation(xmlDoc.getElementsByTagName("Gestor")[0].childNodes[0].nodeValue, xmlDoc.getElementsByTagName("CENTRO")[0].childNodes[0].nodeValue)

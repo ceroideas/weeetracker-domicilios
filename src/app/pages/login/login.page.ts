@@ -118,6 +118,8 @@ export class LoginPage implements OnInit {
 
       console.log(config);
 
+      localStorage.setItem('config',JSON.stringify(config));
+
       this.consultas.getConfigInformation(config.gestor, config.centro)
         .subscribe((data:any)=>{
           console.log(data);

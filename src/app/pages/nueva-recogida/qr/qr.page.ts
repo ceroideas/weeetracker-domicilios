@@ -3,11 +3,14 @@ import { NavController, AlertController, LoadingController, Platform, ToastContr
 // import { QRScanner, QRScannerStatus } from '@awesome-cordova-plugins/qr-scanner/ngx';
 import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { EventsService } from '../../../services/events.service';
+import { Events } from '../../../services/events';
 import { MenuController } from '@ionic/angular';
 import { Device } from '@awesome-cordova-plugins/device/ngx';
 import { Location } from '@angular/common';
 
 import { BarcodeProvider } from '../../../providers/barcode/barcode';
+
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-qr',
@@ -27,23 +30,48 @@ export class QrPage implements OnInit {
 
   timeout;
 
+  lecturas = [];
+
   zebra = false;
 
   isCordova = this.platform.is('cordova');
+
+  private _storage: Storage | null = null;
+
+  /**/
+  private scans = [];
+  private scanners = [{ "SCANNER_NAME": "Please Wait...", "SCANNER_INDEX": 0, "SCANNER_CONNECTION_STATE": true }];
+  private selectedScanner = "Please Select...";
+  private selectedScannerId = -1;
+  private ean8Decoder = true;   //  Model for decoder
+  private ean13Decoder = true;  //  Model for decoder
+  private code39Decoder = true; //  Model for decoder
+  private code128Decoder = true;//  Model for decoder
+  private dataWedgeVersion = "Pre 6.3. Please create & configure profile manually.  See the ReadMe for more details.";
+  private availableScannersText = "Requires Datawedge 6.3+"
+  private activeProfileText = "Requires Datawedge 6.3+";
+  private commandResultText = "Messages from DataWedge will go here";
+  private uiHideDecoders = true;
+  private uiDatawedgeVersionAttention = true;
+  private uiHideSelectScanner = true;
+  private uiHideShowAvailableScanners = false;
+  private uiHideCommandMessages = true;
+  private uiHideFloatingActionButton = true;
+  /**/
 
   onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
 
   constructor(/*private qrScanner: QRScanner,*/ private barcodeScanner: BarcodeScanner, public nav: NavController, public alertCtrl: AlertController,
-    public events: EventsService, private menu: MenuController, public loading: LoadingController,
-
+    public events: EventsService, public events1: Events, private menu: MenuController, public loading: LoadingController,
+    private storage: Storage,
     private barcodeProvider: BarcodeProvider, public _location: Location,
     private changeDetectorRef: ChangeDetectorRef, private device: Device,
     private alertController: AlertController, private platform: Platform, private toastController: ToastController
     ) {
 
-    this.platform.ready().then((readySource) => {
+    this.platform.ready().then(()=>{
 
       //  Check manufacturer.  Exit if this app is not running on a Zebra device
       console.log(this.device.manufacturer);
@@ -52,7 +80,8 @@ export class QrPage implements OnInit {
         return this.prepareQrScanner();
       }
       console.log("Device manufacturer is: " + this.device.manufacturer);
-      if (!(this.device.manufacturer.toLowerCase().includes("zebra") || this.device.manufacturer.toLowerCase().includes("motorola solutions"))) {
+      // if (!(this.device.manufacturer.toLowerCase().includes("zebra") || this.device.manufacturer.toLowerCase().includes("motorola solutions"))) {
+      if (!localStorage.getItem('zebra')) {
         this.zebra = false;
         return this.prepareQrScanner();
       }
@@ -62,16 +91,25 @@ export class QrPage implements OnInit {
       //  Determine the version.  We can add additional functionality if a more recent version of the DW API is present
       this.barcodeProvider.sendCommand("com.symbol.datawedge.api.GET_VERSION_INFO", "");
 
+
       ////////////////////////////
       //  EVENT HANDLING
       ////////////////////////////
 
+      this.events.destroy('status:dw63ApisAvailable');
+      this.events.destroy('status:dw64ApisAvailable');
+      this.events.destroy('status:dw65ApisAvailable');
+      this.events.destroy('data:activeProfile');
+      this.events.destroy('data:commandResult');
+      this.events.destroy('data:enumeratedScanners');
+      this.events.destroy('data:scan');
+
       //  6.3 DataWedge APIs are available
-      events.subscribe('status:dw63ApisAvailable', (isAvailable) => {
+      this.events.subscribe('status:dw63ApisAvailable', (isAvailable) => {
         console.log("DataWedge 6.3 APIs are available");
         //  We are able to create the profile under 6.3.  If no further version events are received, notify the user
         //  they will need to create the profile manually
-        this.barcodeProvider.sendCommand("com.symbol.datawedge.api.CREATE_PROFILE", "ZebraIonicDemo");
+        this.barcodeProvider.sendCommand("com.symbol.datawedge.api.CREATE_PROFILE", "ZebraWeeetracker");
         this.dataWedgeVersion = "6.3.  Please configure profile manually.  See the ReadMe for more details.";
 
         //  Although we created the profile we can only configure it with DW 6.4.
@@ -87,7 +125,7 @@ export class QrPage implements OnInit {
       });
 
       //  6.4 Datawedge APIs are available
-      events.subscribe('status:dw64ApisAvailable', (isAvailable) => {
+      this.events.subscribe('status:dw64ApisAvailable', (isAvailable) => {
         console.log("DataWedge 6.4 APIs are available");
 
         //  Documentation states the ability to set a profile config is only available from DW 6.4.
@@ -98,7 +136,7 @@ export class QrPage implements OnInit {
 
         //  Configure the created profile (associated app and keyboard plugin)
         let profileConfig = {
-          "PROFILE_NAME": "ZebraIonicDemo",
+          "PROFILE_NAME": "ZebraWeeetracker",
           "PROFILE_ENABLED": "true",
           "CONFIG_MODE": "UPDATE",
           "PLUGIN_CONFIG": {
@@ -107,7 +145,7 @@ export class QrPage implements OnInit {
             "PARAM_LIST": {}
           },
           "APP_LIST": [{
-            "PACKAGE_NAME": "com.zebra.zebraionicdemo",
+            "PACKAGE_NAME": "com.ecolec.weeetracker",
             "ACTIVITY_LIST": ["*"]
           }]
         };
@@ -115,7 +153,7 @@ export class QrPage implements OnInit {
 
         //  Configure the created profile (intent plugin)
         let profileConfig2 = {
-          "PROFILE_NAME": "ZebraIonicDemo",
+          "PROFILE_NAME": "ZebraWeeetracker",
           "PROFILE_ENABLED": "true",
           "CONFIG_MODE": "UPDATE",
           "PLUGIN_CONFIG": {
@@ -123,7 +161,7 @@ export class QrPage implements OnInit {
             "RESET_CONFIG": "true",
             "PARAM_LIST": {
               "intent_output_enabled": "true",
-              "intent_action": "com.zebra.ionicdemo.ACTION",
+              "intent_action": "com.ecolec.weeetracker.ACTION",
               "intent_delivery": "2"
             }
           }
@@ -132,14 +170,14 @@ export class QrPage implements OnInit {
 
         //  Give some time for the profile to settle then query its value
         setTimeout(function () {
-          barcodeProvider.sendCommand("com.symbol.datawedge.api.GET_ACTIVE_PROFILE", "");
+          this.barcodeProvider.sendCommand("com.symbol.datawedge.api.GET_ACTIVE_PROFILE", "");
         }, 1000);
 
         this.changeDetectorRef.detectChanges();
       });
 
       //  6.5 Datawedge APIs are available
-      events.subscribe('status:dw65ApisAvailable', (isAvailable) => {
+      this.events.subscribe('status:dw65ApisAvailable', (isAvailable) => {
         console.log("DataWedge 6.5 APIs are available");
 
         //  The ability to switch to a new scanner is only available from DW 6.5 onwards
@@ -155,7 +193,7 @@ export class QrPage implements OnInit {
       });
 
       //  Response to our request to find out the active DW profile
-      events.subscribe('data:activeProfile', (activeProfile) => {
+      this.events.subscribe('data:activeProfile', (activeProfile) => {
         console.log("Active profile: " + activeProfile);
 
         //  Update the UI
@@ -165,13 +203,13 @@ export class QrPage implements OnInit {
       });
 
       //  The result (success / failure) of our last API call along with additional information
-      events.subscribe('data:commandResult', (commandResult) => {
+      this.events.subscribe('data:commandResult', (commandResult) => {
         this.commandResultText = commandResult;
         this.changeDetectorRef.detectChanges();
       });
 
       //  Response to our requet to enumerte the scanners
-      events.subscribe('data:enumeratedScanners', (enumeratedScanners) => {
+      this.events.subscribe('data:enumeratedScanners', (enumeratedScanners) => {
         //  Maintain two lists, the first for devices which support DW 6.5+ and shows a combo box to select
         //  the scanner to use.  The second will just display the available scanners in a list and be available
         //  for 6.4 and below
@@ -189,24 +227,33 @@ export class QrPage implements OnInit {
       });
 
       //  A scan has been received
-      events.subscribe('data:scan', (data: any) => {
+      this.events.subscribe('data:scan', async (data: any) => {
+
+        console.log('scanned data ok');
         //  Update the list of scanned barcodes
         let scannedData = data.scanData.extras["com.symbol.datawedge.data_string"];
         let scannedType = data.scanData.extras["com.symbol.datawedge.label_type"];
 
+        // this.toastController.create({message: JSON.stringify(data.scanData), duration:5000}).then(t=>t.present());
+
         // this.scans.unshift({ "data": scannedData, "type": scannedType, "timeAtDecode": data.time });
 
-        // this.etiqueta = scannedData;
+        this.etiqueta = scannedData;
 
         if (localStorage.getItem('read_type') == 'grupal') {
 
           if (this.validateTicket()) {
 
-            let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+            // let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+            this.lecturas = await this.storage.get('lecturas');
 
-            if (lecturas) {
+            if (!this.lecturas) {
+              this.lecturas = [];
+            }
+
+            if (this.lecturas) {
               
-              let i = lecturas.findIndex(x=>x.values.etiqueta == scannedData);
+              let i = this.lecturas.findIndex(x=>x.values.etiqueta == this.etiqueta);
 
               if (i !== -1) {
                 return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
@@ -214,7 +261,7 @@ export class QrPage implements OnInit {
               }
 
             }
-            this.scans.unshift(scannedData);
+            this.scans.unshift(this.etiqueta);
             this.scans = this.scans.filter(this.onlyUnique);
           }else{
             this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
@@ -224,11 +271,16 @@ export class QrPage implements OnInit {
 
           if (this.validateTicket()) {
 
-            let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+            // let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+            this.lecturas = await this.storage.get('lecturas');
 
-            if (lecturas) {
+            if (!this.lecturas) {
+              this.lecturas = [];
+            }
+
+            if (this.lecturas) {
               
-              let i = lecturas.findIndex(x=>x.values.etiqueta == scannedData);
+              let i = this.lecturas.findIndex(x=>x.values.etiqueta == this.etiqueta);
 
               if (i !== -1) {
                 return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
@@ -239,7 +291,7 @@ export class QrPage implements OnInit {
             }
 
             this.nav.back();
-            this.events.publish('lectura',scannedData);
+            this.events.publish('lectura',this.etiqueta);
           }else{
             this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
           }
@@ -253,12 +305,16 @@ export class QrPage implements OnInit {
         this.changeDetectorRef.detectChanges();
       });
 
-    });
+    })
+
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     localStorage.removeItem('etiqueta');
     localStorage.removeItem('etiqueta_objeto');
+
+    const storage = await this.storage.create();
+    this._storage = storage;
   }
 
   validateTicket()
@@ -307,22 +363,27 @@ export class QrPage implements OnInit {
       this.semitrans = false;
     },5000);
 
-    this.barcodeScanner.scan().then(barcodeData => {
+    this.barcodeScanner.scan().then(async (barcodeData) => {
       console.log('Barcode data', barcodeData);
       (window.document.querySelector('ion-app') as HTMLElement).classList.remove('cameraView');
       (window.document.querySelector('ion-app') as HTMLElement).classList.add('cameraView2');
 
-      // this.etiqueta = barcodeData.text;
+      this.etiqueta = barcodeData.text;
 
       if (localStorage.getItem('read_type') == 'grupal') {
 
           if (this.validateTicket()) {
 
-            let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+            // let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+            this.lecturas = await this.storage.get('lecturas');
 
-            if (lecturas) {
+            if (!this.lecturas) {
+              this.lecturas = [];
+            }
+
+            if (this.lecturas) {
               
-              let i = lecturas.findIndex(x=>x.values.etiqueta == barcodeData.text);
+              let i = this.lecturas.findIndex(x=>x.values.etiqueta == this.etiqueta);
 
               if (i !== -1) {
                 return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
@@ -330,7 +391,7 @@ export class QrPage implements OnInit {
               }
 
             }
-            this.scans.unshift(barcodeData.text);
+            this.scans.unshift(this.etiqueta);
             this.scans = this.scans.filter(this.onlyUnique);
           }else{
             this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
@@ -340,11 +401,16 @@ export class QrPage implements OnInit {
 
           if (this.validateTicket()) {
 
-            let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+            // let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+            this.lecturas = await this.storage.get('lecturas');
 
-            if (lecturas) {
+            if (!this.lecturas) {
+              this.lecturas = [];
+            }
+
+            if (this.lecturas) {
               
-              let i = lecturas.findIndex(x=>x.values.etiqueta == barcodeData.text);
+              let i = this.lecturas.findIndex(x=>x.values.etiqueta == this.etiqueta);
 
               if (i !== -1) {
                 return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
@@ -355,7 +421,7 @@ export class QrPage implements OnInit {
             }
 
             this.nav.back();
-            this.events.publish('lectura',barcodeData.text);
+            this.events.publish('lectura',this.etiqueta);
           }else{
             this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
           }
@@ -375,7 +441,7 @@ export class QrPage implements OnInit {
     this.semitrans = false;
   }
 
-  buscar()
+  async buscar()
   {
     if (!this.etiqueta) {
       return false;
@@ -385,11 +451,16 @@ export class QrPage implements OnInit {
 
       if (this.validateTicket()) {
 
-        let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+        // let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+        this.lecturas = await this.storage.get('lecturas');
 
-        if (lecturas) {
+        if (!this.lecturas) {
+          this.lecturas = [];
+        }
+
+        if (this.lecturas) {
           
-          let i = lecturas.findIndex(x=>x.values.etiqueta == this.etiqueta);
+          let i = this.lecturas.findIndex(x=>x.values.etiqueta == this.etiqueta);
 
           if (i !== -1) {
             return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
@@ -407,11 +478,16 @@ export class QrPage implements OnInit {
 
       if (this.validateTicket()) {
 
-        let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+        // let lecturas = JSON.parse(localStorage.getItem('lecturas'));
+        this.lecturas = await this.storage.get('lecturas');
 
-        if (lecturas) {
+        if (!this.lecturas) {
+          this.lecturas = [];
+        }
+
+        if (this.lecturas) {
           
-          let i = lecturas.findIndex(x=>x.values.etiqueta == this.etiqueta);
+          let i = this.lecturas.findIndex(x=>x.values.etiqueta == this.etiqueta);
 
           if (i !== -1) {
             return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
@@ -443,26 +519,6 @@ export class QrPage implements OnInit {
 
   /**/
 
-
-  private scans = [];
-  private scanners = [{ "SCANNER_NAME": "Please Wait...", "SCANNER_INDEX": 0, "SCANNER_CONNECTION_STATE": true }];
-  private selectedScanner = "Please Select...";
-  private selectedScannerId = -1;
-  private ean8Decoder = true;   //  Model for decoder
-  private ean13Decoder = true;  //  Model for decoder
-  private code39Decoder = true; //  Model for decoder
-  private code128Decoder = true;//  Model for decoder
-  private dataWedgeVersion = "Pre 6.3. Please create & configure profile manually.  See the ReadMe for more details.";
-  private availableScannersText = "Requires Datawedge 6.3+"
-  private activeProfileText = "Requires Datawedge 6.3+";
-  private commandResultText = "Messages from DataWedge will go here";
-  private uiHideDecoders = true;
-  private uiDatawedgeVersionAttention = true;
-  private uiHideSelectScanner = true;
-  private uiHideShowAvailableScanners = false;
-  private uiHideCommandMessages = true;
-  private uiHideFloatingActionButton = true;
-
   //  Function to handle changes in the decoder checkboxes.  
   //  Note: SET_CONFIG only available on DW 6.4+ per the docs
   public setDecoders() {
@@ -484,7 +540,7 @@ export class QrPage implements OnInit {
     }
     //  Set the new configuration
     let profileConfig = {
-      "PROFILE_NAME": "ZebraIonicDemo",
+      "PROFILE_NAME": "ZebraWeeetracker",
       "PROFILE_ENABLED": "true",
       "CONFIG_MODE": "UPDATE",
       "PLUGIN_CONFIG": {

@@ -1,7 +1,7 @@
 
 export class ResiduoEspecifico{
 
-    Id : number;
+    sidFraccion : number;
     
-    Nombre : string;
+    nombre : string;
 }

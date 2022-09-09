@@ -39,6 +39,12 @@ export class HomePage implements OnInit {
 
   async cargarDatos() {
     this.usuario = await this.usuarioService.cargarToken();
+    if (!this.usuario) {
+      this.navCtrl.navigateRoot("/login");
+      setTimeout(()=>{
+        return this.events.publish('setLoaded');
+      },50)
+    }
     this.titulo = this.usuario.tercero.Nombre;
     console.log(this.usuario.responsabilidades);
     this.menuService.getMenuOpts().subscribe(res => {

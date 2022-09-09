@@ -186,7 +186,9 @@ export class StepThreePage implements OnInit {
           await this.comprobarRaee(i);
         }
 
-        localStorage.setItem('lecturas',JSON.stringify(this.lecturas));
+        // localStorage.setItem('lecturas',JSON.stringify(this.lecturas));
+
+        await this._storage?.set('lecturas', this.lecturas);
 
         load.dismiss();
 
@@ -277,7 +279,15 @@ export class StepThreePage implements OnInit {
   }
 
   atras() {
-    this.nav.navigateRoot('/home');
+    this.alertCtrl.create({message:"¿Está seguro de volver atrás? La información actual se perderá", buttons: [
+    {
+      text:"Si, regresar",
+      handler:()=>{
+        this.nav.navigateRoot('/home');
+      }
+    },{
+      text:"Cancelar"
+    }]}).then(a=>a.present())
     // this._location.back();
   }
 

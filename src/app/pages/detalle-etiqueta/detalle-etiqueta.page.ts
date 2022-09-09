@@ -42,7 +42,7 @@ export class DetalleEtiquetaPage implements OnInit {
   }
 
   procesarDatos() {
-    let marca: Marcas = this.usuario.marcas.find(m => m.PidMarca === this.residuo.sidMarca);
+    /*let marca: Marcas = this.usuario.marcas.find(m => m.PidMarca === this.residuo.sidMarca);
     if(marca)this.marca = marca.Nombre;
     let residuo : ResiduoEspecifico = this.usuario.residuos.find(r => r.Id === this.residuo.sidResiduoEspecifico);
     if(residuo)this.res = residuo.Nombre;
@@ -50,7 +50,7 @@ export class DetalleEtiquetaPage implements OnInit {
       this.destino = "Reciclaje";
     }else if(this.residuo.destino == 2){
       this.destino = "Reutilización";
-    }
+    }*/
   }
 
   ngOnInit() {

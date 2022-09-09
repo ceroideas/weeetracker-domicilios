@@ -24,3 +24,11 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+.alert-radio-label.sc-ion-alert-md {
+   white-space: pre-line !important;
+}
+
+.alert-radio-label.sc-ion-alert-ios {
+    white-space: pre-line !important;
+}

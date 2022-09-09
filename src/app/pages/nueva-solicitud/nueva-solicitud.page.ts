@@ -161,7 +161,7 @@ export class NuevaSolicitudPage implements OnInit {
   }
 
   nuevaSolicitud() {
-    let id = this.myForm.get('residuo').value;
+    /*let id = this.myForm.get('residuo').value;
     let residuo = this.usuario.residuos.find(r => r.Id === this.myForm.get('residuo').value);
     let obj: ALinea = { Nombre: residuo.Nombre, Unidades: this.myForm.get('cantidad').value, idResiduo: residuo.Id };
     let count = 0;
@@ -175,7 +175,7 @@ export class NuevaSolicitudPage implements OnInit {
     if (existe) {
       this.residuos.splice(count, 1);
     }
-    this.residuos.unshift(obj);
+    this.residuos.unshift(obj);*/
   }
 
   eliminar(index: number) {

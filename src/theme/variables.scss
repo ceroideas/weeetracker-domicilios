@@ -109,10 +109,10 @@ ion-footer{
 }
 
 ion-footer img{
-    width: 25%;
+    // width: 25%;
     padding-bottom: 5px;
     position: relative;
-    bottom: 63px;
+    bottom: 8vh;
     filter: invert(100%);
     width: 100px;
 }
@@ -471,7 +471,7 @@ ion-modal.selectGestor ion-toolbar {
 }
 
 .alert-radio-label.sc-ion-alert-md {
-  white-space: normal !important;
+  // white-space: normal !important;
   font-size: 13px;
 }
 

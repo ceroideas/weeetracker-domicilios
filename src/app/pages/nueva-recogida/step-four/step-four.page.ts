@@ -26,7 +26,6 @@ export class StepFourPage implements OnInit {
   usuario: Usuario = new Usuario();
 
   lecturas:any;
-  gestor = JSON.parse(localStorage.getItem('gestor'));
   origen = JSON.parse(localStorage.getItem('origen'));
   contenedores:any;
   especificos:any;
@@ -52,7 +51,7 @@ export class StepFourPage implements OnInit {
 
     this.myForm = this.fb.group({
       origen: [this.origen.direccion, Validators.required],
-      gestor_recogida: [this.gestor.nombre, Validators.required],
+      gestor_recogida: ['', Validators.required],
       nombre: ['', Validators.required],
       firma: ['', Validators.required],
     });
@@ -76,6 +75,7 @@ export class StepFourPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
+    this.myForm.patchValue({gestor_recogida: this.usuario.tercero.Nombre});
     console.log(this.usuario);
   }
 

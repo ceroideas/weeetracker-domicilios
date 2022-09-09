@@ -31,7 +31,8 @@ export class StepTwoPage implements OnInit {
   usuario: Usuario = new Usuario();
 
   solicitud = JSON.parse(localStorage.getItem('solicitud')) ? JSON.parse(localStorage.getItem('solicitud'))['response'] : null;
-  gestor = JSON.parse(localStorage.getItem('solicitud')) ? JSON.parse(localStorage.getItem('solicitud'))['response'] : null;
+  // gestor = JSON.parse(localStorage.getItem('solicitud')) ? JSON.parse(localStorage.getItem('solicitud'))['response'] : null;
+  gestor:any = null;
   direcciones = null;
 
   constructor(private usuarioService: UsuarioService,
@@ -173,8 +174,8 @@ export class StepTwoPage implements OnInit {
   nuevoOrigen()
   {
     if (!this.gestor) {
-      this.consultaService.createLogger('E | Sin gestor seleccionado');
-      return this.alertCtrl.create({message:"No ha seleccionado Gestor", buttons: ['Ok']}).then(a=>{
+      this.consultaService.createLogger('E | Sin gestor de origen seleccionado');
+      return this.alertCtrl.create({message:"No ha seleccionado Gestor de origen", buttons: ['Ok']}).then(a=>{
         a.present();
       });
     }
