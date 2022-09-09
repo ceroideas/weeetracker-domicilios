@@ -29,7 +29,6 @@ export class StepSixPage implements OnInit {
   usuario: Usuario = new Usuario();
 
   lecturas:any;
-  gestor = JSON.parse(localStorage.getItem('gestor'));
   origen = JSON.parse(localStorage.getItem('origen'));
   contenedores:any;
   especificos:any;
@@ -70,7 +69,7 @@ export class StepSixPage implements OnInit {
       albaran_origen: [null, Validators.required],
       codigo_externo: [null, Validators.required],
       fecha_operacion: [moment(localStorage.getItem('date')).format('DD-MM-Y'), Validators.required],
-      gestor_recogida: [JSON.parse(localStorage.getItem('gestor')).nombreComercial, Validators.required],
+      gestor_recogida: ['', Validators.required],
       total: [null],
     });
     this.cargarUsuario();
@@ -84,6 +83,7 @@ export class StepSixPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
+    this.myForm.patchValue({gestor_recogida: this.usuario.tercero.Nombre});
     console.log(this.usuario);
 
     this.initial = 'R'+last2+String(this.usuario.terminal).padStart(4, '0');
@@ -201,13 +201,11 @@ export class StepSixPage implements OnInit {
     await this.consultas.uploadFTP(firma_2.firma,firma_2.archivo,'FTPUploadFirmas');
 
     let origen = JSON.parse(localStorage.getItem('origen'));
-    let gestor = JSON.parse(localStorage.getItem('gestor'));
     let fecha = localStorage.getItem('date');
     let tipo_operativa = localStorage.getItem('tipo_operativa');
 
     
     /*console.log(origen);
-    console.log(gestor);
     console.log(fecha);
     console.log(tipo_operativa);
     console.log(firma_1);
