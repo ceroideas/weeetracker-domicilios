@@ -111,6 +111,8 @@ export class ReadedPage implements OnInit {
     private storage: Storage,
     private barcodeScanner: BarcodeScanner) {
 
+    console.log(this.params.getParam());
+
     this.myForm = this.fb.group({
 
       etiqueta: [localStorage.getItem('etiqueta'),Validators.required],
@@ -303,15 +305,15 @@ export class ReadedPage implements OnInit {
   setValues()
   {
     this.myForm.patchValue({
-      etiqueta: this.read.values.etiqueta,
-      // fraccion: this.read.values.fraccion,
-      // residuo: this.read.values.residuo,
-      // residuo_especifico: this.read.values.residuo_especifico,
-      // marca: this.read.values.marca,
-      // tipo_contenedor: this.read.values.tipo_contenedor,
-      canibalizado: this.read.values.canibalizado,
-      estado_raee: this.read.values.estado_raee,
-      ref: this.read.values.ref,
+      etiqueta: this.read?.values.etiqueta,
+      // fraccion: this.read?.values.fraccion,
+      // residuo: this.read?.values.residuo,
+      // residuo_especifico: this.read?.values.residuo_especifico,
+      // marca: this.read?.values.marca,
+      // tipo_contenedor: this.read?.values.tipo_contenedor,
+      canibalizado: this.read?.values.canibalizado,
+      estado_raee: this.read?.values.estado_raee,
+      ref: this.read?.values.ref,
     });
   }
 
@@ -328,8 +330,8 @@ export class ReadedPage implements OnInit {
       if (!this.loadedMarca && !this.loadedResiduo) {
         this.loadedMarca = true;
         this.loadedResiduo = true;
-        this.myForm.patchValue({marca: this.read.values.marca});
-        this.myForm.patchValue({residuo: this.read.values.residuo});
+        this.myForm.patchValue({marca: this.read?.values.marca});
+        // this.myForm.patchValue({residuo: this.read?.values.residuo});
         this.setValues();
       }
     }
@@ -356,18 +358,15 @@ export class ReadedPage implements OnInit {
       }
     }
 
-    console.log(this.usuario.residuos);
-
     for (let i of this.usuario.residuos) {
       if (i.sidFraccion == this.myForm.value.fraccion) {
         this.residuos.push(i);
       }
     }
 
-    console.log(this.residuos);
-
     this.myForm.patchValue({
-      tipo_contenedor: null
+      tipo_contenedor: null,
+      residuo: this.read?.values.residuo
     })
   }
 
@@ -378,15 +377,9 @@ export class ReadedPage implements OnInit {
       this.consultaService.especificos(this.myForm.value.residuo).subscribe(data=>{
         this.residuos_especificos = data;
 
-        if (!this.read) {
-          if (!this.loadedResiduoEsp) {
-            this.loadedResiduoEsp = true;
-          }
-        }else{
-          if (!this.loadedResiduoEsp) {
-            this.loadedResiduoEsp = true;
-            this.myForm.patchValue({residuo_especifico: this.read.values.residuo_especifico});
-          }
+        if (!this.loadedResiduoEsp) {
+          this.loadedResiduoEsp = true;
+          this.myForm.patchValue({residuo_especifico: this.read?.values.residuo_especifico});
         }
       })
     },100)
@@ -420,13 +413,11 @@ export class ReadedPage implements OnInit {
       let data1 = data.filter(filtro)
       this.fracciones = data1;
 
-      if (this.read) {
-        if (!this.loadedFraccion) {
-          this.loadedFraccion = true;
-          this.myForm.patchValue({fraccion: this.read.values.fraccion});
-          this.changeFraccion();
-          this.myForm.patchValue({tipo_contenedor: this.read.values.tipo_contenedor});
-        }
+      if (!this.loadedFraccion) {
+        this.loadedFraccion = true;
+        this.myForm.patchValue({fraccion: this.read?.values.fraccion});
+        this.changeFraccion();
+        this.myForm.patchValue({tipo_contenedor: this.read?.values.tipo_contenedor});
       }
     })
   }
@@ -670,7 +661,7 @@ export class ReadedPage implements OnInit {
 
     this.camera.getPicture(options).then((imageData) => {
 
-     this.photos.push({path: imageData});
+     this.photos.push({path: 'data:image/jpeg;base64,'+imageData});
      // this.previews.push({path: imageData/*, preview: imageData.replace('file://','_app_file_')*/});
 
      // this.uploadFTP(imageData);

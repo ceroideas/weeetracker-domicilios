@@ -13,9 +13,11 @@ const routes: Routes = [
   { path: 'identificacion-residuos', loadChildren: () => import('./pages/identificacion-residuos/identificacion-residuos.module').then(m => m.IdentificacionResiduosPageModule) },
   { path: 'detalle-etiqueta', loadChildren: () => import('./pages/detalle-etiqueta/detalle-etiqueta.module').then(m => m.DetalleEtiquetaPageModule) },
   { path: 'detalle-solicitud', loadChildren: () => import('./pages/detalle-solicitud/detalle-solicitud.module').then(m => m.DetalleSolicitudPageModule) },
+  { path: 'nueva-recogida', loadChildren: () => import('./pages/nueva-recogida/nueva-recogida.module').then( m => m.NuevaRecogidaPageModule) },
+  { path: 'operativas-realizadas', loadChildren: () => import('./pages/operativas-realizadas/operativas-realizadas.module').then( m => m.OperativasRealizadasPageModule) },
   {
-    path: 'nueva-recogida',
-    loadChildren: () => import('./pages/nueva-recogida/nueva-recogida.module').then( m => m.NuevaRecogidaPageModule)
+    path: 'pesar-raees',
+    loadChildren: () => import('./pages/pesar-raees/pesar-raees.module').then( m => m.PesarRaeesPageModule)
   },
 ];
 

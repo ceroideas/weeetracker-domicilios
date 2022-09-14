@@ -139,7 +139,7 @@
           <ion-row *ngFor="let p of photos; let i = index">
 
             <ion-col size="6" style="text-align: left;">
-              <img [src]="'data:image/jpeg;base64,'+p.path" alt="" style="border-radius: 65px; height:65px; width:65px"><br>
+              <img [src]="p.path" alt="" style="border-radius: 65px; height:65px; width:65px"><br>
               
             </ion-col>
             <ion-col size="6">

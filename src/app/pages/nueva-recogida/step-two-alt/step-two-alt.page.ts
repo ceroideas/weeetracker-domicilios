@@ -73,7 +73,7 @@ export class StepTwoAltPage implements OnInit {
   adelante()
   {
     let val = this.myForm.value;
-    let data = {
+    let info = {
       Direccion: val.direccion,
       Nombre: val.centro,
       SidPais: val.pais,
@@ -81,6 +81,9 @@ export class StepTwoAltPage implements OnInit {
       SidMunicipio: val.localidad,
       SidTercero: this.gestor.pidTercero,
       // CodigoPostal: val.codigo_postal.toString(),
+      Contacto: val.contacto,
+      Nif: val.nif,
+      Tlfn: val.tlfn_contacto,
       Estado: 1,
       TipoVia: "Calle",
       Pesado: 0,
@@ -92,8 +95,9 @@ export class StepTwoAltPage implements OnInit {
       insRnP: val.insRnP,
     }
 
-    this.consultaService.nuevoOrigen(data).subscribe((data:any)=>{
+    this.consultaService.nuevoOrigen(info).subscribe((data:any)=>{
       console.log(data);
+      localStorage.setItem('nuevoOrigen',JSON.stringify(info));
       this.events.publish('nuevoOrigen',{centro:data.info.centro, direcciones: data.info.direcciones});
       this._location.back();
     })

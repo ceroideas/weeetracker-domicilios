@@ -35,6 +35,8 @@ export class StepTwoPage implements OnInit {
   gestor:any = null;
   direcciones = null;
 
+  mostrarNuevo = true;
+
   constructor(private usuarioService: UsuarioService,
     private consultaService: ConsultasService,
     private _location: Location,
@@ -47,6 +49,10 @@ export class StepTwoPage implements OnInit {
     private loadingCtrl: LoadingController,
     private storage: Storage,
     private alertCtrl: AlertController,) {
+
+    if (localStorage.getItem('tipo_operativa') == 'CSR') {
+      this.mostrarNuevo = false;
+    }
 
     this.myForm = this.fb.group({
       pidSolicitud: [this.solicitud ? this.solicitud.sid : ''],
@@ -96,23 +102,22 @@ export class StepTwoPage implements OnInit {
     this.events.subscribe('nuevoOrigen',(data:any)=>{
       // this.solicitud = data.centro;
       // this.gestor = data.centro;
-      localStorage.setItem('nuevoOrigen','1');
       this.direcciones = data.direcciones;
       let last = this.direcciones.length-1;
 
       this.myForm.patchValue({
         
-        // sidTercero: null,
-        // sidDireccionTercero: null,
+        sidTercero: null,
+        sidDireccionTercero: null,
 
-        // centro: this.direcciones[last].nombre,
-        // localidad: this.direcciones[last].nombreMunicipio,
-        // direccion: this.direcciones[last].direccion,
-        // provincia: this.direcciones[last].nombreProvincia,
-        // pais: this.direcciones[last].nombrePais,
-        // codNima: this.direcciones[last].codNima,
-        // insRP: this.direcciones[last].insRP,
-        // insRnP: this.direcciones[last].insRnP,
+        centro: this.direcciones[last].nombre,
+        localidad: this.direcciones[last].nombreMunicipio,
+        direccion: this.direcciones[last].direccion,
+        provincia: this.direcciones[last].nombreProvincia,
+        pais: this.direcciones[last].nombrePais,
+        codNima: this.direcciones[last].codNima,
+        insRP: this.direcciones[last].insRp,
+        insRnP: this.direcciones[last].insRnP,
       })
     });
 
@@ -146,7 +151,7 @@ export class StepTwoPage implements OnInit {
             provincia: data1['ubicacion']['_provincia'].nombre,
             pais: data1['ubicacion']['_pais'].nombre,
             codNima: direccion.codNima,
-            insRP: direccion.insRP,
+            insRP: direccion.insRp,
             insRnP: direccion.insRnP,
           });
 
@@ -301,7 +306,7 @@ export class StepTwoPage implements OnInit {
               provincia: data1['ubicacion']['_provincia'].nombre,
               pais: data1['ubicacion']['_pais'].nombre,
               codNima: this.direcciones[0].codNima,
-              insRP: this.direcciones[0].insRP,
+              insRP: this.direcciones[0].insRp,
               insRnP: this.direcciones[0].insRnP,
             });
 

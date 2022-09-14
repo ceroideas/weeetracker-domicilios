@@ -323,13 +323,16 @@ export class EditReadPage implements OnInit {
     // this.residuos = this.usuario.residuos;
     this.marcas = this.usuario.marcas;
 
-    if (!this.loadedMarca && !this.loadedResiduo) {
-      this.loadedMarca = true;
-      this.loadedResiduo = true;
-      this.myForm.patchValue({marca: this.read.values.marca});
-      // this.myForm.patchValue({residuo: this.read.values.residuo});
+    if (!this.read) {
       this.especificos();
-      this.setValues();
+    }else{
+      if (!this.loadedMarca && !this.loadedResiduo) {
+        this.loadedMarca = true;
+        this.loadedResiduo = true;
+        this.myForm.patchValue({marca: this.read.values.marca});
+        // this.myForm.patchValue({residuo: this.read.values.residuo});
+        this.setValues();
+      }
     }
 
     this.loadContenedores();
@@ -577,7 +580,7 @@ export class EditReadPage implements OnInit {
 
     this.camera.getPicture(options).then((imageData) => {
 
-     this.photos.push({path: imageData});
+     this.photos.push({path: 'data:image/jpeg;base64,'+imageData});
      // this.previews.push({path: imageData/*, preview: imageData.replace('file://','_app_file_')*/});
 
      // this.uploadFTP(imageData);

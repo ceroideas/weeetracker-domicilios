@@ -341,6 +341,9 @@ export class QrPage implements OnInit {
       sum = sum.toString().split("").pop();
     }
     this.etiqueta = sp.join('').substr(2);
+    if (sum == 0) {
+      return ((0).toString() == control);
+    }
     return ((10-sum).toString() == control);
   }
 

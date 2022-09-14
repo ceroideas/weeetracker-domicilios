@@ -91,10 +91,10 @@ export class StepSixPage implements OnInit {
 
     this.consultas.recuperarCertificado(this.initial).subscribe((data:any)=>{
 
-      if (!data.certificado) {
+      if (!data.certificado.length) {
         this.initial += '00001';
       }else{
-        this.initial += this.padLeft(parseInt(data.certificado.pidCertificado.slice(-5))+1,5);
+        this.initial += this.padLeft(parseInt(data.certificado[data.certificado.length-1].pidCertificado.slice(-5))+1,5);
       }
 
       this.myForm.patchValue({
@@ -121,7 +121,7 @@ export class StepSixPage implements OnInit {
       if (!data.certificado) {
         this.initial2 += '00001';
       }else{
-        this.initial2 += this.padLeft((parseInt(data.certificado.pidRaeecertificado.slice(-5))+1).toString(),5);
+        this.initial2 += this.padLeft((parseInt(data.certificado)+1).toString(),5);
       }
 
       this.myForm.patchValue({
@@ -143,6 +143,8 @@ export class StepSixPage implements OnInit {
 
       this.contadores.firmas = data1.certificado1;
       this.contadores.fotos = data1.certificado2;
+
+      console.log('data1',data1);
     });
   }
 
@@ -171,7 +173,7 @@ export class StepSixPage implements OnInit {
         for(let j of i.photos)
         {
           let name = "F"+i.values.etiqueta+this.myForm.value.certificado+String(contador).padStart(4, '0')+'.jpg';
-          let result = await this.consultas.uploadFTP(j.path,name,'FTPUploadFotos');
+          let result = await this.consultas.uploadFTP(j.path,name,'/Fotos');
 
           let pidraeecert = (parseInt( this.myForm.value.certificadoraee )+contadorraee).toString();
 
@@ -192,17 +194,19 @@ export class StepSixPage implements OnInit {
     
     firma_1.archivo = 'Fr'+this.myForm.value.certificado+'_11.png';
     firma_1.id = this.pidFirma+String(this.contadores.firmas).padStart(4, '0');
-    await this.consultas.uploadFTP(firma_1.firma,firma_1.archivo,'FTPUploadFirmas');
+    await this.consultas.uploadFTP(firma_1.firma,firma_1.archivo,'/Firmas');
 
     this.contadores.firmas++;
 
     firma_2.archivo = 'Fr'+this.myForm.value.certificado+'_12.png';
     firma_2.id = this.pidFirma+String(this.contadores.firmas).padStart(4, '0');
-    await this.consultas.uploadFTP(firma_2.firma,firma_2.archivo,'FTPUploadFirmas');
+    await this.consultas.uploadFTP(firma_2.firma,firma_2.archivo,'/Firmas');
 
     let origen = JSON.parse(localStorage.getItem('origen'));
     let fecha = localStorage.getItem('date');
     let tipo_operativa = localStorage.getItem('tipo_operativa');
+
+    // return console.log(firma_1,firma_2);
 
     
     /*console.log(origen);
@@ -253,12 +257,32 @@ export class StepSixPage implements OnInit {
       SidFirmaDestino: null,
       Observaciones: null,
       SidTipoOperativa: tipo_operativa,
-    };
 
-    
+    };
+    if (localStorage.getItem('nuevoOrigen')) {
+      let n_o = JSON.parse(localStorage.getItem('nuevoOrigen'));
+
+      certificado.auxEntidad = n_o.Nombre;
+      certificado.auxReferencia = n_o.Contacto;
+      certificado.auxNIF = n_o.Nif;
+      certificado.auxDireccion = n_o.Direccion;
+      certificado.auxLocalidad = n_o.SidMunicipio.toString();
+      certificado.auxProvincia = n_o.SidProvincia.toString();
+      certificado.auxTelefono = n_o.Tlfn;
+    }else{
+      certificado.auxEntidad = null;
+      certificado.auxReferencia = null;
+      certificado.auxNIF = null;
+      certificado.auxDireccion = null;
+      certificado.auxLocalidad = null;
+      certificado.auxProvincia = null;
+      certificado.auxTelefono = null;
+    }
+
+    let contador = 0;
+
     for(let l of lecturas)
     {
-      let contador = 0;
 
       raees.push({
           PidRaee: l.values.etiqueta,
@@ -267,9 +291,9 @@ export class StepSixPage implements OnInit {
           SidFraccion: l.values.fraccion,
           SidResiduo: l.values.residuo,
           SidResiduoEspecifico: l.values.residuo_especifico,
-          SidMarca: l.values.marca,
+          SidMarca: l.values.marca != "" ? l.values.marca : null,
           SidTipoContenedor: l.values.tipo_contenedor,
-          Canibalizado: l.values.canibalizado,
+          Canibalizado: l.values.canibalizado ? l.values.canibalizado : false,
           SidEstadoRaee: l.values.estado_raee,
           Estado: 1,
         })
@@ -302,22 +326,45 @@ export class StepSixPage implements OnInit {
     console.log(fotos);
     l.dismiss();
 
+    let name_logs = moment().format('YYMMDDHHmmss')+'_'+String(this.usuario.terminal).padStart(4, '0')+'_LOG.txt';
+    let result = await this.consultas.uploadLog(name_logs,'/Logs');
+
     this.consultas.createLogger('Guardando los datos Success');
 
     this.loadingCtrl.create({message:"Guardando la información de Recogida"}).then(l=>{
       l.present();
 
-      this.consultas.informacion({firmas:firmas, certificado:certificado, raees:raees, raeescertificados:raeescertificados, fotos:fotos}).subscribe(data=>{
+      this.consultas.informacion({firmas:firmas, certificado:certificado, raees:raees, raeescertificados:raeescertificados, fotos:fotos}).subscribe((data:any)=>{
         console.log(data);
+        l.dismiss();
 
-        this.consultas.createLogger('Datos guardados, regresando al Inicio Success');
+        localStorage.setItem('certificado_pesado',this.myForm.value.certificado);
 
         this.nav.navigateRoot('/home');
 
-        this.alertCtrl.create({message:"Información de Recogida guardada exitosamente!", buttons: ['OK']}).then(a=>a.present());
-
-        l.dismiss();
+        if (data.informacion.pesado > 0) {
+          this.alertCtrl.create({message:"¿Quiere pesar los RAEEs?", buttons: [
+          {
+            text:'OK',
+            handler: ()=>{
+              this.consultas.createLogger('Datos guardados, regresando al Inicio Success');
+              this.nav.navigateRoot('/pesar-raees');
+            }
+          },{
+            text:"No",
+            handler:()=>{
+              localStorage.removeItem('certificado_pesado');
+              this.consultas.createLogger('Datos guardados, regresando al Inicio Success');
+              this.alertCtrl.create({message:"Información de Recogida guardada exitosamente!", buttons: ['OK']}).then(a=>a.present());
+            }
+          }]}).then(a=>a.present());
+        }else{
+          this.consultas.createLogger('Datos guardados, regresando al Inicio Success');
+          this.alertCtrl.create({message:"Información de Recogida guardada exitosamente!", buttons: ['OK']}).then(a=>a.present());
+        }
       })
+    },err=>{
+      this.consultas.createLogger('E | Error Guardando los datos | '+JSON.stringify(err));
     })
   }
 
@@ -327,6 +374,7 @@ export class StepSixPage implements OnInit {
     {
       text:"Si, regresar",
       handler:()=>{
+        this.consultas.createLogger('Volver atras, paso 6');
         this._location.back();
       }
     },{

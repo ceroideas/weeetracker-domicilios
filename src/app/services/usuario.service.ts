@@ -39,7 +39,19 @@ export class UsuarioService {
 
     return new Promise((resolve)=>{
 
-      this.http.get(apiUrl + '/residuo/getResiduos').subscribe((data:any)=>{
+      if (localStorage.getItem('config')) {
+        let cf = JSON.parse(localStorage.getItem('config'));
+
+        this.usuario.dtercero = cf.centro;
+        this.usuario.terminal = cf.pda.padStart(4, '0');
+        this.usuario.sidsig = cf.sidsig;
+      }else{
+        this.usuario.dtercero = JSON.parse(token.DTercero);
+        this.usuario.terminal = token.Terminal.padStart(4, '0');
+        this.usuario.sidsig = JSON.parse(token.SidSIG);
+      }
+
+      this.http.get(apiUrl + '/residuo/getResiduos/'+this.usuario.dtercero).subscribe((data:any)=>{
         console.log('residuos',data);
 
         this.usuario.id = token.Id;
@@ -47,24 +59,13 @@ export class UsuarioService {
         this.usuario.login = token.Login;
         // this.usuario.tipoTercero = token.TipoTercero;
 
-        if (localStorage.getItem('config')) {
-          let cf = JSON.parse(localStorage.getItem('config'));
-
-          this.usuario.dtercero = cf.centro;
-          this.usuario.terminal = cf.pda.padStart(4, '0');
-          this.usuario.sidsig = cf.sidsig;
-        }else{
-          this.usuario.dtercero = JSON.parse(token.DTercero);
-          this.usuario.terminal = token.Terminal.padStart(4, '0');
-          this.usuario.sidsig = JSON.parse(token.SidSIG);
-        }
-
         this.usuario.tercero = JSON.parse(token.Tercero);    
         this.usuario.responsabilidades = JSON.parse(token.Resps);
         this.usuario.centros = JSON.parse(token.Centros);
         this.usuario.marcas = JSON.parse(token.Marcas);
         // this.usuario.perfiles = JSON.parse(token.Perfiles);
-        this.usuario.residuos = data;
+        this.usuario.residuos = data.residuos;
+        this.usuario.direccionTercero = data.direccion;
         // this.usuario.direcciones = JSON.parse(token.Direcciones).DireccionesTerceros;
         this.storage.set('usuario', this.usuario);
         this.storage.set('login', this.usuario.login);

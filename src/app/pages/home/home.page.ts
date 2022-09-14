@@ -23,6 +23,8 @@ export class HomePage implements OnInit {
   usuario: Usuario = new Usuario();
   titulo: string;
 
+  pesarBtn;
+
   constructor(private menuService: MenuService,
     private router: Router,
     private navCtrl: NavController,
@@ -45,8 +47,10 @@ export class HomePage implements OnInit {
         return this.events.publish('setLoaded');
       },50)
     }
+
+    this.pesarBtn = this.usuario.direccionTercero.pesado > 0;
     this.titulo = this.usuario.tercero.Nombre;
-    console.log(this.usuario.responsabilidades);
+    // console.log(this.usuario.responsabilidades);
     this.menuService.getMenuOpts().subscribe(res => {
       this.menu = res;
       this.menuAux = this.menu;

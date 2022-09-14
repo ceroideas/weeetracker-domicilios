@@ -29,10 +29,25 @@ export class ConsultasService {
     let etiquetaObj = { Etiqueta: etiqueta };
     return this.http.post(apiUrl + '/residuo/GetRaee', etiquetaObj);
   }
+  GetRaees(certificado: string) {
+    return this.http.get(apiUrl + '/residuo/GetRaees/'+certificado);
+  }
+  GetRaeesFraccion(certificado: string) {
+    return this.http.get(apiUrl + '/residuo/GetRaeesFraccion/'+certificado);
+  }
+  RaeesDia(dia: string, centro: number) {
+    return this.http.get(apiUrl + '/solicitud/RaeesDia/'+dia+'/'+centro);
+  }
 
   getConsultaResiduo(idTercero, idCentro, idResiduo) {
     let residuo = { idTercero: idTercero, idCentro: idCentro, idResiduo: idResiduo };
     return this.http.post(apiUrl + '/residuo/especifico', residuo);
+  }
+  guardarPeso(data) {
+    return this.http.post(apiUrl + '/solicitud/guardarPeso', data);
+  }
+  saveObservations(data) {
+    return this.http.post(apiUrl + '/solicitud/saveObservations', data);
   }
 
   altaIdentificacion(residuo: Identificacion) {
@@ -70,6 +85,10 @@ export class ConsultasService {
   getConsultaStock(idTercero, idCentro) {
     let stock = { idTercero: idTercero, idCentro: idCentro };
     return this.http.post(apiUrl + '/stock', stock);
+  }
+
+  getOperativas(idTercero, idCentro) {
+    return this.http.get(apiUrl + '/solicitud/operativas/'+idTercero+'/'+idCentro);
   }
 
   contenedores() {
@@ -197,46 +216,81 @@ export class ConsultasService {
     return this.http.post(apiUrl + '/solicitud/informacion',data);
   }
 
-  uploadFTP(url,name,type = 'FTPUpload1')
+  uploadFTP(url,name,type = '/Fotos')
   {
     console.log(url);
+    url = url.replace('data:image/jpeg;base64,', '');
+    url = url.replace('data:image/png;base64,', '');
+
     return new Promise((resolve)=>{
+     this.http.post(apiUrl + '/file/FTPUploadFotos', {'ArchivoCodificado':url,'Nombre':name, 'Ruta': type})
 
-      fetch(url)
-      .then((res:any) => res.blob())
-      .then((myBlob)=>{
+     .subscribe(data=>{
+       return resolve(data);
+     },err=>{
+       return resolve(err);
+     });
 
-        console.log(myBlob);
+      // fetch(url)
+      // .then((res:any) => res.blob())
+      // .then((myBlob)=>{
 
-        var file = new File([myBlob], name,{
-          type: myBlob.type,
+      //   console.log(myBlob);
+
+      //   var file:any;
+
+      //   file = new File([myBlob], name,{
+      //     type: myBlob.type,
+      //   });
+
+      //   let formData = new FormData();
+      //   formData.append('File',file);
+
+      //   $.ajax({
+      //     url: this.url+'/file/'+type,
+      //     type: 'POST',
+      //     contentType: false,
+      //     processData: false,
+      //     data: formData,
+      //   })
+      //   .done(function(data) {
+      //     console.log(data);
+      //     resolve(data);
+      //   })
+      //   .fail(function() {
+      //     console.log("error");
+      //     resolve(null);
+      //   })
+      //   .always(function() {
+      //     console.log("complete");
+      //   });
+
+      // })
+
+    })
+  }
+
+  uploadLog(name,type)
+  {
+    return new Promise((resolve)=>{
+      if (this.platform.is('cordova')) {
+        
+        let url = this.file.externalRootDirectory+'logs';
+
+        this.file.checkFile(url,'log.txt').then(response => {
+
+          this.http.post(apiUrl + '/file/FTPUploadFotos', {'ArchivoCodificado':url+'/log.txt','Nombre':name, 'Ruta': type}).subscribe(data=>{
+            return resolve(data);
+          });
+
+        },err=>{
+          return resolve(false);
         });
 
-        let formData = new FormData();
-
-        formData.append('File',file);
-
-        $.ajax({
-          url: this.url+'/file/'+type,
-          type: 'POST',
-          contentType: false,
-          processData: false,
-          data: formData,
-        })
-        .done(function(data) {
-          console.log(data);
-          resolve(data);
-        })
-        .fail(function() {
-          console.log("error");
-          resolve(null);
-        })
-        .always(function() {
-          console.log("complete");
-        });
-
-      })
-
+      }else{
+        return resolve(true);
+      }
+      /**/
     })
   }
 

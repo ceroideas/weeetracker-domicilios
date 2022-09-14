@@ -1,0 +1,163 @@
+<app-header [titulo]="titulo"></app-header>
+
+<ion-content padding color="medium"  fullscreen="fullscreen">
+
+  <ion-grid *ngIf="!verDetalle">
+
+    <ion-row>
+      
+      <ion-col size="4">
+        <ion-label class="left-label">Tipo Operat.:</ion-label>
+      </ion-col>
+      <ion-col size="5">
+        <ion-select [(ngModel)]="filter" style="margin: 0 !important;">
+
+          <ion-select-option *ngFor="let item of tipooperativas">{{item}}</ion-select-option>
+          
+        </ion-select>
+      </ion-col>
+      <ion-col size="3">
+        <ion-button size="small" (click)="filtrar()" color="primary">Filtrar</ion-button>
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row *ngIf="visualizarTabla">
+
+      <ion-col class="fila" size="12" style="overflow: auto;">
+        <ion-grid class="tabla" style="width: 600px;">
+
+          <table style="width: 100%; text-align: left;">
+                
+              <thead style="font-size: 14px;">
+                  <tr>
+                      <!-- <th>Tipo Cert</th> -->
+                      <th>Tipo Operat</th>
+                      <th>NºCertif</th>
+                      <th>Fecha</th>
+                      <th>PE o GS</th>
+                  </tr>
+              </thead>
+
+              <tbody style="font-size: 10px;">
+                  <tr *ngFor="let item of operativas;let i = index;" [ngClass]="{'trselected': (detalleOperativa == i)}" (click)="detalle(i)">
+                      <!-- <td>{{item.sidTipoCertificado}}</td> -->
+                      <td>{{item.sidTipoOperativa}}</td>
+                      <td>{{item.pidCertificado}}</td>
+                      <td>{{item.fecha | date:'dd/MM/yyyy'}}</td>
+                      <td>{{item.nombreComercial}}</td>
+                  </tr>
+              </tbody>
+
+          </table>
+
+        </ion-grid>
+      </ion-col>
+
+
+      <ion-col size="12" text-center>
+        <ion-button class="boton" [disabled]="!detalleOperativaBtn" (click)="verDetalleEtiqueta()">Ver detalle</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+
+  <ion-grid *ngIf="verDetalle">
+
+    <ion-row>
+      
+      <ion-col size="6" style="margin-bottom: 8px;">
+        Nº Certificado: 
+      </ion-col>
+      <ion-col size="6" style="margin-bottom: 8px;">
+        {{operativas[detalleOperativa].pidCertificado}}
+      </ion-col>
+
+      <ion-col size="6" style="margin-bottom: 8px;">
+        Código Externo: 
+      </ion-col>
+      <ion-col size="6" style="margin-bottom: 8px;">
+      </ion-col>
+
+      <ion-col size="6" style="margin-bottom: 8px;">
+        Albarán Origen: 
+      </ion-col>
+      <ion-col size="6" style="margin-bottom: 8px;">
+      </ion-col>
+
+      <ion-col size="6" style="margin-bottom: 8px;">
+        Fecha: 
+      </ion-col>
+      <ion-col size="6" style="margin-bottom: 8px;">
+        {{operativas[detalleOperativa].fecha | date:'dd/MM/yyyy'}}
+      </ion-col>
+
+      <ion-col size="6" style="margin-bottom: 8px;">
+        Gestor Origen: 
+      </ion-col>
+      <ion-col size="6" style="margin-bottom: 8px;">
+        {{operativas[detalleOperativa].nombreComercial}}
+      </ion-col>
+
+      <ion-col size="6" style="margin-bottom: 8px;">
+        Gestor Destino: 
+      </ion-col>
+      <ion-col size="6" style="margin-bottom: 8px;">
+        {{operativas[detalleOperativa].nDes}}
+      </ion-col>
+
+      <ion-col size="12" style="margin-bottom: 8px;">
+        <ion-label>Observaciones</ion-label>
+
+        <ion-textarea rows="3" style="color: #000" [(ngModel)]="observaciones"></ion-textarea>
+      </ion-col>
+
+
+    </ion-row>
+
+    <ion-row>
+
+      <table style="width: 100%; text-align: left;">
+                
+          <thead style="font-size: 14px;">
+              <tr>
+                  <th>Etiqueta</th>
+                  <th>Can</th>
+                  <th>R. Espécifico</th>
+                  <th>Cont</th>
+              </tr>
+          </thead>
+
+          <tbody style="font-size: 10px;">
+              <tr *ngFor="let l of raees">
+                  <td>{{l.sidRaee}}</td>
+                  <td>{{l.canibalizado ? 'S' : 'N'}}</td>
+                  <td>{{l.nombreResiduo}}</td>
+                  <td>{{l.nombre}}</td>
+              </tr>
+          </tbody>
+
+      </table>
+
+
+      <ion-col size="12" text-center>
+        <ion-button style="min-width: auto;" class="boton" (click)="saveObservations()">Guardar</ion-button>
+        <ion-button style="min-width: auto;" class="boton" (click)="volver()">Volver</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+
+<ion-footer no-border>
+    <ion-buttons>
+      <ion-button class="izquierda" *ngIf="!verDetalle" style="padding-left: 15px;" (click)="atras()">
+        <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+      </ion-button>
+      <ion-button class="izquierda" *ngIf="verDetalle" style="padding-left: 15px;" (click)="verDetalle = false">
+        <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+      </ion-button>
+    </ion-buttons>
+    <img src="../../../assets/img/logo-ecolec.png">
+</ion-footer>

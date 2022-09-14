@@ -34,4 +34,6 @@ export class Usuario{
     residuos:ResiduoEspecifico[];    
 
     direcciones:any;
+    
+    direccionTercero:any;
 }

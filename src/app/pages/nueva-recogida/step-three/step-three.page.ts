@@ -62,6 +62,10 @@ export class StepThreePage implements OnInit {
     console.log(this.usuario);
   }
 
+  onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+
   async ngOnInit() {
 
     this.consultaService.createLogger('Seleccionar Tipo de Lectura Success');
@@ -109,50 +113,66 @@ export class StepThreePage implements OnInit {
         
         this.consultaService.GetRaee(data).subscribe((data:any)=>{
 
+          let fracciones = [];
+
+          for (let i of this.usuario.responsabilidades) {
+            fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
+          }
+
           this.consultaService.createLogger('Comprobando Raee Success');
 
           l.dismiss();
 
-          if (data) {
+          if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
             return this.alertCtrl.create({message:"El Residuo ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
           }
 
-          if (!data) {
+          if (data.raee) {
             this.nav.navigateForward('/nueva-recogida/step-three/readed');
+
+            let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
+
+            if (!result) {
+              this.consultaService.createLogger('Residuo no puede ser recogido Success');
+              return this.alertCtrl.create({message:"No se puede Recoger esa etiqueta",buttons: ['Ok']}).then(a=>a.present());
+            }
+
+            let raee = data.raee;
+
+            var lectura = {
+              etiqueta: raee.pidRaee,
+              fraccion: raee.sidFraccion,
+              residuo: raee.sidResiduo,
+              residuo_especifico: raee.sidResiduoEspecifico,
+              marca: raee.sidMarca,
+              tipo_contenedor: raee.sidTipoContenedor,
+              canibalizado: raee.canibalizado,
+              estado_raee: raee.sidEstadoRaee,
+              ref: null
+            };
+            /*this.lecturas.push({values: lectura, photos: null});
+            localStorage.setItem('lecturas',JSON.stringify(this.lecturas));*/
+
+            // localStorage.setItem('etiqueta_objeto',JSON.stringify(data[0]));
+            // this.alertCtrl.create({message:"La etiqueta ya existe"}).then(a=>a.present());
+            this.params.setParam({values:lectura, photos:null});
           }
 
-          this.loadingCtrl.create().then(l=>{
+          this.nav.navigateForward('/nueva-recogida/step-three/readed');
 
-            this.consultaService.getIdentificacion(data[0].sidRaee).subscribe((data:any)=>{
+          // if (!data) {
+          //   this.nav.navigateForward('/nueva-recogida/step-three/readed');
+          // }
+
+          /*this.loadingCtrl.create({message:"Obteniendo Valores RAEE"}).then(l=>{
+
+            this.consultaService.getIdentificacion(data).subscribe((data:any)=>{
               l.dismiss();
 
               console.log(data);
 
-              if (data.length) {
-
-                  let raee = data[0];
-
-                  var lectura = {
-                    etiqueta: raee.pidRaee,
-                    fraccion: raee.sidFraccion,
-                    residuo: raee.sidResiduo,
-                    residuo_especifico: raee.sidResiduoEspecifico,
-                    marca: raee.sidMarca,
-                    tipo_contenedor: raee.sidTipoContenedor,
-                    canibalizado: raee.canibalizado,
-                    estado_raee: raee.sidEstadoRaee,
-                    ref: null
-                  };
-                  /*this.lecturas.push({values: lectura, photos: null});
-                  localStorage.setItem('lecturas',JSON.stringify(this.lecturas));*/
-
-                // localStorage.setItem('etiqueta_objeto',JSON.stringify(data[0]));
-                // this.alertCtrl.create({message:"La etiqueta ya existe"}).then(a=>a.present());
-                this.params.setParam({values:lectura, photos:null});
-              }
-
-              this.nav.navigateForward('/nueva-recogida/step-three/readed');
+              
             },err=>{
               this.consultaService.createLogger('E | Error al obtener Raee '+JSON.stringify(err));
               l.dismiss();
@@ -160,7 +180,7 @@ export class StepThreePage implements OnInit {
               this.nav.navigateForward('/nueva-recogida/step-three/readed');
             });
 
-          });
+          });*/
         },err=>{
           
           this.consultaService.createLogger('E | Error al obtener Raee '+JSON.stringify(err));
@@ -187,6 +207,11 @@ export class StepThreePage implements OnInit {
         }
 
         // localStorage.setItem('lecturas',JSON.stringify(this.lecturas));
+
+        if (!this.lecturas.length) {
+          load.dismiss();
+          return this.alertCtrl.create({message:"No hay etiquetas que procesar",buttons: ['Ok']}).then(a=>a.present());
+        }
 
         await this._storage?.set('lecturas', this.lecturas);
 
@@ -217,7 +242,44 @@ export class StepThreePage implements OnInit {
               ref: null
           };
 
-          if (data) {
+          let fracciones = [];
+
+          for (let j of this.usuario.responsabilidades) {
+            fracciones.push({id:j.SidFraccion,operacion:j.TipoOperacion, contenedor:j.SidTipoContenedor});
+          }
+
+          if (data.recogido.length) {
+            this.consultaService.createLogger('Residuo ya recogido Success');
+            this.alertCtrl.create({message:"El Residuo "+i+" ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
+            return resolve(true);
+          }
+
+          if (data.raee) {
+            let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
+
+            if (!result) {
+              this.consultaService.createLogger('Residuo no puede ser recogido Success');
+              this.alertCtrl.create({message:"No se puede Recoger la etiqueta "+i,buttons: ['Ok']}).then(a=>a.present());
+              return resolve(true);
+            }else{
+              lectura = {
+                etiqueta: data.raee.pidRaee,
+                fraccion: data.raee.sidFraccion,
+                residuo: data.raee.sidResiduo,
+                residuo_especifico: data.raee.sidResiduoEspecifico,
+                marca: data.raee.sidMarca,
+                tipo_contenedor: data.raee.sidTipoContenedor,
+                canibalizado: data.raee.canibalizado,
+                estado_raee: data.raee.sidEstadoRaee,
+                ref: null
+              };
+            }
+          }
+
+          this.lecturas.push({values:lectura, photos:null});
+          return resolve(true);
+
+          /*if (data) {
             this.consultaService.createLogger('Residui ya recogido Success');
             this.alertCtrl.create({message:"El Residuo "+i+" ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
             return resolve(true);
@@ -264,7 +326,7 @@ export class StepThreePage implements OnInit {
               // this.nav.navigateForward('/nueva-recogida/step-three/readed');
             });
 
-          });
+          });*/
         },err=>{
           resolve(false);
           this.loadingCtrl.dismiss();

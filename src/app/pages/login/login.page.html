@@ -13,9 +13,9 @@
             
             <label style="color: #fff; font-size: 16px;">Terminal: {{terminal}} <br></label>
 
-            <label style="color: #fff; font-size: 16px;">Gestor: {{direccion}} <br></label>
+            <label style="color: #fff; font-size: 16px;">Gestor: {{nombre}} <br></label>
 
-            <label style="color: #fff; font-size: 16px;">Centro: {{nombre}} <br></label>
+            <label style="color: #fff; font-size: 16px;">Centro: {{direccion}} <br></label>
 
         </div>
 
@@ -100,9 +100,8 @@
       
     </ion-row>
 
-    <ion-button (click)="takephoto()">TOMAR FOTO</ion-button> -->
 
-    <!-- <input type="file" (change)="upload($event)"> -->
+    <input type="file" (change)="upload($event)"> -->
 
 
 </ion-content>
@@ -111,5 +110,5 @@
 <ion-footer no-border>
     <ion-icon class="izquierda" name="help-circle-outline" (click)="abrir()"></ion-icon>
     <img class="imgLogin" src="../../../assets/img/logo-ecolec.png">
-    <p style="position: absolute;top: 2px;right: 15px;">{{message}} V 1.0.4</p>
+    <p style="position: absolute;top: 2px;right: 15px;">{{message}} V 1.0.6</p>
 </ion-footer>

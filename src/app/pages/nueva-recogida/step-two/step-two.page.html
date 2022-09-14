@@ -98,7 +98,7 @@
       <div style="text-align: center;">
         <ion-button *ngIf="direcciones" (click)="modifOrigen()" class="ecobtn">Modif. Origen</ion-button>
 
-        <ion-button (click)="nuevoOrigen()" class="ecobtn">Nuevo Origen</ion-button>
+        <ion-button (click)="nuevoOrigen()" *ngIf="mostrarNuevo" class="ecobtn">Nuevo Origen</ion-button>
       </div>
 
 
