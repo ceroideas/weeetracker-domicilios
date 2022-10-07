@@ -14,7 +14,7 @@
                 <ion-label class="left-label">Solicitud:</ion-label>
               </ion-col>
               <ion-col size="6">
-                <ion-input class="ion-no-margin mb-2" [readonly]="solicitud ? true : false" formControlName="pidSolicitud"></ion-input>
+                <ion-input type="number" class="ion-no-margin mb-2" [readonly]="solicitud ? true : false" formControlName="pidSolicitud"></ion-input>
               </ion-col>
             </ion-row>
 
@@ -50,7 +50,27 @@
         <ion-col size="12">
           <ion-label>Nombre Comercial:</ion-label>
           <ion-input class="ion-no-margin mb-2" [readonly]="true" formControlName="nombre_comercial"></ion-input>
+
+          <hr>
         </ion-col>
+
+        <ion-col size="12" *ngIf="direcciones">
+          <ion-label>Provincias Disponibles:</ion-label>
+
+          <ng-select2 
+            formControlName="selecciona_provincia"
+            [data]="available_provinces"
+            [placeholder]="'Seleccione una provincia'"
+            (ngModelChange)="modifOrigen()">
+          </ng-select2>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="myForm.value.centro">
+        <!-- <ion-col size="12">
+          <ion-label>Nombre Comercial:</ion-label>
+          <ion-input class="ion-no-margin mb-2" [readonly]="true" formControlName="nombre_comercial"></ion-input>
+        </ion-col> -->
 
         <ion-col size="6">
           <ion-label>Centro:</ion-label>
@@ -78,7 +98,7 @@
         </ion-col>
 
         <ion-col size="12">
-          <ion-label>Código Nima:</ion-label>
+          <ion-label>Código NIMA:</ion-label>
           <ion-input class="ion-no-margin mb-2" [readonly]="true" formControlName="codNima"></ion-input>
         </ion-col>
 
@@ -96,7 +116,7 @@
       <br>
 
       <div style="text-align: center;">
-        <ion-button *ngIf="direcciones" (click)="modifOrigen()" class="ecobtn">Modif. Origen</ion-button>
+        <ion-button *ngIf="direcciones && myForm.value.centro" (click)="modifOrigen()" class="ecobtn">Modif. Origen</ion-button>
 
         <ion-button (click)="nuevoOrigen()" *ngIf="mostrarNuevo" class="ecobtn">Nuevo Origen</ion-button>
       </div>

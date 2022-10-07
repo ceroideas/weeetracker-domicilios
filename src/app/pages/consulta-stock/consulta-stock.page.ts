@@ -24,7 +24,8 @@ export class ConsultaStockPage implements OnInit {
   listaEtiqueta: number;
   detalleStockBtn: boolean = false;
   detalleEtiquetakBtn: boolean = false;
-  stock: Stock = new Stock();
+  // stock: Stock = new Stock();
+  stock = [];
   totalStock: number = 0;
   usuario: Usuario = new Usuario();
   idCentro: any;

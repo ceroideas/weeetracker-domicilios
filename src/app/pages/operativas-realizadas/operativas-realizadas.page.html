@@ -24,7 +24,7 @@
 
     <ion-row *ngIf="visualizarTabla">
 
-      <ion-col class="fila" size="12" style="overflow: auto;">
+      <ion-col class="fila" size="12" style="overflow: auto; height: 200px;">
         <ion-grid class="tabla" style="width: 600px;">
 
           <table style="width: 100%; text-align: left;">
@@ -78,12 +78,14 @@
         Código Externo: 
       </ion-col>
       <ion-col size="6" style="margin-bottom: 8px;">
+        {{operativas[detalleOperativa].nroCertificadoReferencia}}
       </ion-col>
 
       <ion-col size="6" style="margin-bottom: 8px;">
         Albarán Origen: 
       </ion-col>
       <ion-col size="6" style="margin-bottom: 8px;">
+        {{operativas[detalleOperativa].numCertOrigen}}
       </ion-col>
 
       <ion-col size="6" style="margin-bottom: 8px;">

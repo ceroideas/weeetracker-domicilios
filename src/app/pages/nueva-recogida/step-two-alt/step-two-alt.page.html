@@ -64,21 +64,33 @@
           <ion-input class="ion-no-margin mb-2" formControlName="direccion"></ion-input>
         </ion-col>
 
-
         <ion-col size="12">
           <ion-label>Provincia:</ion-label>
 
-          <ion-select class="ion-no-margin mb-2" formControlName="provincia" (ionChange)="getMunicipios(myForm.value.provincia)">
-            <ion-select-option *ngFor="let p of provincias" [value]="p.pidProvincia">{{p.nombre}}</ion-select-option>
+          <ng-select2 *ngIf="available_provincias.length"
+            [data]="available_provincias"
+            formControlName="provincia"
+            [placeholder]="'Seleccione una provincia'"
+            (ngModelChange)="getMunicipios(myForm.value.provincia)">
+          </ng-select2>
+
+          <ion-select class="ion-no-margin mb-2" *ngIf="!available_provincias.length">
           </ion-select>
+
         </ion-col>
 
         <ion-col size="12">
           <ion-label>Localidad:</ion-label>
 
-          <ion-select class="ion-no-margin mb-2" formControlName="localidad">
-            <ion-select-option *ngFor="let m of municipios" [value]="m.pidMunicipio">{{m.nombre}}</ion-select-option>
+          <ng-select2 *ngIf="available_municipios.length"
+            [data]="available_municipios"
+            formControlName="localidad"
+            [placeholder]="'Seleccione una localidad'">
+          </ng-select2>
+
+          <ion-select class="ion-no-margin mb-2" *ngIf="!available_municipios.length">
           </ion-select>
+
         </ion-col>
 
         <ion-col size="12">

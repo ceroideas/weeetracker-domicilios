@@ -4,6 +4,7 @@ import { NavController, AlertController, LoadingController, Platform, ToastContr
 import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { EventsService } from '../../../services/events.service';
 import { Events } from '../../../services/events';
+import { ParamsService } from '../../../services/params.service';
 import { MenuController } from '@ionic/angular';
 import { Device } from '@awesome-cordova-plugins/device/ngx';
 import { Location } from '@angular/common';
@@ -26,6 +27,8 @@ export class QrPage implements OnInit {
   scanner = false;
   error = false;
 
+  titulo = "";
+
   etiqueta:string;
 
   timeout;
@@ -39,24 +42,24 @@ export class QrPage implements OnInit {
   private _storage: Storage | null = null;
 
   /**/
-  private scans = [];
-  private scanners = [{ "SCANNER_NAME": "Please Wait...", "SCANNER_INDEX": 0, "SCANNER_CONNECTION_STATE": true }];
-  private selectedScanner = "Please Select...";
-  private selectedScannerId = -1;
-  private ean8Decoder = true;   //  Model for decoder
-  private ean13Decoder = true;  //  Model for decoder
-  private code39Decoder = true; //  Model for decoder
-  private code128Decoder = true;//  Model for decoder
-  private dataWedgeVersion = "Pre 6.3. Please create & configure profile manually.  See the ReadMe for more details.";
-  private availableScannersText = "Requires Datawedge 6.3+"
-  private activeProfileText = "Requires Datawedge 6.3+";
-  private commandResultText = "Messages from DataWedge will go here";
-  private uiHideDecoders = true;
-  private uiDatawedgeVersionAttention = true;
-  private uiHideSelectScanner = true;
-  private uiHideShowAvailableScanners = false;
-  private uiHideCommandMessages = true;
-  private uiHideFloatingActionButton = true;
+  public scans = [];
+  public scanners = [{ "SCANNER_NAME": "Please Wait...", "SCANNER_INDEX": 0, "SCANNER_CONNECTION_STATE": true }];
+  public selectedScanner = "Please Select...";
+  public selectedScannerId = -1;
+  public ean8Decoder = true;   //  Model for decoder
+  public ean13Decoder = true;  //  Model for decoder
+  public code39Decoder = true; //  Model for decoder
+  public code128Decoder = true;//  Model for decoder
+  public dataWedgeVersion = "Pre 6.3. Please create & configure profile manually.  See the ReadMe for more details.";
+  public availableScannersText = "Requires Datawedge 6.3+"
+  public activeProfileText = "Requires Datawedge 6.3+";
+  public commandResultText = "Messages from DataWedge will go here";
+  public uiHideDecoders = true;
+  public uiDatawedgeVersionAttention = true;
+  public uiHideSelectScanner = true;
+  public uiHideShowAvailableScanners = false;
+  public uiHideCommandMessages = true;
+  public uiHideFloatingActionButton = true;
   /**/
 
   onlyUnique(value, index, self) {
@@ -65,7 +68,7 @@ export class QrPage implements OnInit {
 
   constructor(/*private qrScanner: QRScanner,*/ private barcodeScanner: BarcodeScanner, public nav: NavController, public alertCtrl: AlertController,
     public events: EventsService, public events1: Events, private menu: MenuController, public loading: LoadingController,
-    private storage: Storage,
+    private storage: Storage, private params: ParamsService,
     private barcodeProvider: BarcodeProvider, public _location: Location,
     private changeDetectorRef: ChangeDetectorRef, private device: Device,
     private alertController: AlertController, private platform: Platform, private toastController: ToastController
@@ -315,6 +318,8 @@ export class QrPage implements OnInit {
 
     const storage = await this.storage.create();
     this._storage = storage;
+
+    this.params.setParam(null);
   }
 
   validateTicket()

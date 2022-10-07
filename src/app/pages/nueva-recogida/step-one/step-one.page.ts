@@ -8,6 +8,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConsultasService } from 'src/app/services/consultas.service';
 import { Usuario } from 'src/app/models/usuario';
 
+import { Storage } from '@ionic/storage-angular';
+
 declare var moment:any;
 
 @Component({
@@ -25,6 +27,8 @@ export class StepOnePage implements OnInit {
 
   date = localStorage.getItem('date');
 
+  private _storage: Storage | null = null;
+
   constructor(private usuarioService: UsuarioService,
     private consultaService: ConsultasService,
     private _location: Location,
@@ -33,7 +37,8 @@ export class StepOnePage implements OnInit {
     private lectorService: LectorService,
     private translate: TranslateService,
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController,) {
+    private alertCtrl: AlertController,
+    private storage: Storage) {
 
     this.myForm = this.fb.group({
       type: ['request', Validators.required],
@@ -49,6 +54,18 @@ export class StepOnePage implements OnInit {
 
   ngOnInit() {
     this.consultaService.createLogger('NUEVA RECOGIDA');
+
+    this.storage.create().then(async (storage)=>{
+
+      this._storage = storage;
+
+      await this._storage.remove('firma_origen');
+      await this._storage.remove('firma_transportista');
+
+      localStorage.removeItem('albaran_origen');
+      localStorage.removeItem('codigo_externo');
+
+    });
   }
 
   adelante()

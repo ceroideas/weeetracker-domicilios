@@ -48,10 +48,25 @@
               <ion-col size="4">
                 <ion-label class="left-label">Marca:</ion-label>
               </ion-col>
-              <ion-col size="8">
+              <ion-col size="8" style="position: relative;">
+
+                <ng-select2 
+                  formControlName="marca"
+                  [data]="marcas"
+                  [placeholder]="'Seleccione una marca'">
+                </ng-select2>
+                
+                <!-- <ion-input class="ion-no-margin mb-2" formControlName="text_marca"
+                (ionFocus)="showAllBrands()" (ionBlur)="hideBrands()"
+                (ionChange)="openBrandSelector()"></ion-input>
                 <ion-select interface="action-sheet" class="ion-no-margin mb-2" formControlName="marca">
                   <ion-select-option *ngFor="let m of marcas" [value]="m.PidMarca">{{m.Nombre}}</ion-select-option>
                 </ion-select>
+                <div *ngIf="showmarcas" style="background-color: #fff; position: absolute; z-index: 9999; color: #000; max-height: 300px; overflow: auto;">
+                  <ion-list>
+                    <ion-item lines="none" *ngFor="let m of filtermarcas" (click)="selectMarca(m)">{{m.Nombre}}</ion-item>
+                  </ion-list>
+                </div> -->
               </ion-col>
             </ion-row>
 

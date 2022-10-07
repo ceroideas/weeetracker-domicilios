@@ -8,6 +8,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConsultasService } from 'src/app/services/consultas.service';
 import { Usuario } from 'src/app/models/usuario';
 import { ParamsService } from '../../../services/params.service';
+import { EventsService } from '../../../services/events.service';
 
 import { Storage } from '@ionic/storage-angular';
 
@@ -43,6 +44,7 @@ export class StepFivePage implements OnInit {
     private nav: NavController,
     private fb: FormBuilder,
     private params: ParamsService,
+    private events: EventsService,
     private lectorService: LectorService,
     private translate: TranslateService,
     private loadingCtrl: LoadingController,
@@ -50,7 +52,7 @@ export class StepFivePage implements OnInit {
     private storage: Storage) {
 
     this.myForm = this.fb.group({
-      origen: [this.origen.direccion, Validators.required],
+      origen: [this.origen.centro, Validators.required],
       gestor_recogida: ['', Validators.required],
       nombre: ['', Validators.required],
       firma: ['', Validators.required],
@@ -71,6 +73,13 @@ export class StepFivePage implements OnInit {
         
       })
     })*/
+
+    this.events.subscribe('reloadStepFive',async ()=>{
+      this.lecturas = await this._storage.get('lecturas');
+
+      this.agrupadas = this.consultas.groupBy(this.lecturas,'residuo_especifico');
+      this.keys = Object.keys(this.agrupadas);
+    });
   }
   async cargarUsuario()
   {
@@ -104,6 +113,23 @@ export class StepFivePage implements OnInit {
 
     this.agrupadas = this.consultas.groupBy(this.lecturas,'residuo_especifico');
     this.keys = Object.keys(this.agrupadas);
+
+
+    /**/
+    
+
+    let firma = await this._storage?.get('firma_transportista');
+
+    if (firma) {
+      this.myForm.patchValue({
+        origen: firma.origen,
+        gestor_recogida: firma.gestor_recogida,
+        nombre: firma.nombre,
+        firma: firma.firma,
+      });
+
+      this.signaturePad.fromDataURL(firma.firma, {ratio: 1});
+    }
   }
 
   clearCanvas()

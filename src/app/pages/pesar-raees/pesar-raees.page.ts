@@ -28,6 +28,7 @@ export class PesarRaeesPage implements OnInit {
   pesoCertificado = 0;
 
   pesado;
+  forcepesado = false;
 
   fracciones:any = [];
 
@@ -39,6 +40,8 @@ export class PesarRaeesPage implements OnInit {
   certificado;
 
   tipo = [];
+
+  loaded = false;
 
   constructor(private _location: Location,
     private consultasService: ConsultasService,
@@ -56,7 +59,7 @@ export class PesarRaeesPage implements OnInit {
 
       this.blockedDays = (dateString: string) => {
         const date = new Date(dateString);
-        const days = moment().subtract(this.usuario.direccionTercero.diasPesado+4,'days');
+        const days = moment().subtract(this.usuario.direccionTercero.diasPesado,'days');
         const tomo = moment();
 
         /**
@@ -66,7 +69,7 @@ export class PesarRaeesPage implements OnInit {
         return date > days && date < tomo;
       };
 
-      this.consultasService.RaeesDia(moment().subtract(1,'day').format('Y-MM-DD'),this.idCentro).subscribe((data:any)=>{
+      this.consultasService.RaeesDia(moment().subtract(this.usuario.direccionTercero.diasPesado,'day').format('Y-MM-DD'),this.idCentro).subscribe((data:any)=>{
         console.log(data);
         this.pesado = data.i.dter.pesado;
 
@@ -85,6 +88,8 @@ export class PesarRaeesPage implements OnInit {
 
         console.log(this.certificados);
         this.certificados_aux = this.certificados;
+
+        this.enterFilter();
 
         if (localStorage.getItem('certificado_pesado')) {
 
@@ -129,6 +134,8 @@ export class PesarRaeesPage implements OnInit {
   pesar()
   {
     this.irPesar = true;
+    this.forcepesado = false;
+    this.loaded = false;
 
     // this.fracciones = this.certificados[this.detallePeso];
     // console.log(this.fracciones);
@@ -157,11 +164,15 @@ export class PesarRaeesPage implements OnInit {
               k.x.peso = 0;
               aux.push(k.x);
             }
+            if (k.x.sidEstadoRaee == 5) {
+              this.forcepesado = true;
+            }
           }
           preaux.push(aux);
         }
 
         this.fracciones = preaux;
+        this.loaded = true;
 
         for(let i in this.fracciones)
         {
@@ -185,12 +196,13 @@ export class PesarRaeesPage implements OnInit {
 
           let pesoCertificado:any;
 
-          if (this.pesado == 2) {
+          if (this.pesado == 1 || this.forcepesado) {
             pesoCertificado =
             [{peso:this.pesoCertificado, fraccion:null, tercero: this.idTercero,
               certificadoSubordinado: "", direccion: this.idCentro,
               certificado: this.certificados[this.detallePeso].pidCertificado, fecha: moment().format('Y-MM-DD')}];
-          }else{
+
+          }else if(this.pesado == 2 && !this.forcepesado){
             pesoCertificado = this.pesoFraccion;
           }
 
@@ -234,6 +246,8 @@ export class PesarRaeesPage implements OnInit {
 
   enterFilter()
   {
+    this.detallePesoBtn = false;
+    this.detallePeso = null;
 
     let certificados = [];
     if (this.tipo.length) {

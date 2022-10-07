@@ -257,11 +257,11 @@ ion-input , ion-select, ion-textarea {
 }
 button.action-sheet-button.ion-activatable.action-sheet-.sc-ion-action-sheet-md {
     font-size: 15px;
-    height: 35px;
+    height: 60px;
 }
 button.action-sheet-button.ion-activatable.action-sheet-.sc-ion-action-sheet-ios {
     font-size: 15px;
-    height: 35px;
+    height: 60px;
 }
 // Aviso reutilizable
 .aviso .alert-wrapper{
@@ -489,4 +489,38 @@ ion-modal.selectGestor ion-toolbar {
 
 ion-datetime {
     color: #333 !important;
+}
+
+.no-ripple {
+  --ripple-color: transparent;
+}
+
+.no-ripple:active {
+    // ion-icon {
+        background-color: rgba(255,255,255,.3);
+    // }
+}
+
+.searchbar-input {
+    padding-left: 55px !important;
+    border-radius: 50px !important;
+}
+
+.select2 {
+  width: 100% !important;
+  margin-bottom: 8px !important;
+}
+
+.select2-selection {
+  padding: 4px !important;
+  height: 37.2px !important;
+  border-radius: 0 !important;
+}
+
+.select2-selection__arrow {
+  top: 6px !important;
+}
+
+.select2-results__option {
+    color: #000 !important;
 }

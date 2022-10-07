@@ -90,6 +90,7 @@ export class ConsultasService {
   getOperativas(idTercero, idCentro) {
     return this.http.get(apiUrl + '/solicitud/operativas/'+idTercero+'/'+idCentro);
   }
+  
 
   contenedores() {
     return this.http.get(apiUrl + '/residuo/contenedores');
@@ -134,6 +135,9 @@ export class ConsultasService {
   buscarCentro(data){
     return this.http.post(apiUrl + '/solicitud/findCentros', data);
   }
+  centrosGestores(){
+    return this.http.get(apiUrl + '/solicitud/centrosGestores');
+  }
   nuevoOrigen(data){
     return this.http.post(apiUrl + '/solicitud/nuevoOrigen', data);
   }
@@ -154,6 +158,9 @@ export class ConsultasService {
   // solo si es un dispositivo zebra
   listarUsuarios(centro){
     return this.http.get(apiUrl + '/users/listar/'+centro);
+  }
+  getResponsabilities(idTercero, idCentro) {
+    return this.http.get(apiUrl + '/users/getResponsabilities/'+idTercero+'/'+idCentro);
   }
   
   fechaActualSolicitud() {

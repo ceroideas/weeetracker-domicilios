@@ -14,7 +14,7 @@ import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { Camera } from '@awesome-cordova-plugins/camera/ngx';
 import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
-import { SignaturePadModule } from 'angular2-signaturepad';
+
 import { IonicStorageModule } from '@ionic/storage-angular';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -26,6 +26,8 @@ import { Keyboard } from '@awesome-cordova-plugins/keyboard/ngx';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 
 import { File } from '@awesome-cordova-plugins/file/ngx';
+
+import { NgSelect2Module } from 'ng-select2';
 
 
 /*export function createTranslateLoader(http: HttpClient) {
@@ -41,13 +43,13 @@ export function createTranslateLoader(http: HttpClient) {
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
+    NgSelect2Module,
     BrowserModule,
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
     PipesModule,
-    SignaturePadModule,
     ComponentsModule,
     TranslateModule.forRoot({
       loader: {

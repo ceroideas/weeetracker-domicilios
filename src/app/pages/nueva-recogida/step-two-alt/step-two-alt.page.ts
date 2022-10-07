@@ -28,8 +28,15 @@ export class StepTwoAltPage implements OnInit {
   gestor = JSON.parse(localStorage.getItem('gestor'));
 
   paises:any;
-  provincias:any;
-  municipios:any;
+  provincias:any = [];
+  municipios:any = [];
+
+
+  filterprovincias = [];
+  showprovincias = false;
+
+  filtermunicipios = [];
+  showmunicipios = false;
 
   constructor(private usuarioService: UsuarioService,
     private consultaService: ConsultasService,
@@ -119,20 +126,36 @@ export class StepTwoAltPage implements OnInit {
     })
   }
 
+  available_provincias = [];
+  available_municipios = [];
+
   getProvincias(id)
   {
     console.log(id);
 
     this.consultaService.getProvincias(id).subscribe((data:any)=>{
-      this.provincias = data.provincias;
+      this.provincias = data.provincias.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+      for (let i of this.provincias) {
+        this.available_provincias.push({id:i.pidProvincia, text:i.nombre});
+      }
+
+      console.log(this.available_provincias);
     })
   }
 
   getMunicipios(id)
   {
-    this.consultaService.getMunicipios(id).subscribe((data:any)=>{
-      this.municipios = data.municipios;
-    })
-  }
+    this.available_municipios = [];
 
+    setTimeout(()=>{
+      this.consultaService.getMunicipios(id).subscribe((data:any)=>{
+        this.municipios = data.municipios.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+        for (let i of this.municipios) {
+          this.available_municipios.push({id:i.pidMunicipio, text:i.nombre});
+        }
+      });
+    },100)
+  }
 }

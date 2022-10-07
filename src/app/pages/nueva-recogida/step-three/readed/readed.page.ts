@@ -33,7 +33,7 @@ declare var $:any;
 })
 export class ReadedPage implements OnInit {
 
-  titulo = "NUEVA RECOGIDA 3 - RAEE: Nuevo RAEE";
+  titulo = localStorage.getItem('alt_title_rd') ? localStorage.getItem('alt_title_rd') : "NUEVA RECOGIDA 3 - RAEE: Nuevo RAEE";
   myForm: FormGroup;
 
   date = localStorage.getItem('date');
@@ -68,24 +68,24 @@ export class ReadedPage implements OnInit {
   zebra = false;
 
   /**/
-  private scans = [];
-  private scanners = [{ "SCANNER_NAME": "Please Wait...", "SCANNER_INDEX": 0, "SCANNER_CONNECTION_STATE": true }];
-  private selectedScanner = "Please Select...";
-  private selectedScannerId = -1;
-  private ean8Decoder = true;   //  Model for decoder
-  private ean13Decoder = true;  //  Model for decoder
-  private code39Decoder = true; //  Model for decoder
-  private code128Decoder = true;//  Model for decoder
-  private dataWedgeVersion = "Pre 6.3. Please create & configure profile manually.  See the ReadMe for more details.";
-  private availableScannersText = "Requires Datawedge 6.3+"
-  private activeProfileText = "Requires Datawedge 6.3+";
-  private commandResultText = "Messages from DataWedge will go here";
-  private uiHideDecoders = true;
-  private uiDatawedgeVersionAttention = true;
-  private uiHideSelectScanner = true;
-  private uiHideShowAvailableScanners = false;
-  private uiHideCommandMessages = true;
-  private uiHideFloatingActionButton = true;
+  public scans = [];
+  public scanners = [{ "SCANNER_NAME": "Please Wait...", "SCANNER_INDEX": 0, "SCANNER_CONNECTION_STATE": true }];
+  public selectedScanner = "Please Select...";
+  public selectedScannerId = -1;
+  public ean8Decoder = true;   //  Model for decoder
+  public ean13Decoder = true;  //  Model for decoder
+  public code39Decoder = true; //  Model for decoder
+  public code128Decoder = true;//  Model for decoder
+  public dataWedgeVersion = "Pre 6.3. Please create & configure profile manually.  See the ReadMe for more details.";
+  public availableScannersText = "Requires Datawedge 6.3+"
+  public activeProfileText = "Requires Datawedge 6.3+";
+  public commandResultText = "Messages from DataWedge will go here";
+  public uiHideDecoders = true;
+  public uiDatawedgeVersionAttention = true;
+  public uiHideSelectScanner = true;
+  public uiHideShowAvailableScanners = false;
+  public uiHideCommandMessages = true;
+  public uiHideFloatingActionButton = true;
   /**/
 
   constructor(private usuarioService: UsuarioService,
@@ -321,7 +321,12 @@ export class ReadedPage implements OnInit {
   {
     this.usuario = await this.usuarioService.cargarToken();
     // this.residuos = this.usuario.residuos;
-    this.marcas = this.usuario.marcas;
+    let marcas = [];
+    for(let i of this.usuario.marcas)
+    {
+      marcas.push({id:i.PidMarca,text:i.Nombre});
+    }
+    this.marcas = marcas;
 
     if (!this.read) {
       this.especificos();
@@ -345,9 +350,16 @@ export class ReadedPage implements OnInit {
     this.contenedores = [];
     this.residuos = [];
 
-    for (let i of this.usuario.responsabilidades) {
-      if (i.SidFraccion == this.myForm.value.fraccion) {
-        contenedores.push(i.SidTipoContenedor)
+    let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
+    for (let i of resp) {
+      if (i.SidFraccion) {
+        if (i.SidFraccion == this.myForm.value.fraccion) {
+          contenedores.push(i.SidTipoContenedor)
+        }
+      }else{
+        if (i.sidFraccion == this.myForm.value.fraccion) {
+          contenedores.push(i.sidTipoContenedor)
+        }
       }
     }
 
@@ -372,10 +384,13 @@ export class ReadedPage implements OnInit {
 
   especificos()
   {
+    this.myForm.patchValue({residuo_especifico: null});
     setTimeout(()=>{
 
       this.consultaService.especificos(this.myForm.value.residuo).subscribe(data=>{
         this.residuos_especificos = data;
+
+        this.myForm.patchValue({residuo_especifico: null});
 
         if (!this.loadedResiduoEsp) {
           this.loadedResiduoEsp = true;
@@ -424,14 +439,20 @@ export class ReadedPage implements OnInit {
 
   loadContenedores()
   {
+    console.log('loadContenedores')
     this.consultaService.contenedores().subscribe(data=>{
       this.contenedores_aux = data;
 
       if (!this.loadedContenedor) {
         this.loadedContenedor = true;
         let fracciones = [];
-        for (let i of this.usuario.responsabilidades) {
-          fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
+        let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
+        for (let i of resp) {
+          if (i.SidFraccion) {
+            fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
+          }else{
+            fracciones.push({id:i.sidFraccion,operacion:i.tipoOperacion, contenedor:i.sidTipoContenedor});
+          }
         }
         this.loadFracciones(fracciones.filter(this.onlyUnique));
       }
@@ -576,6 +597,11 @@ export class ReadedPage implements OnInit {
     // localStorage.setItem('lecturas',JSON.stringify(lecturas));
     this.events.publish('getLecturas');
     if (this.to == 'forward') {
+      if (localStorage.getItem('alt_title_rd')) {
+        localStorage.setItem('alt_title_sm','NUEVA RECEPCIÓN 3 - RAEE: Listado RAEE');
+      }else{
+        localStorage.removeItem('alt_title_sm');
+      }
       this.nav.navigateRoot('/nueva-recogida/step-three/summary');
     }else{
       this._location.back();

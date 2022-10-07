@@ -24,7 +24,7 @@
         <ion-col size="6"
         *ngIf="(usuario?.responsabilidades | checkResp:'RED') ||
             (usuario?.responsabilidades | checkResp:'REF')">
-            <ion-button class="ecobtn"
+            <ion-button [routerLink]="['/nueva-recepcion']" class="ecobtn"
             size="large" style="font-size: 14px;" expand="block">NUEVA RECEPCIÓN</ion-button>
         </ion-col>
 

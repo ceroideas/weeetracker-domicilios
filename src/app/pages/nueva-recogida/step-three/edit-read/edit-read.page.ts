@@ -33,7 +33,7 @@ declare var $:any;
 })
 export class EditReadPage implements OnInit {
   
-  titulo = "NUEVA RECOGIDA 3 - RAEE: Editar RAEE";
+  titulo = localStorage.getItem('alt_title_ed') ? localStorage.getItem('alt_title_ed') :  "NUEVA RECOGIDA 3 - RAEE: Editar RAEE";
   myForm: FormGroup;
 
   date = localStorage.getItem('date');
@@ -69,24 +69,29 @@ export class EditReadPage implements OnInit {
   zebra = false;
 
   /**/
-  private scans = [];
-  private scanners = [{ "SCANNER_NAME": "Please Wait...", "SCANNER_INDEX": 0, "SCANNER_CONNECTION_STATE": true }];
-  private selectedScanner = "Please Select...";
-  private selectedScannerId = -1;
-  private ean8Decoder = true;   //  Model for decoder
-  private ean13Decoder = true;  //  Model for decoder
-  private code39Decoder = true; //  Model for decoder
-  private code128Decoder = true;//  Model for decoder
-  private dataWedgeVersion = "Pre 6.3. Please create & configure profile manually.  See the ReadMe for more details.";
-  private availableScannersText = "Requires Datawedge 6.3+"
-  private activeProfileText = "Requires Datawedge 6.3+";
-  private commandResultText = "Messages from DataWedge will go here";
-  private uiHideDecoders = true;
-  private uiDatawedgeVersionAttention = true;
-  private uiHideSelectScanner = true;
-  private uiHideShowAvailableScanners = false;
-  private uiHideCommandMessages = true;
-  private uiHideFloatingActionButton = true;
+
+  lecturas = [];
+  showControls = localStorage.getItem('read_type') == 'grupal' ? true : false;
+
+  /**/
+  public scans = [];
+  public scanners = [{ "SCANNER_NAME": "Please Wait...", "SCANNER_INDEX": 0, "SCANNER_CONNECTION_STATE": true }];
+  public selectedScanner = "Please Select...";
+  public selectedScannerId = -1;
+  public ean8Decoder = true;   //  Model for decoder
+  public ean13Decoder = true;  //  Model for decoder
+  public code39Decoder = true; //  Model for decoder
+  public code128Decoder = true;//  Model for decoder
+  public dataWedgeVersion = "Pre 6.3. Please create & configure profile manually.  See the ReadMe for more details.";
+  public availableScannersText = "Requires Datawedge 6.3+"
+  public activeProfileText = "Requires Datawedge 6.3+";
+  public commandResultText = "Messages from DataWedge will go here";
+  public uiHideDecoders = true;
+  public uiDatawedgeVersionAttention = true;
+  public uiHideSelectScanner = true;
+  public uiHideShowAvailableScanners = false;
+  public uiHideCommandMessages = true;
+  public uiHideFloatingActionButton = true;
   /**/
 
   constructor(private usuarioService: UsuarioService,
@@ -304,6 +309,7 @@ export class EditReadPage implements OnInit {
 
   setValues()
   {
+    console.log('setValues');
     this.myForm.patchValue({
       etiqueta: this.read.values.etiqueta,
       // fraccion: this.read.values.fraccion,
@@ -319,17 +325,25 @@ export class EditReadPage implements OnInit {
 
   async cargarUsuario()
   {
+    console.log('cargar usuario')
     this.usuario = await this.usuarioService.cargarToken();
     // this.residuos = this.usuario.residuos;
-    this.marcas = this.usuario.marcas;
+    let marcas = [];
+    for(let i of this.usuario.marcas)
+    {
+      marcas.push({id:i.PidMarca,text:i.Nombre});
+    }
+    this.marcas = marcas;
+
 
     if (!this.read) {
       this.especificos();
     }else{
+      console.log(this.read.values.marca);
       if (!this.loadedMarca && !this.loadedResiduo) {
         this.loadedMarca = true;
         this.loadedResiduo = true;
-        this.myForm.patchValue({marca: this.read.values.marca});
+        this.myForm.patchValue({marca: this.read?.values.marca});
         // this.myForm.patchValue({residuo: this.read.values.residuo});
         this.setValues();
       }
@@ -344,9 +358,16 @@ export class EditReadPage implements OnInit {
     this.contenedores = [];
     this.residuos = [];
 
-    for (let i of this.usuario.responsabilidades) {
-      if (i.SidFraccion == this.myForm.value.fraccion) {
-        contenedores.push(i.SidTipoContenedor)
+    let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
+    for (let i of resp) {
+      if (i.SidFraccion) {
+        if (i.SidFraccion == this.myForm.value.fraccion) {
+          contenedores.push(i.SidTipoContenedor)
+        }
+      }else{
+        if (i.sidFraccion == this.myForm.value.fraccion) {
+          contenedores.push(i.sidTipoContenedor)
+        }
       }
     }
 
@@ -357,7 +378,7 @@ export class EditReadPage implements OnInit {
       }
     }
 
-    console.log(this.usuario.residuos);
+    // console.log(this.usuario.residuos);
 
     for (let i of this.usuario.residuos) {
       if (i.sidFraccion == this.myForm.value.fraccion) {
@@ -378,10 +399,15 @@ export class EditReadPage implements OnInit {
       this.consultaService.especificos(this.myForm.value.residuo).subscribe(data=>{
         this.residuos_especificos = data;
 
+        this.myForm.patchValue({residuo_especifico: null});
+
         if (!this.loadedResiduoEsp) {
+          console.log('cargado especifico')
           this.loadedResiduoEsp = true;
           this.myForm.patchValue({residuo_especifico: this.read.values.residuo_especifico});
         }
+      },err=>{
+        this.loadedResiduoEsp = true;
       })
     },100)
   }
@@ -394,6 +420,49 @@ export class EditReadPage implements OnInit {
     this.consultaService.createLogger('Editar datos de RAEE Success');
     const storage = await this.storage.create();
     this._storage = storage;
+
+    this.configureLecturas();
+  }
+
+  left;
+  right;
+  idx;
+
+  async configureLecturas()
+  {
+    this.lecturas = await this.storage.get('lecturas');
+
+    if (this.lecturas.length == 1) {
+      this.showControls = false;
+    }
+
+    this.idx = this.lecturas.findIndex(x=>x.values.etiqueta == this.read.values.etiqueta);
+
+    console.log(this.idx,this.lecturas.length);
+
+    if (this.idx == 0) {
+      this.left = false;
+      this.right = true;
+    }
+
+    if (this.idx == this.lecturas.length-1) {
+      this.left = true;
+      this.right = false;
+    }
+
+    if (this.idx != 0 && this.idx != this.lecturas.length-1) {
+      this.left = true;
+      this.right = true;
+    }
+  }
+
+  async prev()
+  {
+    await this.adelante(true,'prev');
+  }
+  async next()
+  {
+    await this.adelante(true,'next');
   }
 
   loadFracciones(f)
@@ -430,8 +499,13 @@ export class EditReadPage implements OnInit {
       if (!this.loadedContenedor) {
         this.loadedContenedor = true;
         let fracciones = [];
-        for (let i of this.usuario.responsabilidades) {
-          fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
+        let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
+        for (let i of resp) {
+          if (i.SidFraccion) {
+            fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
+          }else{
+            fracciones.push({id:i.sidFraccion,operacion:i.tipoOperacion, contenedor:i.sidTipoContenedor});
+          }
         }
         this.loadFracciones(fracciones.filter(this.onlyUnique));
       }
@@ -481,9 +555,10 @@ export class EditReadPage implements OnInit {
   //   }
   // }
 
-  async adelante()
+  async adelante(stay = false, side = null)
   {
-    if (!this.myForm.valid) {
+    console.log(this.myForm.value);
+    if (!this.myForm.valid && stay == false) {
       return this.alertCtrl.create({message:"Por favor, complete todos los datos.", buttons: ["Ok"]}).then(a=>a.present());
     }
 
@@ -492,7 +567,7 @@ export class EditReadPage implements OnInit {
         buttons: [{
           text:"Si",
           handler:()=>{
-            this.continuar();
+            this.continuar(stay,side);
           }},{
             text:"No"
           }]}).then(a=>a.present());
@@ -502,17 +577,17 @@ export class EditReadPage implements OnInit {
 
     await this._storage?.set('photos', this.photos);
 
-    this.continuar();
+    this.continuar(stay,side);
   }
 
-  async continuar()
+  async continuar(stay = false, side = null)
   {
     // let lecturas = localStorage.getItem('lecturas') ? JSON.parse(localStorage.getItem('lecturas')) : [];
 
-    let lecturas = await this.storage.get('lecturas');
+    this.lecturas = await this.storage.get('lecturas');
 
-    if (!lecturas) {
-      lecturas = [];
+    if (!this.lecturas) {
+      this.lecturas = [];
     }
 
     let photos:any = null;
@@ -524,17 +599,75 @@ export class EditReadPage implements OnInit {
       // localStorage.removeItem('photos');
     }
 
-    let idx = lecturas.findIndex(x=>x.values.etiqueta == this.read.values.etiqueta);
+    let idx = this.lecturas.findIndex(x=>x.values.etiqueta == this.read.values.etiqueta);
 
-    lecturas[idx] = {values: this.myForm.value, photos: photos};
+    this.lecturas[idx] = {values: this.myForm.value, photos: photos};
 
     // localStorage.setItem('lecturas',JSON.stringify(lecturas));
     
-    await this._storage?.set('lecturas', lecturas);
+    await this._storage?.set('lecturas', this.lecturas);
 
     this.events.publish('getLecturas');
     this.events.publish('updateLecturas');
-    this._location.back();
+
+    this.events.publish('cargarUsuario');
+    this.events.publish('reloadStepFour');
+    this.events.publish('reloadStepFive');
+
+    if (stay) {
+
+      this.loadedFraccion = false;
+      this.loadedResiduo = false;
+      this.loadedMarca = false;
+      this.loadedResiduoEsp = false;
+      this.loadedContenedor = false;
+
+      if (localStorage.getItem('read_type') == 'grupal') {
+        // if (!this.myForm.value.prevent_overwrite) {
+          for (let i of this.lecturas)
+          {
+
+            // if (!i.values.prevent_overwrite) {
+              
+              // porque la marca puede estar vacia
+              i.values.marca = !i.values.residuo ? this.myForm.value.marca : i.values.marca;
+              // porque canibalizado puede estar vacia
+              i.values.canibalizado = !i.values.residuo ? this.myForm.value.canibalizado : i.values.canibalizado;
+
+              i.values.fraccion = !i.values.fraccion ? this.myForm.value.fraccion : i.values.fraccion;
+              i.values.residuo = !i.values.residuo ? this.myForm.value.residuo : i.values.residuo;
+              i.values.residuo_especifico = !i.values.residuo_especifico ? this.myForm.value.residuo_especifico : i.values.residuo_especifico;
+              i.values.tipo_contenedor = !i.values.tipo_contenedor ? this.myForm.value.tipo_contenedor : i.values.tipo_contenedor;
+              i.values.estado_raee = !i.values.estado_raee ? this.myForm.value.estado_raee : i.values.estado_raee;
+              i.values.ref = !i.values.ref ? this.myForm.value.ref : i.values.ref;
+
+            // }
+            
+          }
+        // }
+      }
+
+      console.log(this.lecturas);
+
+      if (side == 'prev') {
+        this.read = this.lecturas[this.idx-1];
+        this.photos = this.lecturas[this.idx-1].photos ? this.lecturas[this.idx-1].photos : [];
+        console.log(this.read);
+      }else if(side == 'next'){
+        this.read = this.lecturas[this.idx+1];
+        this.photos = this.lecturas[this.idx+1].photos ? this.lecturas[this.idx+1].photos : [];
+        console.log(this.read);
+      }
+
+      await this._storage?.set('lecturas', this.lecturas);
+
+      this.configureLecturas();
+
+      this.cargarUsuario();
+
+    }else{
+      this._location.back();
+    }
   }
 
   removeRef()

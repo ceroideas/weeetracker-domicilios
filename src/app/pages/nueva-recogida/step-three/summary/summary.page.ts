@@ -15,7 +15,7 @@ import { Storage } from '@ionic/storage-angular';
 export class SummaryPage implements OnInit {
 
   lecturas: any;
-  titulo = "NUEVA RECOGIDA 3 - RAEE: Listado RAEE";
+  titulo = localStorage.getItem('alt_title_sm') ? localStorage.getItem('alt_title_sm') :  "NUEVA RECOGIDA 3 - RAEE: Listado RAEE";
   contenedores = [];
   especificos = [];
   selected = null;
@@ -81,15 +81,24 @@ export class SummaryPage implements OnInit {
 
     this.params.setParam({contenedores:this.contenedores,especificos:this.especificos});
 
-    this.nav.navigateForward('/nueva-recogida/step-four');
+    if (localStorage.getItem('alt_title_sm')) {
+      this.nav.navigateRoot('/nueva-recepcion/step-four-rcp');
+    }else{
+      this.nav.navigateForward('/nueva-recogida/step-four');
+    }
   }
 
   atras()
   {
+    localStorage.removeItem('noFwd');
     if (this.noFwd) {
       return this._location.back();
     }
-    this.nav.navigateRoot('/nueva-recogida/step-three');
+    if (localStorage.getItem('alt_title_sm')) {
+      this.nav.navigateRoot('/nueva-recepcion/step-three-rcp');
+    }else{
+      this.nav.navigateRoot('/nueva-recogida/step-three');
+    }
   }
 
   seleccionar(l)
@@ -112,6 +121,10 @@ export class SummaryPage implements OnInit {
           
           this.events.publish('getLecturas');
 
+          this.events.publish('cargarUsuario');
+          this.events.publish('reloadStepFour');
+          this.events.publish('reloadStepFive');
+
           this.selected = null;
         }
       },{
@@ -123,6 +136,9 @@ export class SummaryPage implements OnInit {
   {
     this.params.setParam(this.lecturas.find(x=>x.values.etiqueta == this.selected));
 
+    if (localStorage.getItem('alt_title_sm')) {
+      localStorage.setItem('alt_title_sm','NUEVA RECEPCIÓN 3 - RAEE: Editar RAEE')
+    }
     this.nav.navigateForward('/nueva-recogida/step-three/edit-read');
   }
 

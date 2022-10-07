@@ -37,6 +37,8 @@ export class StepTwoPage implements OnInit {
 
   mostrarNuevo = true;
 
+  available_provinces = [];
+
   constructor(private usuarioService: UsuarioService,
     private consultaService: ConsultasService,
     private _location: Location,
@@ -49,6 +51,8 @@ export class StepTwoPage implements OnInit {
     private loadingCtrl: LoadingController,
     private storage: Storage,
     private alertCtrl: AlertController,) {
+
+    localStorage.removeItem('other_resp');
 
     if (localStorage.getItem('tipo_operativa') == 'CSR') {
       this.mostrarNuevo = false;
@@ -63,6 +67,9 @@ export class StepTwoPage implements OnInit {
       sidDireccionTercero: [''],
 
       nombre_comercial: ['',Validators.required],
+
+      selecciona_provincia: ['',Validators.required],
+
       centro: ['',Validators.required],
       localidad: ['',Validators.required],
       direccion: ['',Validators.required],
@@ -105,19 +112,28 @@ export class StepTwoPage implements OnInit {
       this.direcciones = data.direcciones;
       let last = this.direcciones.length-1;
 
+      this.available_provinces = [];
+
+      for(let i of this.direcciones)
+      {
+        this.available_provinces.push(i.nombreProvincia);
+      }
+
+      this.available_provinces = this.available_provinces.filter(this.onlyUnique);
+
       this.myForm.patchValue({
         
         sidTercero: null,
         sidDireccionTercero: null,
 
-        centro: this.direcciones[last].nombre,
-        localidad: this.direcciones[last].nombreMunicipio,
-        direccion: this.direcciones[last].direccion,
-        provincia: this.direcciones[last].nombreProvincia,
-        pais: this.direcciones[last].nombrePais,
-        codNima: this.direcciones[last].codNima,
-        insRP: this.direcciones[last].insRp,
-        insRnP: this.direcciones[last].insRnP,
+        centro: null,// this.direcciones[last].nombre,
+        localidad: null,// this.direcciones[last].nombreMunicipio,
+        direccion: null,// this.direcciones[last].direccion,
+        provincia: null,// this.direcciones[last].nombreProvincia,
+        pais: null,// this.direcciones[last].nombrePais,
+        codNima: null,// this.direcciones[last].codNima,
+        insRP: null,// this.direcciones[last].insRp,
+        insRnP: null,// this.direcciones[last].insRnP,
       })
     });
 
@@ -198,7 +214,9 @@ export class StepTwoPage implements OnInit {
     }
     this.loadingCtrl.create({message:"Buscando centros..."}).then(l=>{
       l.present();
-      this.consultaService.buscarCentro({nombre:this.myForm.value.nombre, nif: this.myForm.value.nif, tercero: this.usuario.tercero.PidTercero}).subscribe((data:any)=>{
+      this.consultaService.buscarCentro({
+        nombre:this.myForm.value.nombre, nif: this.myForm.value.nif,
+        tercero: this.usuario.tercero.PidTercero, tipooperativa: localStorage.getItem('tipo_operativa')}).subscribe((data:any)=>{
 
         l.dismiss();
 
@@ -256,11 +274,15 @@ export class StepTwoPage implements OnInit {
   {
     this.modal.create({
       component: ModalOrigenesPage,
-      componentProps: {origenes: this.direcciones},
+      componentProps: {origenes: this.direcciones.filter(x=>x.nombreProvincia == this.myForm.value.selecciona_provincia)},
       cssClass: "selectGestor"
     }).then(m=>{
       m.present();
     })
+  }
+
+  onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
   }
 
   sendToSearch(id)
@@ -278,12 +300,22 @@ export class StepTwoPage implements OnInit {
         this.gestor = data.info.centro;
         this.direcciones = data.info.direcciones;
 
+        this.available_provinces = [];
+
         if (!this.direcciones.length) {
           this.consultaService.createLogger('E | No hay direcciones que mostrar en el origen ERROR');
           return this.alertCtrl.create({message:"No hay direcciones que mostrar, por favor, ingrese nuevo origen", buttons: ['Ok']}).then(a=>{
             a.present();
           });
         }
+
+
+        for(let i of this.direcciones)
+        {
+          this.available_provinces.push(i.nombreProvincia);
+        }
+
+        this.available_provinces = this.available_provinces.filter(this.onlyUnique).sort((a, b) => a.localeCompare(b));;
 
         this.loadingCtrl.create({message: "Obteniendo ubicación de centro"}).then(l=>{
           l.present();
@@ -300,14 +332,14 @@ export class StepTwoPage implements OnInit {
               sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
 
               nombre_comercial: centro.nombreComercial,
-              centro: this.direcciones[0].nombre,
-              localidad: data1['ubicacion']['_municipio'].nombre,
-              direccion: this.direcciones[0].direccion,
-              provincia: data1['ubicacion']['_provincia'].nombre,
-              pais: data1['ubicacion']['_pais'].nombre,
-              codNima: this.direcciones[0].codNima,
-              insRP: this.direcciones[0].insRp,
-              insRnP: this.direcciones[0].insRnP,
+              centro: null, // this.direcciones[0].nombre,
+              localidad: null, // data1['ubicacion']['_municipio'].nombre,
+              direccion: null, // this.direcciones[0].direccion,
+              provincia: null, // data1['ubicacion']['_provincia'].nombre,
+              pais: null, // data1['ubicacion']['_pais'].nombre,
+              codNima: null, // this.direcciones[0].codNima,
+              insRP: null, // this.direcciones[0].insRp,
+              insRnP: null, // this.direcciones[0].insRnP,
             });
 
             l.dismiss();

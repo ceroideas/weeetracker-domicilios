@@ -129,8 +129,6 @@ export class StepThreePage implements OnInit {
           }
 
           if (data.raee) {
-            this.nav.navigateForward('/nueva-recogida/step-three/readed');
-
             let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
 
             if (!result) {
@@ -149,6 +147,7 @@ export class StepThreePage implements OnInit {
               tipo_contenedor: raee.sidTipoContenedor,
               canibalizado: raee.canibalizado,
               estado_raee: raee.sidEstadoRaee,
+              prevent_overwrite: true,
               ref: null
             };
             /*this.lecturas.push({values: lectura, photos: null});
@@ -157,6 +156,8 @@ export class StepThreePage implements OnInit {
             // localStorage.setItem('etiqueta_objeto',JSON.stringify(data[0]));
             // this.alertCtrl.create({message:"La etiqueta ya existe"}).then(a=>a.present());
             this.params.setParam({values:lectura, photos:null});
+
+            // this.nav.navigateForward('/nueva-recogida/step-three/readed');
           }
 
           this.nav.navigateForward('/nueva-recogida/step-three/readed');
@@ -239,6 +240,7 @@ export class StepThreePage implements OnInit {
               tipo_contenedor: null,
               canibalizado: null,
               estado_raee: null,
+              prevent_overwrite: false,
               ref: null
           };
 
@@ -271,6 +273,7 @@ export class StepThreePage implements OnInit {
                 tipo_contenedor: data.raee.sidTipoContenedor,
                 canibalizado: data.raee.canibalizado,
                 estado_raee: data.raee.sidEstadoRaee,
+                prevent_overwrite: true,
                 ref: null
               };
             }

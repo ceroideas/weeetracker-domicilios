@@ -12,8 +12,11 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { StepTwoPage } from './step-two.page';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { NgSelect2Module } from 'ng-select2';
+
 @NgModule({
   imports: [
+    NgSelect2Module,
     CommonModule,
     FormsModule,
     IonicModule,

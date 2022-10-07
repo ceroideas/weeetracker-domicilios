@@ -8,6 +8,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConsultasService } from 'src/app/services/consultas.service';
 import { Usuario } from 'src/app/models/usuario';
 import { ParamsService } from '../../../services/params.service';
+import { EventsService } from '../../../services/events.service';
+
+import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 
 import { Storage } from '@ionic/storage-angular';
 
@@ -20,6 +23,7 @@ declare var moment:any;
   selector: 'app-step-six',
   templateUrl: './step-six.page.html',
   styleUrls: ['./step-six.page.scss'],
+  providers: [Geolocation]
 })
 export class StepSixPage implements OnInit {
 
@@ -56,18 +60,27 @@ export class StepSixPage implements OnInit {
     private nav: NavController,
     private fb: FormBuilder,
     private params: ParamsService,
+    private events: EventsService,
     private lectorService: LectorService,
     private translate: TranslateService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
+    private geolocation: Geolocation,
     private storage: Storage) {
+
+    this.geolocation.getCurrentPosition().then((resp) => {
+      localStorage.setItem('lat',resp.coords.latitude.toString());
+      localStorage.setItem('lng',resp.coords.longitude.toString());
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
 
 
     this.myForm = this.fb.group({
       certificado: ['...', Validators.required],
       certificadoraee: ['...', Validators.required],
-      albaran_origen: [null, Validators.required],
-      codigo_externo: [null, Validators.required],
+      albaran_origen: [localStorage.getItem('albaran_origen') ? localStorage.getItem('albaran_origen') : "", Validators.required],
+      codigo_externo: [localStorage.getItem('codigo_externo') ? localStorage.getItem('codigo_externo') : "", Validators.required],
       fecha_operacion: [moment(localStorage.getItem('date')).format('DD-MM-Y'), Validators.required],
       gestor_recogida: ['', Validators.required],
       total: [null],
@@ -78,6 +91,10 @@ export class StepSixPage implements OnInit {
 
     this.contenedores = p.contenedores;
     this.especificos = p.especificos;
+
+    this.events.subscribe('cargarUsuario',()=>{
+      this.cargarUsuario();
+    })
   }
 
   async cargarUsuario()
@@ -164,6 +181,11 @@ export class StepSixPage implements OnInit {
     l.present();
 
     const lecturas = await this._storage.get('lecturas');
+
+    if (lecturas.length == 0) {
+      l.dismiss();
+      return this.alertCtrl.create({message:"No puede generar un certificado sin RAEEs", buttons: ['Ok']}).then(a=>a.present());
+    }
     
     let contadorraee = 0;
     for(let i of lecturas)
@@ -223,6 +245,8 @@ export class StepSixPage implements OnInit {
     let raeescertificados:any = [];
     let fotos:any = [];
 
+
+
     
     //FirmasCertificado
     firmas.push({
@@ -257,6 +281,11 @@ export class StepSixPage implements OnInit {
       SidFirmaDestino: null,
       Observaciones: null,
       SidTipoOperativa: tipo_operativa,
+
+      albaran_origen: this.myForm.value.albaran_origen,
+      codigo_externo: this.myForm.value.codigo_externo,
+
+      num_raees: lecturas.length,
 
     };
     if (localStorage.getItem('nuevoOrigen')) {
@@ -302,8 +331,8 @@ export class StepSixPage implements OnInit {
         PidRaeecertificado: (parseInt(this.myForm.value.certificadoraee)+contador).toString(),
         SidRaee: l.values.etiqueta,
         SidCertificado: this.myForm.value.certificado,
-        GpsX: 0,
-        GpsY: 0,
+        GpsX: parseFloat(localStorage.getItem('lat')),
+        GpsY: parseFloat(localStorage.getItem('lng')),
         SidTipoDeLectora: 3,
       })
 
@@ -334,11 +363,17 @@ export class StepSixPage implements OnInit {
     this.loadingCtrl.create({message:"Guardando la información de Recogida"}).then(l=>{
       l.present();
 
-      this.consultas.informacion({firmas:firmas, certificado:certificado, raees:raees, raeescertificados:raeescertificados, fotos:fotos}).subscribe((data:any)=>{
+      this.consultas.informacion({firmas:firmas, certificado:certificado, raees:raees, raeescertificados:raeescertificados, fotos:fotos}).subscribe(async (data:any)=>{
         console.log(data);
         l.dismiss();
 
         localStorage.setItem('certificado_pesado',this.myForm.value.certificado);
+
+        await this._storage.remove('firma_origen');
+        await this._storage.remove('firma_transportista');
+
+        localStorage.removeItem('albaran_origen');
+        localStorage.removeItem('codigo_externo');
 
         this.nav.navigateRoot('/home');
 
@@ -370,6 +405,10 @@ export class StepSixPage implements OnInit {
 
   atras()
   {
+    
+    localStorage.setItem('albaran_origen',this.myForm.value.albaran_origen);
+    localStorage.setItem('codigo_externo',this.myForm.value.codigo_externo);
+
     this.alertCtrl.create({message:"¿Está seguro de volver atrás? La información de la vista actual se perderá", buttons: [
     {
       text:"Si, regresar",
