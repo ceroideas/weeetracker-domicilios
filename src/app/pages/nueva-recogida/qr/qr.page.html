@@ -40,7 +40,7 @@
 
       <ion-row *ngIf="scans.length">
         
-        <ion-col size="12"><h4>Etiquetas leídas</h4></ion-col>
+        <ion-col size="12"><h4>Etiquetas leídas: {{scans.length}}</h4></ion-col>
 
         <ion-col size="12" *ngFor="let s of scans"><li style="padding-bottom: 8px">{{s}}</li></ion-col>
 

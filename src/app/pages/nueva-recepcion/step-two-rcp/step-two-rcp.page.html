@@ -65,6 +65,7 @@
           <ion-label>Provincias Disponibles:</ion-label>
 
           <ng-select2 
+            (click)="consultaService.hideKeyboard()"
             formControlName="selecciona_provincia"
             [data]="available_provinces"
             [placeholder]="'Seleccione una provincia'"

@@ -40,7 +40,7 @@ export class StepTwoPage implements OnInit {
   available_provinces = [];
 
   constructor(private usuarioService: UsuarioService,
-    private consultaService: ConsultasService,
+    public consultaService: ConsultasService,
     private _location: Location,
     private nav: NavController,
     private fb: FormBuilder,

@@ -27,9 +27,18 @@
               </ion-col>
               <ion-col size="8">
                 <ion-label class="left-label">Residuo:</ion-label>
-                <ion-select interface="action-sheet" (ionChange)="especificos()" class="ion-no-margin mb-2" formControlName="residuo">
+
+                <ng-select2 
+                  (click)="consultaService.hideKeyboard()"
+                  formControlName="residuo"
+                  [data]="residuos"
+                  (ngModelChange)="especificos()"
+                  [placeholder]="'Seleccione un residuo'">
+                </ng-select2>
+
+                <!-- <ion-select interface="action-sheet" (ionChange)="especificos()" class="ion-no-margin mb-2" formControlName="residuo">
                   <ion-select-option *ngFor="let r of residuos" [value]="r.pidResiduo">{{r.nombre}}</ion-select-option>
-                </ion-select>
+                </ion-select> -->
               </ion-col>
             </ion-row>
 
@@ -51,6 +60,7 @@
               <ion-col size="8" style="position: relative;">
 
                 <ng-select2 
+                  (click)="consultaService.hideKeyboard()"
                   formControlName="marca"
                   [data]="marcas"
                   [placeholder]="'Seleccione una marca'">

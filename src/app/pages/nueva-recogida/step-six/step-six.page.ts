@@ -109,9 +109,9 @@ export class StepSixPage implements OnInit {
     this.consultas.recuperarCertificado(this.initial).subscribe((data:any)=>{
 
       if (!data.certificado.length) {
-        this.initial += '00001';
+        this.initial += '000001';
       }else{
-        this.initial += this.padLeft(parseInt(data.certificado[data.certificado.length-1].pidCertificado.slice(-5))+1,5);
+        this.initial += this.padLeft(parseInt(data.certificado[data.certificado.length-1].pidCertificado.slice(-6))+1,6);
       }
 
       this.myForm.patchValue({
@@ -136,9 +136,9 @@ export class StepSixPage implements OnInit {
     this.consultas.recuperarCertificadoRAEE(this.initial2).subscribe((data:any)=>{
 
       if (!data.certificado) {
-        this.initial2 += '00001';
+        this.initial2 += '000001';
       }else{
-        this.initial2 += this.padLeft((parseInt(data.certificado)+1).toString(),5);
+        this.initial2 += this.padLeft((parseInt(data.certificado)+1).toString(),6);
       }
 
       this.myForm.patchValue({
@@ -354,6 +354,8 @@ export class StepSixPage implements OnInit {
     console.log(raeescertificados);
     console.log(fotos);
     l.dismiss();
+
+    return false;
 
     let name_logs = moment().format('YYMMDDHHmmss')+'_'+String(this.usuario.terminal).padStart(4, '0')+'_LOG.txt';
     let result = await this.consultas.uploadLog(name_logs,'/Logs');

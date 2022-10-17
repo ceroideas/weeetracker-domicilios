@@ -43,6 +43,7 @@ export class ReadedPage implements OnInit {
   contenedores:any;
   contenedores_aux:any;
   residuos:any;
+  all_residuos:any;
   residuos_especificos:any;
   marcas:any;
   fracciones:any;
@@ -321,6 +322,7 @@ export class ReadedPage implements OnInit {
   {
     this.usuario = await this.usuarioService.cargarToken();
     // this.residuos = this.usuario.residuos;
+    console.log(this.usuario.residuos);
     let marcas = [];
     for(let i of this.usuario.marcas)
     {
@@ -370,9 +372,12 @@ export class ReadedPage implements OnInit {
       }
     }
 
-    for (let i of this.usuario.residuos) {
+    let i:any;
+
+    for (i of this.usuario.residuos) {
       if (i.sidFraccion == this.myForm.value.fraccion) {
-        this.residuos.push(i);
+        this.residuos.push({id:i.pidResiduo,text:i.nombre});
+
       }
     }
 

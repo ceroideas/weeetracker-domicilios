@@ -89,6 +89,7 @@
     </table>
 
     <div text-center>
+      <ion-button class="boton" (click)="atras()">Atras</ion-button>
       <ion-button class="boton" [disabled]="!detallePesoBtn" (click)="pesar()">Siguiente</ion-button>
     </div>
 
@@ -181,9 +182,9 @@
 
 <ion-footer no-border>
     <ion-buttons>
-      <ion-button class="izquierda" *ngIf="!irPesar" style="padding-left: 15px;" (click)="atras()">
+      <!-- <ion-button class="izquierda" *ngIf="!irPesar" style="padding-left: 15px;" (click)="atras()">
         <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
-      </ion-button>
+      </ion-button> -->
       <ion-button class="izquierda" *ngIf="irPesar" style="padding-left: 15px;" (click)="irPesar = false">
         <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
       </ion-button>

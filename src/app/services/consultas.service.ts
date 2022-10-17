@@ -4,6 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Identificacion } from '../models/identificacion';
 
+import { Keyboard } from '@awesome-cordova-plugins/keyboard/ngx';
+
 import { File as _File } from '@awesome-cordova-plugins/file/ngx';
 
 const apiUrl = environment.apiUrl;
@@ -18,7 +20,7 @@ export class ConsultasService {
 
   url = environment.apiUrl;
 
-  constructor(private http: HttpClient, private file: _File, private platform: Platform) {
+  constructor(private http: HttpClient, private file: _File, private platform: Platform, private keyboard: Keyboard) {
   }
   
   getIdentificacion(etiqueta: string) {
@@ -340,6 +342,16 @@ export class ConsultasService {
         }); 
       });
     }
+  }
+
+  hideKeyboard()
+  {
+    console.log('hidding keyboard');
+    setTimeout(()=>{
+      if (this.keyboard.isVisible) {
+        this.keyboard.hide();
+      }
+    },200)
   }
 
 }

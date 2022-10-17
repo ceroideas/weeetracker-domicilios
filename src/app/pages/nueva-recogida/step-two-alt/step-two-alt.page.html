@@ -68,6 +68,7 @@
           <ion-label>Provincia:</ion-label>
 
           <ng-select2 *ngIf="available_provincias.length"
+            (click)="consultaService.hideKeyboard()"
             [data]="available_provincias"
             formControlName="provincia"
             [placeholder]="'Seleccione una provincia'"
@@ -83,6 +84,7 @@
           <ion-label>Localidad:</ion-label>
 
           <ng-select2 *ngIf="available_municipios.length"
+            (click)="consultaService.hideKeyboard()"
             [data]="available_municipios"
             formControlName="localidad"
             [placeholder]="'Seleccione una localidad'">

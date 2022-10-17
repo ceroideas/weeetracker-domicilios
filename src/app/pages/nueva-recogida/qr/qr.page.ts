@@ -241,6 +241,10 @@ export class QrPage implements OnInit {
 
         // this.scans.unshift({ "data": scannedData, "type": scannedType, "timeAtDecode": data.time });
 
+        if (!scannedData || scannedData == "") {
+          return false;
+        }
+
         this.etiqueta = scannedData;
 
         if (localStorage.getItem('read_type') == 'grupal') {
