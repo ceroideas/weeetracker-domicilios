@@ -68,6 +68,8 @@ export class ReadedPage implements OnInit {
 
   zebra = false;
 
+  tipoOperativa = localStorage.getItem('tipo_operativa');
+
   /**/
   public scans = [];
   public scanners = [{ "SCANNER_NAME": "Please Wait...", "SCANNER_INDEX": 0, "SCANNER_CONNECTION_STATE": true }];
@@ -90,7 +92,7 @@ export class ReadedPage implements OnInit {
   /**/
 
   constructor(private usuarioService: UsuarioService,
-    private consultaService: ConsultasService,
+    public consultaService: ConsultasService,
     private _location: Location,
     private changeDetectorRef: ChangeDetectorRef,
     private nav: NavController,
@@ -353,6 +355,7 @@ export class ReadedPage implements OnInit {
     this.residuos = [];
 
     let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
+
     for (let i of resp) {
       if (i.SidFraccion) {
         if (i.SidFraccion == this.myForm.value.fraccion) {
@@ -377,7 +380,6 @@ export class ReadedPage implements OnInit {
     for (i of this.usuario.residuos) {
       if (i.sidFraccion == this.myForm.value.fraccion) {
         this.residuos.push({id:i.pidResiduo,text:i.nombre});
-
       }
     }
 
@@ -387,10 +389,16 @@ export class ReadedPage implements OnInit {
     })
   }
 
+  timeout;
+  interv = 500;
+
   especificos()
   {
-    this.myForm.patchValue({residuo_especifico: null});
-    setTimeout(()=>{
+    if (!this.myForm.value.fraccion) {
+      return false;
+    }
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(()=>{
 
       this.consultaService.especificos(this.myForm.value.residuo).subscribe(data=>{
         this.residuos_especificos = data;
@@ -398,11 +406,17 @@ export class ReadedPage implements OnInit {
         this.myForm.patchValue({residuo_especifico: null});
 
         if (!this.loadedResiduoEsp) {
+          console.log('cargado especifico',this.read.values)
           this.loadedResiduoEsp = true;
           this.myForm.patchValue({residuo_especifico: this.read?.values.residuo_especifico});
+          console.log(this.myForm.value);
         }
+      },err=>{
+        this.loadedResiduoEsp = true;
       })
-    },100)
+
+      this.interv = 100;
+    },this.interv)
   }
 
   onlyUnique(value, index, self) {
@@ -444,7 +458,6 @@ export class ReadedPage implements OnInit {
 
   loadContenedores()
   {
-    console.log('loadContenedores')
     this.consultaService.contenedores().subscribe(data=>{
       this.contenedores_aux = data;
 
@@ -602,7 +615,9 @@ export class ReadedPage implements OnInit {
     // localStorage.setItem('lecturas',JSON.stringify(lecturas));
     this.events.publish('getLecturas');
     if (this.to == 'forward') {
-      if (localStorage.getItem('alt_title_rd')) {
+      if (localStorage.getItem('alt_title_rd_2')) {
+        localStorage.setItem('alt_title_sm','NUEVA ENTREGA 3 - RAEE: Listado RAEE');
+      }else if (localStorage.getItem('alt_title_rd')) {
         localStorage.setItem('alt_title_sm','NUEVA RECEPCIÓN 3 - RAEE: Listado RAEE');
       }else{
         localStorage.removeItem('alt_title_sm');

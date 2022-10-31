@@ -23,6 +23,10 @@ const routes: Routes = [
     path: 'nueva-recepcion',
     loadChildren: () => import('./pages/nueva-recepcion/nueva-recepcion.module').then( m => m.NuevaRecepcionPageModule)
   },
+  {
+    path: 'nueva-entrega',
+    loadChildren: () => import('./pages/nueva-entrega/nueva-entrega.module').then( m => m.NuevaEntregaPageModule)
+  },
 ];
 
 /*const routes: Routes = [

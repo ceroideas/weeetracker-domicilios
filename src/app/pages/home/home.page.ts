@@ -6,6 +6,9 @@ import { NavController, Platform } from '@ionic/angular';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { Usuario } from 'src/app/models/usuario';
 import { EventsService } from 'src/app/services/events.service';
+import { ConsultasService } from 'src/app/services/consultas.service';
+
+declare var moment:any;
 
 @Component({
   selector: 'app-home',
@@ -26,6 +29,7 @@ export class HomePage implements OnInit {
   pesarBtn;
 
   constructor(private menuService: MenuService,
+    private consultas: ConsultasService,
     private router: Router,
     private navCtrl: NavController,
     private usuarioService: UsuarioService,
@@ -99,11 +103,16 @@ export class HomePage implements OnInit {
     this.navHijo = !this.navHijo;
   }
 
-  logOut() {
+  async logOut() {
+
+    let name_logs = moment().format('YYMMDDHHmmss')+'_'+String(this.usuario.terminal).padStart(4, '0')+'_LOG.txt';
+
     this.usuarioService.eliminarToken();
     this.navCtrl.navigateRoot("/login");
     localStorage.removeItem('centro');
     this.events.publish('loadPostLogout');
+    
+    let result = await this.consultas.uploadLog(name_logs,'/Logs');
   }
 
 }

@@ -39,7 +39,7 @@ export class StepFiveRcpPage implements OnInit {
   private _storage: Storage | null = null;
 
   constructor(private usuarioService: UsuarioService,
-    private consultas: ConsultasService,
+    public consultas: ConsultasService,
     private _location: Location,
     private nav: NavController,
     private fb: FormBuilder,

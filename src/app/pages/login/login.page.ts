@@ -11,6 +11,8 @@ import { EventsService } from '../../services/events.service';
 
 // import { File } from '@awesome-cordova-plugins/file/ngx';
 
+declare var moment:any;
+
 declare var $: any;
 
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
@@ -25,6 +27,7 @@ import { FTP } from '@awesome-cordova-plugins/ftp/ngx';
 })
 export class LoginPage implements OnInit {
 
+  _usuario: any;
   usuario: string;
   usuarios: any;
   usuario_centro: any;
@@ -220,6 +223,14 @@ export class LoginPage implements OnInit {
       this.password = "";
       this.navCtrl.navigateForward("/home");
       this.usuarioService.cerrarSpinner();
+
+      /*this._usuario = await this.usuarioService.cargarNombreUsuario();
+
+      let name_logs = moment().format('YYMMDDHHmmss')+'_'+String(this._usuario.terminal).padStart(4, '0')+'_LOG.txt';
+      let result = await this.consultas.uploadLog(name_logs,'/Logs');*/
+
+      /**/
+
       // loading.dismiss(); 
     }, async error => {
       this.usuarioService.cerrarSpinner();
@@ -246,6 +257,12 @@ export class LoginPage implements OnInit {
       this.password = "";
       this.navCtrl.navigateForward("/home");
       this.usuarioService.cerrarSpinner();
+
+      /*this._usuario = await this.usuarioService.cargarNombreUsuario();
+
+      let name_logs = moment().format('YYMMDDHHmmss')+'_'+String(this._usuario.terminal).padStart(4, '0')+'_LOG.txt';
+      let result = await this.consultas.uploadLog(name_logs,'/Logs');*/
+      
       // loading.dismiss(); 
     }, async error => {
       this.usuarioService.cerrarSpinner();

@@ -136,9 +136,9 @@ export class StepSixRcpPage implements OnInit {
     this.consultas.recuperarCertificadoRAEE(this.initial2).subscribe((data:any)=>{
 
       if (!data.certificado) {
-        this.initial2 += '000001';
+        this.initial2 += '00001';
       }else{
-        this.initial2 += this.padLeft((parseInt(data.certificado)+1).toString(),6);
+        this.initial2 += this.padLeft((parseInt(data.certificado)+1).toString(),5);
       }
 
       this.myForm.patchValue({
@@ -253,12 +253,14 @@ export class StepSixRcpPage implements OnInit {
       PidFirmaCertificado: firma_1.id,
       Firma: firma_1.archivo,
       Nombre: firma_1.nombre,
+      Cargo: null,
     });
 
     firmas.push({
       PidFirmaCertificado: firma_2.id,
       Firma: firma_2.archivo,
       Nombre: firma_2.nombre,
+      Cargo: null,
     });
     
 
@@ -267,7 +269,7 @@ export class StepSixRcpPage implements OnInit {
     //Certificado
     certificado = {
       PidCertificado: this.myForm.value.certificado,
-      SidTipoCertificado: 3,
+      SidTipoCertificado: 2,
       SidSig: this.usuario.sidsig,
       Fecha: fecha,
       SidSolicitud: origen.pidSolicitud != "" ? origen.pidSolicitud : null,
@@ -353,12 +355,19 @@ export class StepSixRcpPage implements OnInit {
     console.log(raees);
     console.log(raeescertificados);
     console.log(fotos);
+
+    this.consultas.createLogger('firmas: '+ JSON.stringify(firmas));
+    this.consultas.createLogger('certificado: '+ JSON.stringify(certificado));
+    this.consultas.createLogger('raees: '+ JSON.stringify(raees));
+    this.consultas.createLogger('raeescertificados: '+ JSON.stringify(raeescertificados));
+    this.consultas.createLogger('fotos: '+ JSON.stringify(fotos));
+
     l.dismiss();
 
     // return false;
 
-    let name_logs = moment().format('YYMMDDHHmmss')+'_'+String(this.usuario.terminal).padStart(4, '0')+'_LOG.txt';
-    let result = await this.consultas.uploadLog(name_logs,'/Logs');
+    // let name_logs = moment().format('YYMMDDHHmmss')+'_'+String(this.usuario.terminal).padStart(4, '0')+'_LOG.txt';
+    // let result = await this.consultas.uploadLog(name_logs,'/Logs');
 
     this.consultas.createLogger('Guardando los datos Success');
 
@@ -401,7 +410,9 @@ export class StepSixRcpPage implements OnInit {
         }
       })
     },err=>{
-      this.consultas.createLogger('E | Error Guardando los datos | '+JSON.stringify(err));
+      l.dismiss();
+      this.alertCtrl.create({message:"Ha ocurrido un error guardando los datos", buttons: ['OK']}).then(a=>a.present());
+      this.consultas.createLogger('E | Error Guardando los datos de recepción | '+JSON.stringify(err));
     })
   }
 

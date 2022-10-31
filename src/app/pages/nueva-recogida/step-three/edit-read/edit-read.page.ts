@@ -68,6 +68,8 @@ export class EditReadPage implements OnInit {
 
   zebra = false;
 
+  tipoOperativa = localStorage.getItem('tipo_operativa');
+
   /**/
 
   lecturas = [];
@@ -95,7 +97,7 @@ export class EditReadPage implements OnInit {
   /**/
 
   constructor(private usuarioService: UsuarioService,
-    private consultaService: ConsultasService,
+    public consultaService: ConsultasService,
     private _location: Location,
     private changeDetectorRef: ChangeDetectorRef,
     private nav: NavController,
@@ -352,6 +354,11 @@ export class EditReadPage implements OnInit {
     this.loadContenedores();
   }
 
+  changemodel()
+  {
+    console.log('change model')
+  }
+
   changeFraccion()
   {
     let contenedores = [];
@@ -379,10 +386,11 @@ export class EditReadPage implements OnInit {
     }
 
     // console.log(this.usuario.residuos);
+    let i:any;
 
-    for (let i of this.usuario.residuos) {
+    for (i of this.usuario.residuos) {
       if (i.sidFraccion == this.myForm.value.fraccion) {
-        this.residuos.push(i);
+        this.residuos.push({id:i.pidResiduo,text:i.nombre});
       }
     }
 
@@ -392,9 +400,16 @@ export class EditReadPage implements OnInit {
     })
   }
 
+  timeout;
+  interv = 500;
+
   especificos()
   {
-    setTimeout(()=>{
+    if (!this.myForm.value.fraccion) {
+      return false;
+    }
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(()=>{
 
       this.consultaService.especificos(this.myForm.value.residuo).subscribe(data=>{
         this.residuos_especificos = data;
@@ -402,14 +417,17 @@ export class EditReadPage implements OnInit {
         this.myForm.patchValue({residuo_especifico: null});
 
         if (!this.loadedResiduoEsp) {
-          console.log('cargado especifico')
+          console.log('cargado especifico',this.read.values)
           this.loadedResiduoEsp = true;
           this.myForm.patchValue({residuo_especifico: this.read.values.residuo_especifico});
+          console.log(this.myForm.value);
         }
       },err=>{
         this.loadedResiduoEsp = true;
       })
-    },100)
+
+      this.interv = 100;
+    },this.interv)
   }
 
   onlyUnique(value, index, self) {
@@ -484,9 +502,9 @@ export class EditReadPage implements OnInit {
 
       if (!this.loadedFraccion) {
         this.loadedFraccion = true;
-        this.myForm.patchValue({fraccion: this.read.values.fraccion});
+        this.myForm.patchValue({fraccion: this.read?.values.fraccion});
         this.changeFraccion();
-        this.myForm.patchValue({tipo_contenedor: this.read.values.tipo_contenedor});
+        this.myForm.patchValue({tipo_contenedor: this.read?.values.tipo_contenedor});
       }
     })
   }
@@ -557,8 +575,8 @@ export class EditReadPage implements OnInit {
 
   async adelante(stay = false, side = null)
   {
-    console.log(this.myForm.value);
-    if (!this.myForm.valid && stay == false) {
+    console.log(this.myForm.valid);
+    if (!this.myForm.valid /*&& stay == false*/) {
       return this.alertCtrl.create({message:"Por favor, complete todos los datos.", buttons: ["Ok"]}).then(a=>a.present());
     }
 

@@ -137,8 +137,14 @@ export class ConsultasService {
   buscarCentro(data){
     return this.http.post(apiUrl + '/solicitud/findCentros', data);
   }
-  centrosGestores(){
-    return this.http.get(apiUrl + '/solicitud/centrosGestores');
+  centrosGestores(id1,id2){
+    return this.http.get(apiUrl + '/solicitud/centrosGestores/'+id1+'/'+id2);
+  }
+  centrosEntrega(id1,id2){
+    return this.http.get(apiUrl + '/solicitud/centrosEntrega/'+id1+'/'+id2);
+  }
+  direccionesEntrega(id1,id2,id3){
+    return this.http.get(apiUrl + '/solicitud/direccionesEntrega/'+id1+'/'+id2+'/'+id3);
   }
   nuevoOrigen(data){
     return this.http.post(apiUrl + '/solicitud/nuevoOrigen', data);
@@ -147,6 +153,10 @@ export class ConsultasService {
   centroData(idCentro)
   {
     return this.http.get(apiUrl + '/solicitud/infoTercero/'+idCentro);
+  }
+  centroData2(id,id1,id2)
+  {
+    return this.http.get(apiUrl + '/solicitud/infoTercero2/'+id+'/'+id1+'/'+id2);
   }
   ubicacionCentro(data)
   {
@@ -161,9 +171,19 @@ export class ConsultasService {
   listarUsuarios(centro){
     return this.http.get(apiUrl + '/users/listar/'+centro);
   }
-  getResponsabilities(idTercero, idCentro) {
-    return this.http.get(apiUrl + '/users/getResponsabilities/'+idTercero+'/'+idCentro);
+  getResponsabilities(tercero_origen, direccion_origen, tercero_destino, direccion_destino) {
+    return this.http.get(apiUrl + '/users/getResponsabilities/'+tercero_origen+'/'+direccion_origen+'/'+tercero_destino+'/'+direccion_destino);
   }
+  getResponsabilities2(tercero_destino, direccion_destino) {
+    return this.http.get(apiUrl + '/users/getResponsabilities2/'+tercero_destino+'/'+direccion_destino);
+  }
+  getFracciones(fracciones)
+  {
+    return this.http.post(apiUrl + '/users/getFracciones',fracciones);
+  }
+  // getRexResponsabilities(tercero_destino, direccion_destino) {
+  //   return this.http.get(apiUrl + '/users/getRexResponsabilities/'+tercero_destino+'/'+direccion_destino);
+  // }
   
   fechaActualSolicitud() {
     let fecha: Date = new Date();
@@ -284,20 +304,80 @@ export class ConsultasService {
     return new Promise((resolve)=>{
       if (this.platform.is('cordova')) {
         
-        let url = this.file.externalRootDirectory+'logs';
+        let path = this.file.externalRootDirectory+'logs';
 
-        this.file.checkFile(url,'log.txt').then(response => {
+        const toDataURL = url => fetch(url)
+          .then(resp => resp.blob())
+          .then(blob => new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onloadend = () => resolve(reader.result)
+            reader.onerror = reject
+            reader.readAsDataURL(blob)
+          }))
 
-          this.http.post(apiUrl + '/file/FTPUploadFotos', {'ArchivoCodificado':url+'/log.txt','Nombre':name, 'Ruta': type}).subscribe(data=>{
-            return resolve(data);
-          });
 
-        },err=>{
-          return resolve(false);
-        });
+        toDataURL(path.replace('file://','_app_file_')+'/log.txt')
+          .then(dataUrl => {
+            console.log('RESULT:', dataUrl)
+            // alert(dataUrl);
+
+            let base64file:any = dataUrl;
+
+            base64file = base64file.replace('data:text/plain;base64,', '');
+
+            if (base64file == "") {
+              // alert("no file")
+              return resolve(false);
+            }
+
+            this.http.post(apiUrl + '/file/FTPUploadFotos', {'ArchivoCodificado':base64file,'Nombre':name, 'Ruta': type}).subscribe(data=>{
+              
+              let path = this.file.externalRootDirectory+'logs';
+              this.file.writeFile(path,'log.txt','',{append:false, replace: true});
+
+              // alert("OK");
+
+              return resolve("OK");
+
+            },err=>{
+              // alert("0"+JSON.stringify(err))
+              return resolve(false);
+            });
+
+
+          }).catch(err=>{
+            console.log('error');
+            // alert("1"+JSON.stringify(err))
+            return resolve(false);
+          })
+
+        // alert(path);
+
+        // this.file.checkFile(path.replace('file://','_app_file_'),'log.txt').then(response => {
+
+
+          
+
+        // },err=>{
+        //   alert('archivo no encontrado '+JSON.stringify(err))
+        //   return resolve(false);
+        // });
 
       }else{
-        return resolve(true);
+
+        // return new Promise((resolve)=>{
+           this.http.post(
+             apiUrl + '/file/FTPUploadFotos', {'ArchivoCodificado':'ZG9jdW1lbnRvIGRlIHBydWViYSBkZSBlbnZpbyBkZSBsb2dzIHBvciBmdHA=','Nombre':name, 'Ruta': type})
+
+           .subscribe(data=>{
+             return resolve(data);
+           },err=>{
+             return resolve(err);
+           });
+
+        // })
+
+        // return resolve(true);
       }
       /**/
     })
@@ -315,7 +395,7 @@ export class ConsultasService {
     let path = this.file.externalRootDirectory+'logs';
     let date = " | "+moment().format('DD-MM-Y HH:mm:ss');
 
-    this.file.checkFile(path,'log.txt').then(response => {
+    this.file.checkFile(path.replace('file://','_app_file_'),'log.txt').then(response => {
       this.file.writeFile(path,'log.txt',JSON.stringify(data)+date,{append:true, replace: false});
     }).catch(err=>{
       this.file.createFile(path,'log.txt',true).then(response=>{  

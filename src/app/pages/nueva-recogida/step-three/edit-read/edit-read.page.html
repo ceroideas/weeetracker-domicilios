@@ -35,7 +35,7 @@
             <ion-row>
               <ion-col size="4">
                 <ion-label class="left-label">Fracción:</ion-label>
-                <ion-select interface="action-sheet" (ionChange)="changeFraccion()" class="ion-no-margin mb-2" formControlName="fraccion">
+                <ion-select [disabled]="tipoOperativa == 'REX'" interface="action-sheet" (ionChange)="changeFraccion()" class="ion-no-margin mb-2" formControlName="fraccion">
                   <ion-select-option *ngFor="let f of fracciones" [value]="f.pidFraccion">{{f.nombre}}</ion-select-option>
                 </ion-select>
               </ion-col>
@@ -45,7 +45,7 @@
                   (click)="consultaService.hideKeyboard()"
                   formControlName="residuo"
                   [data]="residuos"
-                  (ngModelChange)="especificos()"
+                  (ngModelChange)="especificos(); changemodel()"
                   [placeholder]="'Seleccione un residuo'">
                 </ng-select2>
                 <!-- <ion-select interface="action-sheet" (ionChange)="especificos()" class="ion-no-margin mb-2" formControlName="residuo">

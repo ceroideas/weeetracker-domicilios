@@ -31,7 +31,7 @@
         <ion-col size="6"
         *ngIf="usuario?.responsabilidades | checkResp:'REX'"
         >
-            <ion-button class="ecobtn"
+            <ion-button [routerLink]="['/nueva-entrega']" class="ecobtn"
             size="large" style="font-size: 14px;" expand="block">NUEVA ENTREGA</ion-button>
         </ion-col>
 

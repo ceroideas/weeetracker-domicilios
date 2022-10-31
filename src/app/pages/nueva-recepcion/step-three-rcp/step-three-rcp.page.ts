@@ -117,7 +117,11 @@ export class StepThreeRcpPage implements OnInit {
 
           let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
           for (let i of resp) {
-            fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
+            if (i.SidFraccion) {
+              fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
+            }else{
+              fracciones.push({id:i.sidFraccion,operacion:i.tipoOperacion, contenedor:i.sidTipoContenedor});
+            }
           }
 
           this.consultaService.createLogger('Comprobando Raee Success');
@@ -229,8 +233,13 @@ export class StepThreeRcpPage implements OnInit {
 
     if (localStorage.getItem('tipo_operativa') == 'REF') {
       let origen = JSON.parse(localStorage.getItem('origen'));
-      this.consultaService.getResponsabilities(origen.sidTercero,origen.sidDireccionTercero).subscribe((data:any)=>{
+      this.consultaService.getResponsabilities(
+        origen.sidTercero,
+        origen.sidDireccionTercero,
+        this.usuario.tercero.PidTercero,
+        this.usuario.dtercero).subscribe((data:any)=>{
         // console.log(data.resp,this.usuario.responsabilidades)
+        console.log(data.resp);
         localStorage.setItem('other_resp',JSON.stringify(data.resp));
       })
     }else{

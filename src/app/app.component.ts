@@ -47,6 +47,7 @@ export class AppComponent {
     private androidPermissions: AndroidPermissions,
     public consultas: ConsultasService
   ) {
+
     this.initializeApp();
 
     this.events.subscribe('loadPostLogout',()=>{
@@ -66,7 +67,7 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(async () => {
 
-      this.consultas.createLogger({nombre:"jorge", apellido:"solano"});
+      // this.consultas.createLogger({nombre:"jorge", apellido:"solano"});
        //Language
        this.translateService.setDefaultLang('es');
        this.translateService.use('es');
@@ -78,7 +79,7 @@ export class AppComponent {
       // }
       this.statusBar.styleDefault();
       this.statusBar.backgroundColorByHexString("#0D8B7A")
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+      // this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
       this.splashScreen.hide();
 
       if (this.platform.is('cordova')) {
@@ -104,8 +105,8 @@ export class AppComponent {
 
         setTimeout(()=>{
           localStorage.removeItem('config');
-          this.events.publish('setLoaded');
-          // this.configXMLdesktop();
+          // this.events.publish('setLoaded');
+          this.configXMLdesktop();
         },100)
       }
     
