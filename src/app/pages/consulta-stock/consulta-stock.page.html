@@ -43,6 +43,7 @@
                 <thead style="font-size: 14px;">
                     <tr>
                         <th>Etiqueta</th>
+                        <th>Fr</th>
                         <th>Can</th>
                         <th>R. Espécifico</th>
                         <th>Cont</th>
@@ -52,6 +53,7 @@
                 <tbody style="font-size: 10px;">
                     <tr *ngFor="let l of details">
                         <td>{{l.sidRaee}}</td>
+                        <td>{{l.fraccion}}</td>
                         <td>{{l.canibalizado ? 'S' : 'N'}}</td>
                         <td>{{l.residuoEspecifico}}</td>
                         <td>{{l.nombre}}</td>

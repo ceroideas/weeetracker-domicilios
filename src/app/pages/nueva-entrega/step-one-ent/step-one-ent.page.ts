@@ -58,6 +58,7 @@ export class StepOneEntPage implements OnInit {
     // });
     let fracciones = [];
     let resps = this.usuario.responsabilidades.filter(x=>x.TipoOperacion == 'REX');
+    console.log(resps);
     let i:any;
     for (i of resps)
     {
