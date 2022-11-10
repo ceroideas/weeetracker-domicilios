@@ -50,6 +50,13 @@ export class StepThreePage implements OnInit {
     private storage: Storage,
     private alertCtrl: AlertController,) {
 
+    this.consultaService.contenedores().subscribe(data=>{
+      localStorage.setItem('contenedores',JSON.stringify(data));
+      this.consultaService.fracciones().subscribe((data:any)=>{
+        localStorage.setItem('fracciones',JSON.stringify(data));
+      });
+    });
+
     this.myForm = this.fb.group({
       type: ['individual', Validators.required],
       // request_n: [''],
@@ -146,7 +153,7 @@ export class StepThreePage implements OnInit {
               marca: raee.sidMarca,
               tipo_contenedor: raee.sidTipoContenedor,
               canibalizado: raee.canibalizado,
-              estado_raee: raee.sidEstadoRaee,
+              estado_raee: raee.sidEstadoRaee ? raee.sidEstadoRaee : 1,
               prevent_overwrite: true,
               ref: null
             };
@@ -238,8 +245,8 @@ export class StepThreePage implements OnInit {
               residuo_especifico: null,
               marca: null,
               tipo_contenedor: null,
-              canibalizado: null,
-              estado_raee: null,
+              canibalizado: false,
+              estado_raee: 1,
               prevent_overwrite: false,
               ref: null
           };

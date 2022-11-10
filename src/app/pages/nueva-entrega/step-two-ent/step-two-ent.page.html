@@ -21,7 +21,7 @@
                   </thead>
 
                   <tbody style="font-size: 10px;">
-                      <tr *ngFor="let l of listadoGestores | search:query" [ngClass]="{'trselected': (selected == l.pidTercero)}" (click)="seleccionar(l)">
+                      <tr *ngFor="let l of listadoGestores | search:query" [ngClass]="{'trselected': (selected == l.pidTerceroTipoTercero)}" (click)="seleccionar(l)">
                           <td>{{l.nombre}}</td>
                       </tr>
                   </tbody>

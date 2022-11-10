@@ -272,6 +272,9 @@ export class StepTwoPage implements OnInit {
 
   modifOrigen()
   {
+    if (this.direcciones.filter(x=>x.nombreProvincia == this.myForm.value.selecciona_provincia).length == 0) {
+      return false;
+    }
     this.modal.create({
       component: ModalOrigenesPage,
       componentProps: {origenes: this.direcciones.filter(x=>x.nombreProvincia == this.myForm.value.selecciona_provincia)},
@@ -315,7 +318,31 @@ export class StepTwoPage implements OnInit {
           this.available_provinces.push(i.nombreProvincia);
         }
 
-        this.available_provinces = this.available_provinces.filter(this.onlyUnique).sort((a, b) => a.localeCompare(b));;
+        this.available_provinces = this.available_provinces.filter(this.onlyUnique).sort((a, b) => a.localeCompare(b));
+
+        if (this.direcciones.length == 1) {
+            
+          this.myForm.patchValue({
+            nombre: centro.nombre,
+            nif: centro.nif,
+
+            sidTercero: centro.pidTercero,
+            sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+
+            nombre_comercial: centro.nombreComercial,
+            centro: null, // this.direcciones[0].nombre,
+            localidad: null, // data1['ubicacion']['_municipio'].nombre,
+            direccion: null, // this.direcciones[0].direccion,
+            provincia: null, // data1['ubicacion']['_provincia'].nombre,
+            pais: null, // data1['ubicacion']['_pais'].nombre,
+            codNima: null, // this.direcciones[0].codNima,
+            insRP: null, // this.direcciones[0].insRp,
+            insRnP: null, // this.direcciones[0].insRnP,
+            selecciona_provincia: this.available_provinces[0]
+          });
+
+          return this.events.publish('changeOrigin',this.direcciones[0]);
+        }
 
         this.loadingCtrl.create({message: "Obteniendo ubicación de centro"}).then(l=>{
           l.present();
@@ -324,23 +351,49 @@ export class StepTwoPage implements OnInit {
             {pais:this.direcciones[0].sidPais, provincia: this.direcciones[0].sidProvincia, municipio:this.direcciones[0].sidMunicipio}).subscribe((data1:any)=>{
 
             this.consultaService.createLogger('Ubicacion Centro conseguida Success');
-            this.myForm.patchValue({
-              nombre: centro.nombre,
-              nif: centro.nif,
 
-              sidTercero: centro.pidTercero,
-              sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+            if (this.solicitud) {
 
-              nombre_comercial: centro.nombreComercial,
-              centro: null, // this.direcciones[0].nombre,
-              localidad: null, // data1['ubicacion']['_municipio'].nombre,
-              direccion: null, // this.direcciones[0].direccion,
-              provincia: null, // data1['ubicacion']['_provincia'].nombre,
-              pais: null, // data1['ubicacion']['_pais'].nombre,
-              codNima: null, // this.direcciones[0].codNima,
-              insRP: null, // this.direcciones[0].insRp,
-              insRnP: null, // this.direcciones[0].insRnP,
-            });
+              this.myForm.patchValue({selecciona_provincia:this.solicitud.provincia});
+
+              let direccion = this.direcciones.find(x=>x.pidDireccionTercero == this.solicitud.ssidDireccionTerceroOrigen);
+
+              this.myForm.patchValue({
+                nombre: centro.nombre,
+                nif: centro.nif,
+
+                sidTercero: centro.pidTercero,
+                sidDireccionTercero: direccion.pidDireccionTercero,
+
+                nombre_comercial: centro.nombreComercial,
+                centro: direccion.nombre,
+                localidad: data1['ubicacion']['_municipio'].nombre,
+                direccion: direccion.direccion,
+                provincia: data1['ubicacion']['_provincia'].nombre,
+                pais: data1['ubicacion']['_pais'].nombre,
+                codNima: direccion.codNima,
+                insRP: direccion.insRp,
+                insRnP: direccion.insRnP,
+              });
+            }else{
+              this.myForm.patchValue({
+                nombre: centro.nombre,
+                nif: centro.nif,
+
+                sidTercero: centro.pidTercero,
+                sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+
+                nombre_comercial: centro.nombreComercial,
+                centro: null, // this.direcciones[0].nombre,
+                localidad: null, // data1['ubicacion']['_municipio'].nombre,
+                direccion: null, // this.direcciones[0].direccion,
+                provincia: null, // data1['ubicacion']['_provincia'].nombre,
+                pais: null, // data1['ubicacion']['_pais'].nombre,
+                codNima: null, // this.direcciones[0].codNima,
+                insRP: null, // this.direcciones[0].insRp,
+                insRnP: null, // this.direcciones[0].insRnP,
+              });
+            }
 
             l.dismiss();
 

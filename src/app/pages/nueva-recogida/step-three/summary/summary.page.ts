@@ -48,16 +48,27 @@ export class SummaryPage implements OnInit {
       })
     });
 
-    this.consultas.contenedores().subscribe((data:any)=>{
-      this.contenedores = data;
+    // this.consultas.contenedores().subscribe((data:any)=>{
+      this.contenedores = JSON.parse(localStorage.getItem('contenedores'));
 
-      this.consultas.todosEspecificos().subscribe(async (data:any)=>{
-        this.especificos = data;
-
-        // this.lecturas = JSON.parse(localStorage.getItem('lecturas'));
+      if (localStorage.getItem('todos_especificos')) {
+        this.especificos = JSON.parse(localStorage.getItem('todos_especificos'));
         this.lecturas = await this._storage.get('lecturas');
-      })
-    })
+
+        this.lecturas = this.lecturas.sort((a, b) => a.values.etiqueta.localeCompare(b.values.etiqueta))
+      }else{
+
+        this.consultas.todosEspecificos().subscribe(async (data:any)=>{
+          localStorage.setItem('todos_especificos',JSON.stringify(data));
+          this.especificos = data;
+
+          // this.lecturas = JSON.parse(localStorage.getItem('lecturas'));
+          this.lecturas = await this._storage.get('lecturas');
+
+          this.lecturas = this.lecturas.sort((a, b) => a.values.etiqueta.localeCompare(b.values.etiqueta))
+        })
+      }
+    // })
   }
 
   ionViewDidEnter()

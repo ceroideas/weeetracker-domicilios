@@ -2,7 +2,7 @@
 
 <ion-content color="medium" fullscreen="fullscreen" padding="padding">
 
-  <form [formGroup]="myForm" #formulario="ngForm" novalidate>
+  <form [formGroup]="myForm" #formulario="ngForm" novalidate (ngSubmit)="adelante()">
     <ion-grid>
 
     <ion-row>

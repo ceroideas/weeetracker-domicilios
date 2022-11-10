@@ -150,6 +150,15 @@ export class ConsultasService {
   direccionesEntrega(id1,id2,id3){
     return this.http.get(apiUrl + '/solicitud/direccionesEntrega/'+id1+'/'+id2+'/'+id3);
   }
+  origenEntregaDirecta(id1,id2){
+    return this.http.get(apiUrl + '/solicitud/origenEntregaDirecta/'+id1+'/'+id2);
+  }
+  direccionesEntregaDirecta(id1,id2,id3){
+    return this.http.get(apiUrl + '/solicitud/direccionesEntregaDirecta/'+id1+'/'+id2+'/'+id3);
+  }
+  fraccionesEntregaDirecta(id1,id2,id3,id4){
+    return this.http.get(apiUrl + '/solicitud/fraccionesEntregaDirecta/'+id1+'/'+id2+'/'+id3+'/'+id4);
+  }
   nuevoOrigen(data){
     return this.http.post(apiUrl + '/solicitud/nuevoOrigen', data);
   }
@@ -387,11 +396,31 @@ export class ConsultasService {
     })
   }
 
-  groupBy(xs, key) {
+  /*groupBy(xs, key) {
     return xs.reduce(function(rv, x) {
       (rv[x.values[key]] = rv[x.values[key]] || []).push(x);
       return rv;
     }, {});
+  }*/
+
+  groupBy( array, a )
+  {
+    let f =  (item)=>
+    {
+      return [item.canibalizado, item.residuo_especifico];
+    }
+    var groups = {};
+    array.forEach( ( o )=>
+    {
+      var group = JSON.stringify( f(o.values) );
+      groups[group] = groups[group] || [];
+      groups[group].push( o );  
+    });
+    // console.log(groups);
+    return Object.keys(groups).map( ( group )=>
+    {
+      return groups[group]; 
+    })
   }
 
   appendInfo(data)
@@ -422,7 +451,7 @@ export class ConsultasService {
           this.appendInfo(data);
 
         }).catch(err => {
-          console.log('No se pudo crear'+JSON.stringify(err));
+          console.log('No se pudo crear '+JSON.stringify(err));
         }); 
       });
     }
@@ -430,7 +459,10 @@ export class ConsultasService {
 
   hideKeyboard()
   {
-    console.log('hidding keyboard');
+    // console.log('hidding keyboard');
+    setTimeout(()=>{
+      $('.select2-search__field').blur();
+    },1)
     setTimeout(()=>{
       if (this.keyboard.isVisible) {
         this.keyboard.hide();

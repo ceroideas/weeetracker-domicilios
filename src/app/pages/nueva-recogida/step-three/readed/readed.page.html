@@ -29,6 +29,7 @@
                 <ion-label class="left-label">Residuo:</ion-label>
 
                 <ng-select2 
+                inputmode="none"
                   (click)="consultaService.hideKeyboard()"
                   formControlName="residuo"
                   [data]="residuos"

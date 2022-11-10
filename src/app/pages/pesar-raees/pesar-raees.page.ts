@@ -69,43 +69,49 @@ export class PesarRaeesPage implements OnInit {
         return date > days && date < tomo;
       };
 
-      this.consultasService.RaeesDia(moment().subtract(this.usuario.direccionTercero.diasPesado,'day').format('Y-MM-DD'),this.idCentro).subscribe((data:any)=>{
-        console.log(data);
-        this.pesado = data.i.dter.pesado;
-
-        for (let j of data.i.certificados)
-        {
-          if (j.x && j.y) {
-            console.log('tiene ambas, tiene peso');
-            j.x.peso = j.y.peso;
-            this.certificados.push(j.x);
-          }else{
-            console.log('no tiene peso')
-            j.x.peso = 0;
-            this.certificados.push(j.x);
-          }
-        }
-
-        console.log(this.certificados);
-        this.certificados_aux = this.certificados;
-
-        this.enterFilter();
-
-        if (localStorage.getItem('certificado_pesado')) {
-
-          let i = this.certificados.findIndex(x=>x.pidCertificado == localStorage.getItem('certificado_pesado'));
-
-          if (i != -1) {
-            this.detallePeso = i;
-            this.detallePesoBtn = true
-
-            localStorage.removeItem('certificado_pesado');
-
-            this.pesar();
-          }
-        }
-      })
+      this.consultar();
       // this.cargarOperativas(this.idCentro, this.idTercero);
+  }
+
+  consultar()
+  {
+    this.certificados = [];
+    this.consultasService.RaeesDia(moment().subtract(this.usuario.direccionTercero.diasPesado,'day').format('Y-MM-DD'),this.idCentro).subscribe((data:any)=>{
+      console.log(data);
+      this.pesado = data.i.dter.pesado;
+
+      for (let j of data.i.certificados)
+      {
+        if (j.x && j.y) {
+          console.log('tiene ambas, tiene peso');
+          j.x.peso = j.y.peso;
+          this.certificados.push(j.x);
+        }else{
+          console.log('no tiene peso')
+          j.x.peso = 0;
+          this.certificados.push(j.x);
+        }
+      }
+
+      console.log(this.certificados);
+      this.certificados_aux = this.certificados;
+
+      this.enterFilter();
+
+      if (localStorage.getItem('certificado_pesado')) {
+
+        let i = this.certificados.findIndex(x=>x.pidCertificado == localStorage.getItem('certificado_pesado'));
+
+        if (i != -1) {
+          this.detallePeso = i;
+          this.detallePesoBtn = true
+
+          localStorage.removeItem('certificado_pesado');
+
+          this.pesar();
+        }
+      }
+    })
   }
 
   ngOnInit() {
@@ -214,6 +220,8 @@ export class PesarRaeesPage implements OnInit {
               this.irPesar = false;
 
               this.certificados[this.detallePeso].peso = this.pesoCertificado;
+
+              this.consultar();
 
               this.alertCtrl.create({message:"Se ha guardado el peso del certficado", buttons: ['Ok']}).then(a=>a.present());
               

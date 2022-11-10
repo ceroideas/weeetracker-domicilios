@@ -27,6 +27,10 @@ const routes: Routes = [
     path: 'nueva-entrega',
     loadChildren: () => import('./pages/nueva-entrega/nueva-entrega.module').then( m => m.NuevaEntregaPageModule)
   },
+  {
+    path: 'nueva-entrega-directa',
+    loadChildren: () => import('./pages/nueva-entrega-directa/nueva-entrega-directa.module').then( m => m.NuevaEntregaDirectaPageModule)
+  },
 ];
 
 /*const routes: Routes = [

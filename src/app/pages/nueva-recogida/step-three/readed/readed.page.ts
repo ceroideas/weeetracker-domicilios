@@ -124,7 +124,7 @@ export class ReadedPage implements OnInit {
       residuo_especifico: ['',Validators.required],
       marca: [''],
       tipo_contenedor: ['',Validators.required],
-      canibalizado: [null],
+      canibalizado: [false],
       estado_raee: [1,Validators.required],
       ref: [''],
     });
@@ -442,24 +442,26 @@ export class ReadedPage implements OnInit {
         }
       }
     }
-    this.consultaService.fracciones().subscribe((data:any)=>{
+    let data1 = JSON.parse(localStorage.getItem('fracciones')).filter(filtro);
+    this.fracciones = data1;
 
-      let data1 = data.filter(filtro)
-      this.fracciones = data1;
+    if (!this.loadedFraccion) {
+      this.loadedFraccion = true;
+      this.myForm.patchValue({fraccion: this.read?.values.fraccion});
+      this.changeFraccion();
+      this.myForm.patchValue({tipo_contenedor: this.read?.values.tipo_contenedor});
+    }
+    /*this.consultaService.fracciones().subscribe((data:any)=>{
 
-      if (!this.loadedFraccion) {
-        this.loadedFraccion = true;
-        this.myForm.patchValue({fraccion: this.read?.values.fraccion});
-        this.changeFraccion();
-        this.myForm.patchValue({tipo_contenedor: this.read?.values.tipo_contenedor});
-      }
-    })
+      
+    })*/
   }
 
   loadContenedores()
   {
-    this.consultaService.contenedores().subscribe(data=>{
-      this.contenedores_aux = data;
+    // this.consultaService.contenedores().subscribe(data=>{
+      // this.contenedores_aux = data;
+      this.contenedores_aux = JSON.parse(localStorage.getItem('contenedores'));
 
       if (!this.loadedContenedor) {
         this.loadedContenedor = true;
@@ -474,7 +476,7 @@ export class ReadedPage implements OnInit {
         }
         this.loadFracciones(fracciones.filter(this.onlyUnique));
       }
-    })
+    // })
   }
 
   checkContenedor()

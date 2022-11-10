@@ -50,6 +50,13 @@ export class StepThreeRcpPage implements OnInit {
     private storage: Storage,
     private alertCtrl: AlertController,) {
 
+    this.consultaService.contenedores().subscribe(data=>{
+      localStorage.setItem('contenedores',JSON.stringify(data));
+      this.consultaService.fracciones().subscribe((data:any)=>{
+        localStorage.setItem('fracciones',JSON.stringify(data));
+      });
+    });
+
     this.myForm = this.fb.group({
       type: ['individual', Validators.required],
       // request_n: [''],
@@ -266,7 +273,7 @@ export class StepThreeRcpPage implements OnInit {
               residuo_especifico: null,
               marca: null,
               tipo_contenedor: null,
-              canibalizado: null,
+              canibalizado: false,
               estado_raee: null,
               prevent_overwrite: false,
               ref: null

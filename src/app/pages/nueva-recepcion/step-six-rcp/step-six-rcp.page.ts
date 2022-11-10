@@ -106,6 +106,19 @@ export class StepSixRcpPage implements OnInit {
     this.initial = 'C'+last2+String(this.usuario.terminal).padStart(4, '0');
     this.initial2 = last2+month+String(this.usuario.terminal).padStart(4, '0');
 
+    this.storage.create().then(async (storage)=>{
+
+      this._storage = storage;
+
+      // this.lecturas = JSON.parse(localStorage.getItem('lecturas'));
+      this.lecturas = await this._storage.get('lecturas');
+
+      this.agrupadas = this.consultas.groupBy(this.lecturas,'residuo_especifico');
+      this.keys = Object.keys(this.agrupadas);
+
+      this.myForm.patchValue({total:(Object.values(this.agrupadas) as any).flat().length});
+    });
+    
     this.consultas.recuperarCertificado(this.initial).subscribe((data:any)=>{
 
       if (!data.certificado.length) {
@@ -118,18 +131,6 @@ export class StepSixRcpPage implements OnInit {
         certificado: this.initial
       });
 
-      this.storage.create().then(async (storage)=>{
-
-        this._storage = storage;
-
-        // this.lecturas = JSON.parse(localStorage.getItem('lecturas'));
-        this.lecturas = await this._storage.get('lecturas');
-
-        this.agrupadas = this.consultas.groupBy(this.lecturas,'residuo_especifico');
-        this.keys = Object.keys(this.agrupadas);
-
-        this.myForm.patchValue({total:(Object.values(this.agrupadas) as any).flat().length});
-      });
 
     });
 
@@ -356,11 +357,11 @@ export class StepSixRcpPage implements OnInit {
     console.log(raeescertificados);
     console.log(fotos);
 
-    this.consultas.createLogger('firmas: '+ JSON.stringify(firmas));
-    this.consultas.createLogger('certificado: '+ JSON.stringify(certificado));
-    this.consultas.createLogger('raees: '+ JSON.stringify(raees));
-    this.consultas.createLogger('raeescertificados: '+ JSON.stringify(raeescertificados));
-    this.consultas.createLogger('fotos: '+ JSON.stringify(fotos));
+    this.consultas.createLogger('firmas: '+ "SUCCESS OPERATION");
+    this.consultas.createLogger('certificado: '+ "SUCCESS OPERATION");
+    this.consultas.createLogger('raees: '+ "SUCCESS OPERATION");
+    this.consultas.createLogger('raeescertificados: '+ "SUCCESS OPERATION");
+    this.consultas.createLogger('fotos: '+ "SUCCESS OPERATION");
 
     l.dismiss();
 

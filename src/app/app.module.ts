@@ -29,6 +29,8 @@ import { File } from '@awesome-cordova-plugins/file/ngx';
 
 import { NgSelect2Module } from 'ng-select2';
 
+import { NativeAudio } from '@awesome-cordova-plugins/native-audio/ngx';
+
 
 /*export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -60,6 +62,7 @@ export function createTranslateLoader(http: HttpClient) {
     })
   ],
   providers: [
+    NativeAudio,
     File,
     StatusBar,
     SplashScreen,

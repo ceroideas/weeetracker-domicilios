@@ -16,7 +16,7 @@ import { Storage } from '@ionic/storage-angular';
 declare var moment:any;
 
 @Component({
-  selector: 'app-step-two',
+  selector: 'app-step-two-ent',
   templateUrl: './step-two-ent.page.html',
   styleUrls: ['./step-two-ent.page.scss'],
 })
@@ -427,12 +427,12 @@ export class StepTwoEntPage implements OnInit {
 
   seleccionar(l)
   {
-    this.selected = l.pidTercero;
+    this.selected = l.pidTerceroTipoTercero;
   }
 
   aceptar()
   {
-    let gestor = this.listadoGestores.find(x=>x.pidTercero == this.selected);
+    let gestor = this.listadoGestores.find(x=>x.pidTerceroTipoTercero == this.selected);
 
     this.myForm.patchValue({
       nombre: gestor.Nombre,
@@ -489,24 +489,48 @@ export class StepTwoEntPage implements OnInit {
         this.available_provinces = this.available_provinces.filter(this.onlyUnique).sort((a, b) => a.localeCompare(b));
 
         this.consultaService.createLogger('Ubicacion Centro conseguida Success');
-        this.myForm.patchValue({
-          nombre: centro.nombre,
-          nif: centro.nif,
 
-          sidTercero: centro.pidTercero,
-          sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+        if (this.direcciones.length > 1) {
+          this.myForm.patchValue({
+            nombre: centro.nombre,
+            nif: centro.nif,
 
-          nombre_comercial: centro.nombreComercial,
-          centro: null, // this.direcciones[0].nombre,
-          localidad: null, // data1['ubicacion']['_municipio'].nombre,
-          direccion: null, // this.direcciones[0].direccion,
-          provincia: null, // data1['ubicacion']['_provincia'].nombre,
-          pais: null, // data1['ubicacion']['_pais'].nombre,
-          codNima: null, // this.direcciones[0].codNima,
-          insRP: null, // this.direcciones[0].insRp,
-          insRnP: null, // this.direcciones[0].insRnP,
-          selecciona_provincia: ""
-        });
+            sidTercero: centro.pidTercero,
+            sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+
+            nombre_comercial: centro.nombreComercial,
+            centro: null, // this.direcciones[0].nombre,
+            localidad: null, // data1['ubicacion']['_municipio'].nombre,
+            direccion: null, // this.direcciones[0].direccion,
+            provincia: null, // data1['ubicacion']['_provincia'].nombre,
+            pais: null, // data1['ubicacion']['_pais'].nombre,
+            codNima: null, // this.direcciones[0].codNima,
+            insRP: null, // this.direcciones[0].insRp,
+            insRnP: null, // this.direcciones[0].insRnP,
+            selecciona_provincia: ""
+          });
+        }else{
+          this.myForm.patchValue({
+            nombre: centro.nombre,
+            nif: centro.nif,
+
+            sidTercero: centro.pidTercero,
+            sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+
+            nombre_comercial: centro.nombreComercial,
+            centro: null, // this.direcciones[0].nombre,
+            localidad: null, // data1['ubicacion']['_municipio'].nombre,
+            direccion: null, // this.direcciones[0].direccion,
+            provincia: null, // data1['ubicacion']['_provincia'].nombre,
+            pais: null, // data1['ubicacion']['_pais'].nombre,
+            codNima: null, // this.direcciones[0].codNima,
+            insRP: null, // this.direcciones[0].insRp,
+            insRnP: null, // this.direcciones[0].insRnP,
+            selecciona_provincia: this.available_provinces[0]
+          });
+
+          this.events.publish('changeOrigin',this.direcciones[0]);
+        }
 
       },err=>{
         l.dismiss();

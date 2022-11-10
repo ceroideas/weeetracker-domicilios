@@ -495,9 +495,10 @@ export class EditReadPage implements OnInit {
         }
       }
     }
-    this.consultaService.fracciones().subscribe((data:any)=>{
+    // this.consultaService.fracciones().subscribe((data:any)=>{
 
-      let data1 = data.filter(filtro)
+      // let data1 = data.filter(filtro)
+      let data1 = JSON.parse(localStorage.getItem('fracciones')).filter(filtro);
       this.fracciones = data1;
 
       if (!this.loadedFraccion) {
@@ -506,13 +507,14 @@ export class EditReadPage implements OnInit {
         this.changeFraccion();
         this.myForm.patchValue({tipo_contenedor: this.read?.values.tipo_contenedor});
       }
-    })
+    // })
   }
 
   loadContenedores()
   {
-    this.consultaService.contenedores().subscribe(data=>{
-      this.contenedores_aux = data;
+    // this.consultaService.contenedores().subscribe(data=>{
+      // this.contenedores_aux = data;
+      this.contenedores_aux = JSON.parse(localStorage.getItem('contenedores'));
 
       if (!this.loadedContenedor) {
         this.loadedContenedor = true;
@@ -527,7 +529,7 @@ export class EditReadPage implements OnInit {
         }
         this.loadFracciones(fracciones.filter(this.onlyUnique));
       }
-    })
+    // })
   }
 
   checkContenedor()

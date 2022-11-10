@@ -13,6 +13,8 @@ import { BarcodeProvider } from '../../../providers/barcode/barcode';
 
 import { Storage } from '@ionic/storage-angular';
 
+import { NativeAudio } from '@awesome-cordova-plugins/native-audio/ngx';
+
 @Component({
   selector: 'app-qr',
   templateUrl: './qr.page.html',
@@ -66,7 +68,7 @@ export class QrPage implements OnInit {
     return self.indexOf(value) === index;
   }
 
-  constructor(/*private qrScanner: QRScanner,*/ private barcodeScanner: BarcodeScanner, public nav: NavController, public alertCtrl: AlertController,
+  constructor(/*private qrScanner: QRScanner,*/ private nativeAudio: NativeAudio, private barcodeScanner: BarcodeScanner, public nav: NavController, public alertCtrl: AlertController,
     public events: EventsService, public events1: Events, private menu: MenuController, public loading: LoadingController,
     private storage: Storage, private params: ParamsService,
     private barcodeProvider: BarcodeProvider, public _location: Location,
@@ -245,6 +247,8 @@ export class QrPage implements OnInit {
           return false;
         }
 
+        this.playAudio();
+
         this.etiqueta = scannedData;
 
         if (localStorage.getItem('read_type') == 'grupal') {
@@ -381,6 +385,8 @@ export class QrPage implements OnInit {
       (window.document.querySelector('ion-app') as HTMLElement).classList.add('cameraView2');
 
       this.etiqueta = barcodeData.text;
+
+      this.playAudio();
 
       if (localStorage.getItem('read_type') == 'grupal') {
 
@@ -617,6 +623,11 @@ export class QrPage implements OnInit {
   //  Function to handle the floating action button onUp.  Cancel any soft scan in progress.
   public fabUp() {
     this.barcodeProvider.sendCommand("com.symbol.datawedge.api.SOFT_SCAN_TRIGGER", "STOP_SCANNING");
+  }
+
+  playAudio()
+  {
+    this.nativeAudio.play('uniqueId1', () => console.log('uniqueId1 is done playing'));
   }
 
 }

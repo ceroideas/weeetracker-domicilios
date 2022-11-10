@@ -20,6 +20,9 @@ import { WebView } from '@awesome-cordova-plugins/ionic-webview/ngx';
 
 import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
 
+import { NativeAudio } from '@awesome-cordova-plugins/native-audio/ngx';
+
+declare var $:any;
 
 @Component({
   selector: 'app-root',
@@ -30,6 +33,7 @@ import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions
 export class AppComponent {
 
   constructor(
+    private nativeAudio: NativeAudio,
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
@@ -47,6 +51,22 @@ export class AppComponent {
     private androidPermissions: AndroidPermissions,
     public consultas: ConsultasService
   ) {
+
+    this.nativeAudio.preloadSimple('uniqueId1', 'assets/beep.mp3').then(()=>{
+      console.log('Beep loaded ok')
+    }, (err)=>{
+      console.log(err)
+    });
+
+
+    this.platform.backButton.subscribe(() => {
+      try {
+        $('.select2-dropdown').remove();
+      }
+      catch(e) {
+        
+      }
+    })
 
     this.initializeApp();
 

@@ -52,6 +52,13 @@ export class StepThreeEntPage implements OnInit {
     private storage: Storage,
     private alertCtrl: AlertController,) {
 
+    this.consultaService.contenedores().subscribe(data=>{
+      localStorage.setItem('contenedores',JSON.stringify(data));
+      this.consultaService.fracciones().subscribe((data:any)=>{
+        localStorage.setItem('fracciones',JSON.stringify(data));
+      });
+    });
+
     this.myForm = this.fb.group({
       type: ['individual', Validators.required],
       // request_n: [''],
@@ -150,8 +157,8 @@ export class StepThreeEntPage implements OnInit {
             let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
 
             if (!result) {
-              this.consultaService.createLogger('Residuo no puede ser recogido Success');
-              return this.alertCtrl.create({message:"No se puede Recoger esta etiqueta",buttons: ['Ok']}).then(a=>a.present());
+              this.consultaService.createLogger('Residuo no puede ser entregado Success');
+              return this.alertCtrl.create({message:"No se puede Entregar esta etiqueta",buttons: ['Ok']}).then(a=>a.present());
             }
 
             let raee = data.raee;
@@ -270,6 +277,8 @@ export class StepThreeEntPage implements OnInit {
 
       this.consultaService.GetRaee2(i,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
 
+        this.loadingCtrl.dismiss();
+
           var lectura = {
               etiqueta: i,
               fraccion: null,
@@ -277,7 +286,7 @@ export class StepThreeEntPage implements OnInit {
               residuo_especifico: null,
               marca: null,
               tipo_contenedor: null,
-              canibalizado: null,
+              canibalizado: false,
               estado_raee: null,
               prevent_overwrite: false,
               ref: null
@@ -289,39 +298,55 @@ export class StepThreeEntPage implements OnInit {
           if (!resp) {
             return resolve(false);
           }
+          for (let i of resp) {
+            if (i.SidFraccion) {
+              fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
+            }else{
+              fracciones.push({id:i.sidFraccion,operacion:i.tipoOperacion, contenedor:i.sidTipoContenedor});
+            }
+          }
+
           for (let j of resp) {
             fracciones.push({id:j.SidFraccion,operacion:j.TipoOperacion, contenedor:j.SidTipoContenedor});
           }
 
-          if (!data.recogido.length) {
+          if (data.recogido.length) {
+            this.consultaService.createLogger('Residuo ya recogido Success');
+          }else{
             this.consultaService.createLogger('Residuo aún no recogido Success');
             this.alertCtrl.create({message:"El Residuo "+i+" aún no ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
-            return resolve(true);
-          }else{
-            this.consultaService.createLogger('Residuo ya recogido Success');
+            return resolve(false);
           }
 
           if (data.raee) {
+
+            if (data.raee.sidFraccion != this.fraccion.pidFraccion ) {
+              return this.alertCtrl.create({message:"La fracción de la etiqueta no corresponde con la seleccionada",buttons: ['Ok']}).then(a=>a.present());
+            }
             let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
 
             if (!result) {
-              this.consultaService.createLogger('Residuo no puede ser recogido Success');
-              this.alertCtrl.create({message:"No se puede Recoger la etiqueta "+i,buttons: ['Ok']}).then(a=>a.present());
-              return resolve(true);
-            }else{
-              lectura = {
-                etiqueta: data.raee.pidRaee,
-                fraccion: data.raee.sidFraccion,
-                residuo: data.raee.sidResiduo,
-                residuo_especifico: data.raee.sidResiduoEspecifico,
-                marca: data.raee.sidMarca,
-                tipo_contenedor: data.raee.sidTipoContenedor,
-                canibalizado: data.raee.canibalizado,
-                estado_raee: data.raee.sidEstadoRaee,
-                prevent_overwrite: true,
-                ref: null
-              };
+              this.consultaService.createLogger('Residuo no puede ser entregado Success');
+              return this.alertCtrl.create({message:"No se puede Entregar esta etiqueta",buttons: ['Ok']}).then(a=>a.present());
             }
+
+            let raee = data.raee;
+
+            // let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
+
+            
+            lectura = {
+              etiqueta: data.raee.pidRaee,
+              fraccion: data.raee.sidFraccion,
+              residuo: data.raee.sidResiduo,
+              residuo_especifico: data.raee.sidResiduoEspecifico,
+              marca: data.raee.sidMarca,
+              tipo_contenedor: data.raee.sidTipoContenedor,
+              canibalizado: data.raee.canibalizado,
+              estado_raee: data.raee.sidEstadoRaee,
+              prevent_overwrite: true,
+              ref: null
+            };
           }
 
           this.lecturas.push({values:lectura, photos:null});
