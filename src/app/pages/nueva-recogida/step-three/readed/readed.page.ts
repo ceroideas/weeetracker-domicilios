@@ -119,7 +119,8 @@ export class ReadedPage implements OnInit {
     this.myForm = this.fb.group({
 
       etiqueta: [localStorage.getItem('etiqueta'),Validators.required],
-      fraccion: ['FR1',Validators.required],
+      fraccion: ['101',Validators.required],
+      fraccion_name: ['FR1'],
       residuo: ['',Validators.required],
       residuo_especifico: ['',Validators.required],
       marca: [''],
@@ -437,17 +438,26 @@ export class ReadedPage implements OnInit {
     {
       for(let j of f)
       {
-        if (j.id == a.pidFraccion && j.operacion == operacion) {
-          return a;
+        if (operacion == 'END' || operacion == 'REX')
+        {
+          if (j.id == a.pidFraccion) {
+            return a;
+          }
+        }else{
+          if (j.id == a.pidFraccion && j.operacion == operacion) {
+            return a;
+          }
         }
       }
     }
     let data1 = JSON.parse(localStorage.getItem('fracciones')).filter(filtro);
+    let data2 = JSON.parse(localStorage.getItem('fracciones'));
     this.fracciones = data1;
 
     if (!this.loadedFraccion) {
       this.loadedFraccion = true;
       this.myForm.patchValue({fraccion: this.read?.values.fraccion});
+      this.myForm.patchValue({fraccion_name: data2.find(x=>x.pidFraccion == this.read?.values.fraccion).nombre });
       this.changeFraccion();
       this.myForm.patchValue({tipo_contenedor: this.read?.values.tipo_contenedor});
     }
@@ -619,6 +629,8 @@ export class ReadedPage implements OnInit {
     if (this.to == 'forward') {
       if (localStorage.getItem('alt_title_rd_2')) {
         localStorage.setItem('alt_title_sm','NUEVA ENTREGA 3 - RAEE: Listado RAEE');
+      }else if (localStorage.getItem('alt_title_rd_3')) {
+        localStorage.setItem('alt_title_sm','NUEVA ENTREGA DIRECTA 3 - RAEE: Listado RAEE');
       }else if (localStorage.getItem('alt_title_rd')) {
         localStorage.setItem('alt_title_sm','NUEVA RECEPCIÓN 3 - RAEE: Listado RAEE');
       }else{

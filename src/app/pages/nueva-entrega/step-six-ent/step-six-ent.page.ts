@@ -91,7 +91,7 @@ export class StepSixEntPage implements OnInit {
 
   async ngOnInit() {
     
-    this.consultas.createLogger('Firma de Geestor Destino Success');
+    this.consultas.createLogger('Firma de Gestor Destino Success');
 
     this.canvas = document.querySelector("#sign-six");
 

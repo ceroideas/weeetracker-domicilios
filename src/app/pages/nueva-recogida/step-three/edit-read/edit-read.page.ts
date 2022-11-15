@@ -125,6 +125,7 @@ export class EditReadPage implements OnInit {
 
       etiqueta: [null ,Validators.required],
       fraccion: [null ,Validators.required],
+      fraccion_name: [null],
       residuo: [null ,Validators.required],
       residuo_especifico: [null ,Validators.required],
       marca: [null],
@@ -490,8 +491,15 @@ export class EditReadPage implements OnInit {
     {
       for(let j of f)
       {
-        if (j.id == a.pidFraccion && j.operacion == operacion) {
-          return a;
+        if (operacion == 'END' || operacion == 'REX')
+        {
+          if (j.id == a.pidFraccion) {
+            return a;
+          }
+        }else{
+          if (j.id == a.pidFraccion && j.operacion == operacion) {
+            return a;
+          }
         }
       }
     }
@@ -499,11 +507,13 @@ export class EditReadPage implements OnInit {
 
       // let data1 = data.filter(filtro)
       let data1 = JSON.parse(localStorage.getItem('fracciones')).filter(filtro);
+      let data2 = JSON.parse(localStorage.getItem('fracciones'));
       this.fracciones = data1;
 
       if (!this.loadedFraccion) {
         this.loadedFraccion = true;
         this.myForm.patchValue({fraccion: this.read?.values.fraccion});
+        this.myForm.patchValue({fraccion_name: data2.find(x=>x.pidFraccion == this.read?.values.fraccion).nombre });
         this.changeFraccion();
         this.myForm.patchValue({tipo_contenedor: this.read?.values.tipo_contenedor});
       }

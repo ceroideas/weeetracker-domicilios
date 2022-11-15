@@ -94,6 +94,8 @@ export class SummaryPage implements OnInit {
 
     if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_2')) {
       this.nav.navigateRoot('/nueva-entrega/step-four-ent');
+    }else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_3')) {
+      this.nav.navigateRoot('/nueva-entrega-directa/step-five-end');
     }else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd')) {
       this.nav.navigateForward('/nueva-recepcion/step-four-rcp');
     }else{
@@ -109,6 +111,8 @@ export class SummaryPage implements OnInit {
     }
     if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_2')) {
       this.nav.navigateRoot('/nueva-entrega/step-three-ent');
+    }else if(localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_3')){
+      this.nav.navigateRoot('/nueva-entrega-directa/step-three-end');
     }else if(localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd')){
       this.nav.navigateRoot('/nueva-recepcion/step-three-rcp');
     }else{
@@ -153,6 +157,8 @@ export class SummaryPage implements OnInit {
 
     if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_2')) {
       localStorage.setItem('alt_title_ed','NUEVA ENTREGA 3 - RAEE: Editar RAEE')
+    } else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_3')) {
+      localStorage.setItem('alt_title_ed','NUEVA ENTREGA DIRECTA 3 - RAEE: Editar RAEE')
     } else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd')) {
       localStorage.setItem('alt_title_ed','NUEVA RECEPCIÓN 3 - RAEE: Editar RAEE')
     } else {

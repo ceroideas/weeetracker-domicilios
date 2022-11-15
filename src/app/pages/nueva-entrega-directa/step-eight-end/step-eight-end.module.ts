@@ -6,10 +6,11 @@ import { TokenInterceptorService } from '../../../services/token-interceptor.ser
 
 import { IonicModule } from '@ionic/angular';
 
-import { StepSixEndPageRoutingModule } from './step-six-end-routing.module';
+import { StepEightEndPageRoutingModule } from './step-eight-end-routing.module';
 
-import { StepSixEndPage } from './step-six-end.page';
+import { StepEightEndPage } from './step-eight-end.page';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { TranslateModule } from '@ngx-translate/core';
 import { PipesModule } from '../../../pipes/pipes.module';
 
 @NgModule({
@@ -19,15 +20,16 @@ import { PipesModule } from '../../../pipes/pipes.module';
     IonicModule,
     ReactiveFormsModule,
     ComponentsModule,
+    TranslateModule,
     HttpClientModule,
     PipesModule,
-    StepSixEndPageRoutingModule
+    StepEightEndPageRoutingModule
   ],
   providers: [{
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
       multi: true
   }],
-  declarations: [StepSixEndPage]
+  declarations: [StepEightEndPage]
 })
-export class StepSixEndPageModule {}
+export class StepEightEndPageModule {}

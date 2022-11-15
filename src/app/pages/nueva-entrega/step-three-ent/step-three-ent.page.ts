@@ -154,7 +154,7 @@ export class StepThreeEntPage implements OnInit {
             if (data.raee.sidFraccion != this.fraccion.pidFraccion ) {
               return this.alertCtrl.create({message:"La fracción de la etiqueta no corresponde con la seleccionada",buttons: ['Ok']}).then(a=>a.present());
             }
-            let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
+            let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion /*&& x.operacion == localStorage.getItem('tipo_operativa')*/);
 
             if (!result) {
               this.consultaService.createLogger('Residuo no puede ser entregado Success');
@@ -323,7 +323,7 @@ export class StepThreeEntPage implements OnInit {
             if (data.raee.sidFraccion != this.fraccion.pidFraccion ) {
               return this.alertCtrl.create({message:"La fracción de la etiqueta no corresponde con la seleccionada",buttons: ['Ok']}).then(a=>a.present());
             }
-            let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
+            let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion /*&& x.operacion == localStorage.getItem('tipo_operativa')*/);
 
             if (!result) {
               this.consultaService.createLogger('Residuo no puede ser entregado Success');

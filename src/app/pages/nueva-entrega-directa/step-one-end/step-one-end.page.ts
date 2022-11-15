@@ -61,6 +61,7 @@ export class StepOneEndPage implements OnInit {
 
       await this._storage.remove('firma_origen');
       await this._storage.remove('firma_transportista');
+      await this._storage.remove('firma_destino');
 
       localStorage.removeItem('albaran_origen');
       localStorage.removeItem('codigo_externo');
@@ -68,6 +69,7 @@ export class StepOneEndPage implements OnInit {
       localStorage.removeItem('alt_title_rd');
       localStorage.removeItem('alt_title_sm');
       localStorage.removeItem('alt_title_rd_2');
+      localStorage.removeItem('alt_title_rd_3');
 
     });
   }

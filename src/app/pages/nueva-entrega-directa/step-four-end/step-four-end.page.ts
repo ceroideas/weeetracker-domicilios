@@ -154,7 +154,7 @@ export class StepFourEndPage implements OnInit {
             // if (data.raee.sidFraccion != this.fraccion.pidFraccion ) {
             //   return this.alertCtrl.create({message:"La fracción de la etiqueta no corresponde con la seleccionada",buttons: ['Ok']}).then(a=>a.present());
             // }
-            let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
+            let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion /*&& x.operacion == localStorage.getItem('tipo_operativa')*/);
 
             if (!result) {
               this.consultaService.createLogger('Residuo no puede ser entregado Success');
@@ -184,8 +184,8 @@ export class StepFourEndPage implements OnInit {
 
             // this.nav.navigateForward('/nueva-recogida/step-three/readed');
           }
-          localStorage.setItem('alt_title_rd','NUEVA ENTREGA 3 - RAEE: Nuevo RAEE');
-          localStorage.setItem('alt_title_rd_2','1');
+          localStorage.setItem('alt_title_rd','NUEVA ENTREGA DIRECTA 3 - RAEE: Nuevo RAEE');
+          localStorage.setItem('alt_title_rd_3','1');
           this.nav.navigateForward('/nueva-recogida/step-three/readed');
 
           // if (!data) {
@@ -253,34 +253,39 @@ export class StepFourEndPage implements OnInit {
 
     if (localStorage.getItem('tipo_operativa') == 'END') {
 
+      console.log(this.usuario.responsabilidades[0])
+
+      let solicitud = JSON.parse(localStorage.getItem('solicitud'))['response'];
+
       let destino = JSON.parse(localStorage.getItem('destino'));
-      this.consultaService.fraccionesEntregaDirecta(this.usuario.tercero.PidTercero,this.usuario.dtercero,destino.sidTercero,destino.sidDireccionTercero).subscribe(data=>{
+      this.consultaService.fraccionesEntregaDirecta(
+        this.usuario.tercero.PidTercero,
+        this.usuario.dtercero,
+        destino.sidTercero,
+        destino.sidDireccionTercero).subscribe((data:any)=>{
         // ....
-      })
-      
-      let solicitud = JSON.parse(localStorage.getItem('solicitud'));
-
-      this.consultaService.getResponsabilities2(
-        solicitud.ssidTerceroOrigen,
-        solicitud.ssidDireccionTerceroOrigen).subscribe((data:any)=>{
-        // console.log(data.resp,this.usuario.responsabilidades)
-        console.log(data.resp);
-        localStorage.setItem('other_resp',JSON.stringify(data.resp));
-
         let fracciones = [];
-        let resps = data.resp.filter(x=>x.TipoOperacion == 'REX');
-        console.log(resps);
-        let i:any;
-        for (i of resps)
-        {
-          fracciones.push(i.SidFraccion);
+
+        for(let i of data.info) {
+          fracciones.push(i.pidFraccion)
         }
 
-        this.consultaService.getFracciones({fracciones:fracciones.filter(this.onlyUnique)}).subscribe((data:any)=>{
-          console.log(data);
-          // data.fr
+        this.consultaService.getResponsabilities2(
+          destino.sidTercero,
+          destino.sidDireccionTercero).subscribe((data:any)=>{
+
+          let resp = [];
+          
+          for (let i of fracciones)
+          {
+            resp = resp.concat(data.resp.filter(x=>x.sidFraccion == i));
+          }
+
+          localStorage.setItem('other_resp',JSON.stringify(resp));
         })
+
       })
+
     }else{
       localStorage.removeItem('other_resp');
     }
@@ -344,7 +349,7 @@ export class StepFourEndPage implements OnInit {
             // if (data.raee.sidFraccion != this.fraccion.pidFraccion ) {
             //   return this.alertCtrl.create({message:"La fracción de la etiqueta no corresponde con la seleccionada",buttons: ['Ok']}).then(a=>a.present());
             // }
-            let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
+            let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion /* && x.operacion == localStorage.getItem('tipo_operativa')*/);
 
             if (!result) {
               this.consultaService.createLogger('Residuo no puede ser entregado Success');

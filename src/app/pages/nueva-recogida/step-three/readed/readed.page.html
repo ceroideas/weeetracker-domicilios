@@ -21,7 +21,10 @@
             <ion-row>
               <ion-col size="4">
                 <ion-label class="left-label">Fracción:</ion-label>
-                <ion-select [disabled]="tipoOperativa == 'REX'" interface="action-sheet" (ionChange)="changeFraccion()" class="ion-no-margin mb-2" formControlName="fraccion">
+
+                <ion-input *ngIf="tipoOperativa == 'REX'" disabled type="text" formControlName="fraccion_name" class="ion-no-margin mb-2"></ion-input>
+
+                <ion-select *ngIf="tipoOperativa != 'REX'" [disabled]="tipoOperativa == 'REX'" interface="action-sheet" (ionChange)="changeFraccion()" class="ion-no-margin mb-2" formControlName="fraccion">
                   <ion-select-option *ngFor="let f of fracciones" [value]="f.pidFraccion">{{f.nombre}}</ion-select-option>
                 </ion-select>
               </ion-col>

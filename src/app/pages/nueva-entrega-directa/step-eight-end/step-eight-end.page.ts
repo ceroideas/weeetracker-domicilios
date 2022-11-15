@@ -20,20 +20,21 @@ const month = ("0" + (new Date().getMonth() + 1)).slice(-2);
 declare var moment:any;
 
 @Component({
-  selector: 'app-step-seven-ent',
-  templateUrl: './step-seven-ent.page.html',
-  styleUrls: ['./step-seven-ent.page.scss'],
+  selector: 'app-step-eight-end',
+  templateUrl: './step-eight-end.page.html',
+  styleUrls: ['./step-eight-end.page.scss'],
   providers: [Geolocation]
 })
-export class StepSevenEntPage implements OnInit {
+export class StepEightEndPage implements OnInit {
 
-  titulo = "NUEVA ENTREGA 7 - Entrega Completada";
+  titulo = "NUEVA ENTREGA DIRECTA 8 - Entrega Completada";
   myForm: FormGroup;
 
   usuario: Usuario = new Usuario();
 
   lecturas:any;
-  origen = JSON.parse(localStorage.getItem('origen'));
+  origen = JSON.parse(localStorage.getItem('solicitud')).response;
+  destino = JSON.parse(localStorage.getItem('destino'));
   contenedores:any;
   especificos:any;
   initial;
@@ -82,7 +83,8 @@ export class StepSevenEntPage implements OnInit {
       albaran_origen: [localStorage.getItem('albaran_origen') ? localStorage.getItem('albaran_origen') : "", Validators.required],
       codigo_externo: [localStorage.getItem('codigo_externo') ? localStorage.getItem('codigo_externo') : "", Validators.required],
       fecha_operacion: [moment(localStorage.getItem('date')).format('DD-MM-Y'), Validators.required],
-      gestor_recogida: ['', Validators.required],
+      gestor_origen: [this.origen.tnombre, Validators.required],
+      gestor_destino: [this.destino.nombre, Validators.required],
       total: [null],
     });
     this.cargarUsuario();
@@ -100,10 +102,9 @@ export class StepSevenEntPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
-    this.myForm.patchValue({gestor_recogida: this.usuario.tercero.Nombre});
     console.log(this.usuario);
 
-    this.initial = 'E'+last2+String(this.usuario.terminal).padStart(4, '0');
+    this.initial = 'N'+last2+String(this.usuario.terminal).padStart(4, '0');
     this.initial2 = last2+month+String(this.usuario.terminal).padStart(4, '0');
 
     this.storage.create().then(async (storage)=>{
@@ -167,7 +168,7 @@ export class StepSevenEntPage implements OnInit {
   }
 
   async ngOnInit() {
-    this.consultas.createLogger('Entrega Completada Success');
+    this.consultas.createLogger('Entrega Directa Completada Success');
   }
 
   padLeft(num, size) {
@@ -232,7 +233,6 @@ export class StepSevenEntPage implements OnInit {
     firma_3.id = this.pidFirma+String(this.contadores.firmas).padStart(4, '0');
     await this.consultas.uploadFTP(firma_3.firma,firma_3.archivo,'/Firmas');
 
-    let origen = JSON.parse(localStorage.getItem('origen'));
     let fecha = localStorage.getItem('date');
     let tipo_operativa = localStorage.getItem('tipo_operativa');
 
@@ -287,11 +287,11 @@ export class StepSevenEntPage implements OnInit {
       SidTipoCertificado: 3,
       SidSig: this.usuario.sidsig,
       Fecha: fecha,
-      SidSolicitud: origen.pidSolicitud != "" ? origen.pidSolicitud : null,
-      SidTerceroSolicitante: origen.sidTercero,
-      SidDireccionTerceroSolicitante: origen.sidDireccionTercero,
-      SidTerceroDestinatario: this.usuario.tercero.PidTercero,
-      SidDireccionTerceroDestinatario: this.usuario.dtercero,
+      SidSolicitud: this.origen.sid,
+      SidTerceroSolicitante: this.origen.tercero,
+      SidDireccionTerceroSolicitante: this.origen.ssidDireccionTerceroOrigen,
+      SidTerceroDestinatario: this.destino.sidTercero,
+      SidDireccionTerceroDestinatario: this.destino.sidDireccionTercero,
       SidEstadoCertificado: 0,
       SidFirmaProcedencia: firma_1.id,
       SidFirmaTransporte: firma_2.id,
@@ -379,14 +379,14 @@ export class StepSevenEntPage implements OnInit {
 
     l.dismiss();
 
-    // return false;
+    return false;
 
     // let name_logs = moment().format('YYMMDDHHmmss')+'_'+String(this.usuario.terminal).padStart(4, '0')+'_LOG.txt';
     // let result = await this.consultas.uploadLog(name_logs,'/Logs');
 
     this.consultas.createLogger('Guardando los datos Success');
 
-    this.loadingCtrl.create({message:"Guardando la información de Entrega"}).then(l=>{
+    this.loadingCtrl.create({message:"Guardando la información de Entrega Directa"}).then(l=>{
       l.present();
 
       this.consultas.informacion({firmas:firmas, certificado:certificado, raees:raees, raeescertificados:raeescertificados, fotos:fotos}).subscribe(async (data:any)=>{
@@ -441,7 +441,7 @@ export class StepSevenEntPage implements OnInit {
     {
       text:"Si, regresar",
       handler:()=>{
-        this.consultas.createLogger('Volver atras, paso 6');
+        this.consultas.createLogger('Volver atras, paso 8');
         this._location.back();
       }
     },{

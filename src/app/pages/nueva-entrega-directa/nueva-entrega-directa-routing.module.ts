@@ -35,7 +35,11 @@ const routes: Routes = [
   {
     path: 'step-seven-end',
     loadChildren: () => import('./step-seven-end/step-seven-end.module').then( m => m.StepSevenEndPageModule)
+  },  {
+    path: 'step-eight-end',
+    loadChildren: () => import('./step-eight-end/step-eight-end.module').then( m => m.StepEightEndPageModule)
   }
+
 ];
 
 @NgModule({
