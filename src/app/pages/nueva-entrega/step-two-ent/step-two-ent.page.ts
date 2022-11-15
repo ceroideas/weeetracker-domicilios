@@ -38,7 +38,7 @@ export class StepTwoEntPage implements OnInit {
   available_provinces = [];
   tipooperativa = localStorage.getItem('tipo_operativa');
 
-  listadoGestores:any;
+  listadoGestores:any = [];
 
   query = "";
 
@@ -97,7 +97,17 @@ export class StepTwoEntPage implements OnInit {
       let fr = JSON.parse(localStorage.getItem('fraccion_seleccionada'))
 
       this.consultaService.centrosEntrega(this.usuario.dtercero,fr.pidFraccion).subscribe((data:any)=>{
-        this.listadoGestores = data.centros;
+
+        let aux = data.centros;
+
+        for (let i of aux)
+        {
+          let comp = this.listadoGestores.find(x=>x.pidTercero == i.pidTercero);
+          if (!comp) {
+            this.listadoGestores.push(i);
+          }
+        }
+        // this.listadoGestores = data.centros;
 
 
         if (data.centros.length == 0) {
