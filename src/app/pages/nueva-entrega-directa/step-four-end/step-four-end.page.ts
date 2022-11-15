@@ -245,6 +245,7 @@ export class StepFourEndPage implements OnInit {
         load.dismiss();
 
         localStorage.setItem('alt_title_sm','NUEVA ENTREGA DIRECTA 4 - RAEE: Listado RAEE');
+        localStorage.setItem('alt_title_rd_3','1');
         this.nav.navigateForward('/nueva-recogida/step-three/summary');
 
       })
@@ -294,6 +295,7 @@ export class StepFourEndPage implements OnInit {
   goSummary()
   {
     localStorage.setItem('alt_title_sm','NUEVA ENTREGA DIRECTA 4 - RAEE: Listado RAEE');
+    localStorage.setItem('alt_title_rd_3','1');
     this.nav.navigateForward('/nueva-recogida/step-three/summary');
   }
 

@@ -376,7 +376,48 @@ export class StepTwoPage implements OnInit {
                 insRnP: direccion.insRnP,
               });
             }else{
-              this.myForm.patchValue({
+              if (this.direcciones.length > 1) {
+                this.myForm.patchValue({
+                  nombre: centro.nombre,
+                  nif: centro.nif,
+
+                  sidTercero: centro.pidTercero,
+                  sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+
+                  nombre_comercial: centro.nombreComercial,
+                  centro: null, // this.direcciones[0].nombre,
+                  localidad: null, // data1['ubicacion']['_municipio'].nombre,
+                  direccion: null, // this.direcciones[0].direccion,
+                  provincia: null, // data1['ubicacion']['_provincia'].nombre,
+                  pais: null, // data1['ubicacion']['_pais'].nombre,
+                  codNima: null, // this.direcciones[0].codNima,
+                  insRP: null, // this.direcciones[0].insRp,
+                  insRnP: null, // this.direcciones[0].insRnP,
+                  selecciona_provincia: ""
+                });
+              }else{
+                this.myForm.patchValue({
+                  nombre: centro.nombre,
+                  nif: centro.nif,
+
+                  sidTercero: centro.pidTercero,
+                  sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+
+                  nombre_comercial: centro.nombreComercial,
+                  centro: null, // this.direcciones[0].nombre,
+                  localidad: null, // data1['ubicacion']['_municipio'].nombre,
+                  direccion: null, // this.direcciones[0].direccion,
+                  provincia: null, // data1['ubicacion']['_provincia'].nombre,
+                  pais: null, // data1['ubicacion']['_pais'].nombre,
+                  codNima: null, // this.direcciones[0].codNima,
+                  insRP: null, // this.direcciones[0].insRp,
+                  insRnP: null, // this.direcciones[0].insRnP,
+                  selecciona_provincia: this.available_provinces[0]
+                });
+
+                this.events.publish('changeOrigin',this.direcciones[0]);
+              }
+              /*this.myForm.patchValue({
                 nombre: centro.nombre,
                 nif: centro.nif,
 
@@ -392,7 +433,7 @@ export class StepTwoPage implements OnInit {
                 codNima: null, // this.direcciones[0].codNima,
                 insRP: null, // this.direcciones[0].insRp,
                 insRnP: null, // this.direcciones[0].insRnP,
-              });
+              });*/
             }
 
             l.dismiss();

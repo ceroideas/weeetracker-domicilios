@@ -75,7 +75,7 @@ export class OperativasRealizadasPage implements OnInit {
     this.consultasService.getOperativas(this.idTercero, this.idCentro).subscribe((res: any) => {
       console.log(res);
       this.operativas = res.operativas.reverse();
-      this.operativas_aux = res.operativas;
+      this.operativas_aux = res.operativas.reverse();
       this.visualizarTabla = true;
       this.usuarioService.cerrarSpinner();
     });

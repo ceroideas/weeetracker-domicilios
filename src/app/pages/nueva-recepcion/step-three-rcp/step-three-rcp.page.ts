@@ -232,6 +232,7 @@ export class StepThreeRcpPage implements OnInit {
         load.dismiss();
 
         localStorage.setItem('alt_title_sm','NUEVA RECEPCIÓN 3 - RAEE: Listado RAEE');
+        localStorage.setItem('alt_title_rd','NUEVA RECEPCIÓN 3 - RAEE: Nuevo RAEE');
         this.nav.navigateForward('/nueva-recogida/step-three/summary');
 
       })
@@ -257,6 +258,7 @@ export class StepThreeRcpPage implements OnInit {
   goSummary()
   {
     localStorage.setItem('alt_title_sm','NUEVA RECEPCIÓN 3 - RAEE: Listado RAEE');
+    localStorage.setItem('alt_title_rd','NUEVA RECEPCIÓN 3 - RAEE: Nuevo RAEE');
     this.nav.navigateForward('/nueva-recogida/step-three/summary');
   }
 

@@ -245,6 +245,7 @@ export class StepThreeEntPage implements OnInit {
         load.dismiss();
 
         localStorage.setItem('alt_title_sm','NUEVA ENTREGA 3 - RAEE: Listado RAEE');
+        localStorage.setItem('alt_title_rd_2','1');
         this.nav.navigateForward('/nueva-recogida/step-three/summary');
 
       })
@@ -268,6 +269,7 @@ export class StepThreeEntPage implements OnInit {
   goSummary()
   {
     localStorage.setItem('alt_title_sm','NUEVA ENTREGA 3 - RAEE: Listado RAEE');
+    localStorage.setItem('alt_title_rd_2','1');
     this.nav.navigateForward('/nueva-recogida/step-three/summary');
   }
 

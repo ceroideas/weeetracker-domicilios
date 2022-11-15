@@ -105,8 +105,12 @@
     "plugins": {
       "cordova-plugin-statusbar": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-geolocation": {},
-      "phonegap-plugin-barcodescanner": {},
+      "cordova-plugin-geolocation": {
+        "GPS_REQUIRED": "true"
+      },
+      "phonegap-plugin-barcodescanner": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
       "cordova-plugin-screen-orientation": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-device": {},
@@ -114,7 +118,9 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-android-permissions": {},
       "cordova-plugin-ftp": {},
-      "cordova-plugin-camera": {},
+      "cordova-plugin-camera": {
+        "ANDROIDX_CORE_VERSION": "1.6.+"
+      },
       "com-darryncampbell-cordova-plugin-intent": {},
       "cordova-plugin-nativeaudio": {}
     },
