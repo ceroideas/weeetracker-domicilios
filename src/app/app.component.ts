@@ -113,12 +113,22 @@ export class AppComponent {
               this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE).then(result => {
                 if (result.hasPermission) {
                   // code
-                  this.configXML();
+                  // this.configXML();
+                  this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.MANAGE_EXTERNAL_STORAGE).then(result => {
+                    if (result.hasPermission) {
+                      // code
+                      this.configXML();
+                    }
+                  });
                 }
               });
+
             }
           },
-          err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE)
+          err => {
+            this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE);
+            this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.MANAGE_EXTERNAL_STORAGE);
+          }
         );
 
       }else{
