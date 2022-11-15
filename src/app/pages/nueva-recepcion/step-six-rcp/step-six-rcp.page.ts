@@ -270,7 +270,7 @@ export class StepSixRcpPage implements OnInit {
     //Certificado
     certificado = {
       PidCertificado: this.myForm.value.certificado,
-      SidTipoCertificado: 2,
+      SidTipoCertificado: 3,
       SidSig: this.usuario.sidsig,
       Fecha: fecha,
       SidSolicitud: origen.pidSolicitud != "" ? origen.pidSolicitud : null,
