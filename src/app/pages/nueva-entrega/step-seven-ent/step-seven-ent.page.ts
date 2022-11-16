@@ -287,11 +287,18 @@ export class StepSevenEntPage implements OnInit {
       SidTipoCertificado: 2,
       SidSig: this.usuario.sidsig,
       Fecha: fecha,
+
       SidSolicitud: origen.pidSolicitud != "" ? origen.pidSolicitud : null,
+      
       SidTerceroSolicitante: this.usuario.tercero.PidTercero,
       SidDireccionTerceroSolicitante: this.usuario.dtercero,
+
       SidTerceroDestinatario: origen.sidTercero,
       SidDireccionTerceroDestinatario: origen.sidDireccionTercero,
+
+      SidTerceroEmisor: this.usuario.tercero.PidTercero,
+      SidDireccionTerceroEmisor: this.usuario.dtercero,
+
       SidEstadoCertificado: 0,
       SidFirmaProcedencia: firma_1.id,
       SidFirmaTransporte: firma_2.id,

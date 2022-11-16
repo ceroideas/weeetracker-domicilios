@@ -22,7 +22,7 @@ declare var moment:any;
 })
 export class StepThreeEndPage implements OnInit {
 
-  titulo = "NUEVA ENTREGA DORECTA 3 - Gestor Destino: Selección";
+  titulo = "NUEVA ENTREGA DIRECTA 3 - Gestor Destino: Selección";
   myForm: FormGroup;
   today = moment().format('Y-MM-DD');
 
@@ -202,28 +202,39 @@ export class StepThreeEndPage implements OnInit {
   }
 
   atras() {
-    if (!this.showList) {
+    
+    this.alertCtrl.create({message:"¿Está seguro de volver atrás? La información actual se perderá", buttons: [
+    {
+      text:"Si, regresar",
+      handler:()=>{
+
+        if (!this.showList) {
       
-      this.showList = true;
+          this.showList = true;
 
-      this.myForm.patchValue({
-        nombre_comercial:null,
-        // selecciona_provincia:"",
-        centro:null,
-        localidad:null,
-        direccion:null,
-        text_provincia:null,
-        provincia:null,
-        pais:null,
-        codNima:null,
-        insRP:null,
-        insRnP:null,
-      });
+          this.myForm.patchValue({
+            nombre_comercial:null,
+            // selecciona_provincia:"",
+            centro:null,
+            localidad:null,
+            direccion:null,
+            text_provincia:null,
+            provincia:null,
+            pais:null,
+            codNima:null,
+            insRP:null,
+            insRnP:null,
+          });
 
-      return false;
+          return false;
 
-    }
-    this._location.back();
+        }
+    
+        this.nav.navigateRoot('/home');
+      }
+    },{
+      text:"Cancelar"
+    }]}).then(a=>a.present())
   }
 
   /*nuevoOrigen()

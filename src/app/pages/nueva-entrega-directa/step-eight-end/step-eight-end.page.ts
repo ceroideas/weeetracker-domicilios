@@ -288,10 +288,15 @@ export class StepEightEndPage implements OnInit {
       SidSig: this.usuario.sidsig,
       Fecha: fecha,
       SidSolicitud: this.origen.sid,
+
       SidTerceroSolicitante: this.origen.tercero,
       SidDireccionTerceroSolicitante: this.origen.ssidDireccionTerceroOrigen,
       SidTerceroDestinatario: this.destino.sidTercero,
       SidDireccionTerceroDestinatario: this.destino.sidDireccionTercero,
+
+      SidTerceroEmisor: this.usuario.tercero.PidTercero,
+      SidDireccionTerceroEmisor: this.usuario.dtercero,
+
       SidEstadoCertificado: 0,
       SidFirmaProcedencia: firma_1.id,
       SidFirmaTransporte: firma_2.id,
@@ -379,7 +384,7 @@ export class StepEightEndPage implements OnInit {
 
     l.dismiss();
 
-    return false;
+    // return false;
 
     // let name_logs = moment().format('YYMMDDHHmmss')+'_'+String(this.usuario.terminal).padStart(4, '0')+'_LOG.txt';
     // let result = await this.consultas.uploadLog(name_logs,'/Logs');

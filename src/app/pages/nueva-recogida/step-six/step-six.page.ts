@@ -273,10 +273,16 @@ export class StepSixPage implements OnInit {
       SidSig: this.usuario.sidsig,
       Fecha: fecha,
       SidSolicitud: origen.pidSolicitud != "" ? origen.pidSolicitud : null,
+      
       SidTerceroSolicitante: origen.sidTercero,
       SidDireccionTerceroSolicitante: origen.sidDireccionTercero,
+
       SidTerceroDestinatario: this.usuario.tercero.PidTercero,
       SidDireccionTerceroDestinatario: this.usuario.dtercero,
+
+      SidTerceroEmisor: this.usuario.tercero.PidTercero,
+      SidDireccionTerceroEmisor: this.usuario.dtercero,
+
       SidEstadoCertificado: 0,
       SidFirmaProcedencia: firma_1.id,
       SidFirmaTransporte: firma_2.id,

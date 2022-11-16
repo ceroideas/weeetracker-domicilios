@@ -142,15 +142,19 @@ export class StepFourEndPage implements OnInit {
 
           l.dismiss();
 
+          if (data.contador > 1)
+          {
+            return this.alertCtrl.create({message:"El Residuo ya ha sido recogido y se encuentra en éste centro",buttons: ['Ok']}).then(a=>a.present());
+          }
+
           if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
             // return this.alertCtrl.create({message:"El Residuo ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
           }else{
             this.consultaService.createLogger('Residuo aún no recogido Success');
-            return this.alertCtrl.create({message:"El Residuo aún no ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
           }
 
-          if (data.raee) {
+          if (data.raee && data.raee.length) {
             // if (data.raee.sidFraccion != this.fraccion.pidFraccion ) {
             //   return this.alertCtrl.create({message:"La fracción de la etiqueta no corresponde con la seleccionada",buttons: ['Ok']}).then(a=>a.present());
             // }
@@ -158,7 +162,7 @@ export class StepFourEndPage implements OnInit {
 
             if (!result) {
               this.consultaService.createLogger('Residuo no puede ser entregado Success');
-              return this.alertCtrl.create({message:"No se puede Entregar esta etiqueta",buttons: ['Ok']}).then(a=>a.present());
+              return this.alertCtrl.create({message:"No se puede entregar esta etiqueta porque el destino no recoge la fracción",buttons: ['Ok']}).then(a=>a.present());
             }
 
             let raee = data.raee;
@@ -184,7 +188,7 @@ export class StepFourEndPage implements OnInit {
 
             // this.nav.navigateForward('/nueva-recogida/step-three/readed');
           }
-          localStorage.setItem('alt_title_rd','NUEVA ENTREGA DIRECTA 3 - RAEE: Nuevo RAEE');
+          localStorage.setItem('alt_title_rd','NUEVA ENTREGA DIRECTA 4 - RAEE: Nuevo RAEE');
           localStorage.setItem('alt_title_rd_3','1');
           this.nav.navigateForward('/nueva-recogida/step-three/readed');
 
@@ -303,7 +307,7 @@ export class StepFourEndPage implements OnInit {
   {
     return new Promise(resolve => {
 
-      this.consultaService.GetRaee2(i,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
+      this.consultaService.GetRaee(i,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
 
         this.loadingCtrl.dismiss();
 
@@ -338,15 +342,20 @@ export class StepFourEndPage implements OnInit {
             fracciones.push({id:j.SidFraccion,operacion:j.TipoOperacion, contenedor:j.SidTipoContenedor});
           }
 
+          if (data.contador > 1)
+          {
+            return this.alertCtrl.create({message:"El Residuo ya ha sido recogido y se encuentra en éste centro",buttons: ['Ok']}).then(a=>a.present());
+          }
+
           if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
           }else{
             this.consultaService.createLogger('Residuo aún no recogido Success');
-            this.alertCtrl.create({message:"El Residuo "+i+" aún no ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
-            return resolve(false);
+            // this.alertCtrl.create({message:"El Residuo "+i+" aún no ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
+            // return resolve(false);
           }
 
-          if (data.raee) {
+          if (data.raee && data.raee.length) {
 
             // if (data.raee.sidFraccion != this.fraccion.pidFraccion ) {
             //   return this.alertCtrl.create({message:"La fracción de la etiqueta no corresponde con la seleccionada",buttons: ['Ok']}).then(a=>a.present());

@@ -118,7 +118,7 @@ export class StepThreeRcpPage implements OnInit {
       this.loadingCtrl.create({message:"Comprobando etiqueta..."}).then(l=>{
         l.present();
         
-        this.consultaService.GetRaee(data).subscribe((data:any)=>{
+        this.consultaService.GetRaee(data,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
 
           let fracciones = [];
 
@@ -135,10 +135,10 @@ export class StepThreeRcpPage implements OnInit {
 
           l.dismiss();
 
-          if (data.recogido.length) {
-            this.consultaService.createLogger('Residuo ya recogido Success');
-            return this.alertCtrl.create({message:"El Residuo ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
-          }
+          // if (data.recogido.length) {
+          //   this.consultaService.createLogger('Residuo ya recogido Success');
+          //   return this.alertCtrl.create({message:"El Residuo ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
+          // }
 
           if (data.raee) {
             let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
@@ -266,7 +266,7 @@ export class StepThreeRcpPage implements OnInit {
   {
     return new Promise(resolve => {
 
-      this.consultaService.GetRaee(i).subscribe((data:any)=>{
+      this.consultaService.GetRaee(i,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
 
           var lectura = {
               etiqueta: i,
@@ -284,15 +284,19 @@ export class StepThreeRcpPage implements OnInit {
           let fracciones = [];
 
           let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
-          for (let j of resp) {
-            fracciones.push({id:j.SidFraccion,operacion:j.TipoOperacion, contenedor:j.SidTipoContenedor});
+          for (let i of resp) {
+            if (i.SidFraccion) {
+              fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
+            }else{
+              fracciones.push({id:i.sidFraccion,operacion:i.tipoOperacion, contenedor:i.sidTipoContenedor});
+            }
           }
 
-          if (data.recogido.length) {
-            this.consultaService.createLogger('Residuo ya recogido Success');
-            this.alertCtrl.create({message:"El Residuo "+i+" ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
-            return resolve(true);
-          }
+          // if (data.recogido.length) {
+          //   this.consultaService.createLogger('Residuo ya recogido Success');
+          //   this.alertCtrl.create({message:"El Residuo "+i+" ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
+          //   return resolve(true);
+          // }
 
           if (data.raee) {
             let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));

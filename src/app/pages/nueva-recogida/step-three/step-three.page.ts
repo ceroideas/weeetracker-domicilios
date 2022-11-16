@@ -118,7 +118,7 @@ export class StepThreePage implements OnInit {
       this.loadingCtrl.create({message:"Comprobando etiqueta..."}).then(l=>{
         l.present();
         
-        this.consultaService.GetRaee(data).subscribe((data:any)=>{
+        this.consultaService.GetRaee(data,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
 
           let fracciones = [];
 
@@ -236,7 +236,7 @@ export class StepThreePage implements OnInit {
   {
     return new Promise(resolve => {
 
-      this.consultaService.GetRaee(i).subscribe((data:any)=>{
+      this.consultaService.GetRaee(i,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
 
           var lectura = {
               etiqueta: i,
