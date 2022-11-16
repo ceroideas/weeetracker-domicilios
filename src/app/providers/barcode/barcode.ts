@@ -6,15 +6,19 @@
 import { Injectable } from '@angular/core';
 import { EventsService } from '../../services/events.service';
 import { Platform } from '@ionic/angular';
+import { Device } from '@awesome-cordova-plugins/device/ngx';
 
 @Injectable()
 export class BarcodeProvider {
 
   private requestResultCodes = "false";
 
-  constructor(public events: EventsService, private platform: Platform) {
+  constructor(public events: EventsService, private platform: Platform, private device: Device) {
 
     this.platform.ready().then(()=>{
+      if (!(this.device.manufacturer.toLowerCase().includes("zebra") || this.device.manufacturer.toLowerCase().includes("motorola solutions"))) {
+        return false;
+      }
       let constructorInstance = this;
 
       //  The Datawedge service will respond via implicit broadcasts intents.  

@@ -19,7 +19,7 @@ import { NativeAudio } from '@awesome-cordova-plugins/native-audio/ngx';
   selector: 'app-qr',
   templateUrl: './qr.page.html',
   styleUrls: ['./qr.page.scss'],
-  providers: [BarcodeScanner, BarcodeProvider, Device]
+  providers: [BarcodeScanner, BarcodeProvider]
 })
 export class QrPage implements OnInit {
 

@@ -22,7 +22,7 @@ import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions
 
 import { NativeAudio } from '@awesome-cordova-plugins/native-audio/ngx';
 
-// import { BarcodeProvider } from './providers/barcode/barcode';
+import { BarcodeProvider } from './providers/barcode/barcode';
 
 
 declare var $:any;
@@ -30,7 +30,7 @@ declare var $:any;
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  providers: [File,WebView,/*FileTransfer,*/AndroidPermissions, /*BarcodeProvider*/]
+  providers: [File,WebView,/*FileTransfer,*/AndroidPermissions, BarcodeProvider]
 })
 
 export class AppComponent {
@@ -59,7 +59,7 @@ export class AppComponent {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private nativeAudio: NativeAudio,
-    // private barcodeProvider: BarcodeProvider,
+    private barcodeProvider: BarcodeProvider,
     private toastController: ToastController,
     private alertController: AlertController,
     private platform: Platform,
@@ -114,8 +114,6 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(async () => {
-
-      this.initZebra();
 
       // this.consultas.createLogger({nombre:"jorge", apellido:"solano"});
        //Language
@@ -186,6 +184,8 @@ export class AppComponent {
         this.fileNavigator.checkDir(this.fileNavigator.externalRootDirectory,'CONFIG').then(_ => {
 
           localStorage.setItem('zebra','1');
+
+          this.initZebra();
 
           console.log('directorio encontrado '+(this.webview.convertFileSrc(path)) + path.replace('file://','_app_file_'))
 
@@ -280,7 +280,7 @@ export class AppComponent {
   initZebra()
   {
     //  Determine the version.  We can add additional functionality if a more recent version of the DW API is present
-      /*this.barcodeProvider.sendCommand("com.symbol.datawedge.api.GET_VERSION_INFO", "");
+      this.barcodeProvider.sendCommand("com.symbol.datawedge.api.GET_VERSION_INFO", "");
 
 
       ////////////////////////////
@@ -442,12 +442,12 @@ export class AppComponent {
         this.uiDatawedgeVersionAttention = false;
 
         this.changeDetectorRef.detectChanges();
-      });*/
+      });
   }
 
   //  Function to handle changes in the decoder checkboxes.  
   //  Note: SET_CONFIG only available on DW 6.4+ per the docs
-  /*public setDecoders() {
+  public setDecoders() {
     var paramList = {
       "scanner_selection": "auto",
       "decoder_ean8": "" + this.ean8Decoder,
@@ -519,7 +519,7 @@ export class AppComponent {
     this.barcodeProvider.sendCommand("com.symbol.datawedge.api.SWITCH_SCANNER", localScannerIndex + "");
     //  Enumerate the scanner - this will update the actual scanner in use so we do not have to worry about whether SWITCH_SCANNER succeeded
     this.barcodeProvider.sendCommand("com.symbol.datawedge.api.ENUMERATE_SCANNERS", "");
-  }*/
+  }
 
   playAudio()
   {
