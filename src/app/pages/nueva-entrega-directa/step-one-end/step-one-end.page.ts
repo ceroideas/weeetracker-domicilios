@@ -65,6 +65,7 @@ export class StepOneEndPage implements OnInit {
 
       localStorage.removeItem('albaran_origen');
       localStorage.removeItem('codigo_externo');
+      localStorage.removeItem('solicitud');
 
       localStorage.removeItem('alt_title_rd');
       localStorage.removeItem('alt_title_sm');

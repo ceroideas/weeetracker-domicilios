@@ -154,7 +154,7 @@ export class StepFourEndPage implements OnInit {
             this.consultaService.createLogger('Residuo aún no recogido Success');
           }
 
-          if (data.raee && data.raee.length) {
+          if (data.raee && data.raee.length != 0) {
             // if (data.raee.sidFraccion != this.fraccion.pidFraccion ) {
             //   return this.alertCtrl.create({message:"La fracción de la etiqueta no corresponde con la seleccionada",buttons: ['Ok']}).then(a=>a.present());
             // }
@@ -355,7 +355,7 @@ export class StepFourEndPage implements OnInit {
             // return resolve(false);
           }
 
-          if (data.raee && data.raee.length) {
+          if (data.raee && data.raee.length != 0) {
 
             // if (data.raee.sidFraccion != this.fraccion.pidFraccion ) {
             //   return this.alertCtrl.create({message:"La fracción de la etiqueta no corresponde con la seleccionada",buttons: ['Ok']}).then(a=>a.present());

@@ -84,8 +84,8 @@ export class PesarRaeesPage implements OnInit {
       {
         if (j.x && j.y) {
           console.log('tiene ambas, tiene peso');
-          j.x.peso = j.y.peso;
-          this.certificados.push(j.x);
+          // j.x.peso = j.y.peso;
+          // this.certificados.push(j.x);
         }else{
           console.log('no tiene peso')
           j.x.peso = 0;
