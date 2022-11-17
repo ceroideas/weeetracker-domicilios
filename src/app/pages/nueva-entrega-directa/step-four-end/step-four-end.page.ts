@@ -120,7 +120,7 @@ export class StepFourEndPage implements OnInit {
       this.loadingCtrl.create({message:"Comprobando etiqueta..."}).then(l=>{
         l.present();
         
-        this.consultaService.GetRaee2(data,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
+        this.consultaService.GetRaee3(data,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
 
           let fracciones = [];
 
@@ -142,7 +142,7 @@ export class StepFourEndPage implements OnInit {
 
           l.dismiss();
 
-          if (data.contador > 1)
+          if (data.contador > 0)
           {
             return this.alertCtrl.create({message:"El Residuo ya ha sido recogido y se encuentra en éste centro",buttons: ['Ok']}).then(a=>a.present());
           }
@@ -307,7 +307,7 @@ export class StepFourEndPage implements OnInit {
   {
     return new Promise(resolve => {
 
-      this.consultaService.GetRaee(i,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
+      this.consultaService.GetRaee3(i,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
 
         this.loadingCtrl.dismiss();
 
@@ -342,9 +342,10 @@ export class StepFourEndPage implements OnInit {
             fracciones.push({id:j.SidFraccion,operacion:j.TipoOperacion, contenedor:j.SidTipoContenedor});
           }
 
-          if (data.contador > 1)
+          if (data.contador > 0)
           {
-            return this.alertCtrl.create({message:"El Residuo ya ha sido recogido y se encuentra en éste centro",buttons: ['Ok']}).then(a=>a.present());
+            this.alertCtrl.create({message:"El Residuo "+data.raee.pidRaee+" ya ha sido recogido y se encuentra en éste centro",buttons: ['Ok']}).then(a=>a.present());
+            return resolve(false);
           }
 
           if (data.recogido.length) {
@@ -364,7 +365,8 @@ export class StepFourEndPage implements OnInit {
 
             if (!result) {
               this.consultaService.createLogger('Residuo no puede ser entregado Success');
-              return this.alertCtrl.create({message:"No se puede Entregar esta etiqueta",buttons: ['Ok']}).then(a=>a.present());
+              this.alertCtrl.create({message:"No se puede Entregar esta etiqueta",buttons: ['Ok']}).then(a=>a.present());
+              return resolve(false);
             }
 
             let raee = data.raee;

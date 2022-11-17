@@ -1,7 +1,7 @@
 <ion-app>
   <ion-router-outlet></ion-router-outlet>
 
-  <ion-list *ngIf="zebra" style="display: none;">
+  <!-- <ion-list *ngIf="zebra" style="display: none;">
     <ion-item no-lines>
       <ion-label position="stacked" color="primary">DataWedge version:</ion-label>
       <ion-textarea rows="2" [ngClass]="{'attention' : uiDatawedgeVersionAttention}" [value]="dataWedgeVersion" [readonly]=true></ion-textarea>
@@ -56,13 +56,5 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-
-    <!-- <ion-item-divider color="light">
-      Scanned Barcodes
-    </ion-item-divider>
-    <ion-item no-lines *ngFor="let scan of scans">
-      <ion-label position="stacked" color="primary">{{ scan.timeAtDecode }} / {{ scan.type }}</ion-label>
-      <H1 item-content>{{ scan.data }}</H1>
-    </ion-item> -->
-  </ion-list>
+  </ion-list> -->
 </ion-app>
