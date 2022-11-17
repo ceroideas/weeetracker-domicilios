@@ -75,6 +75,7 @@ export class BarcodeProvider {
           else if (!intent.extras.hasOwnProperty('RESULT_INFO')) {
             //  A barcode has been scanned
             console.log('a barcode has been scanned');
+            // alert('a barcode has been scanned');
             this.events.publish('data:scan', {scanData: intent, time: new Date().toLocaleTimeString()});
           }
         }

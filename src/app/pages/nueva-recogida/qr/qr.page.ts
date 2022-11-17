@@ -57,15 +57,24 @@ export class QrPage implements OnInit {
     private alertController: AlertController, private platform: Platform, private toastController: ToastController
     ) {
 
-    this.platform.ready().then(()=>{
+    // this.events.destroy('etiquetaLeida');
+
+    this.events.destroy('data:scan');
+
+    this.initQrRead();
+
+  }
+
+  initQrRead()
+  {
+    // this.platform.ready().then(()=>{
 
       //  Check manufacturer.  Exit if this app is not running on a Zebra device
-      console.log(this.device.manufacturer);
+      // console.log("Device manufacturer is: " + this.device.manufacturer);
       if (!this.device.manufacturer) {
         this.zebra = false;
         return this.prepareQrScanner();
       }
-      console.log("Device manufacturer is: " + this.device.manufacturer);
       // if (!(this.device.manufacturer.toLowerCase().includes("zebra") || this.device.manufacturer.toLowerCase().includes("motorola solutions"))) {
       if (!localStorage.getItem('zebra')) {
         this.zebra = false;
@@ -74,8 +83,27 @@ export class QrPage implements OnInit {
 
       this.zebra = true;
 
-      this.events.subscribe('etiquetaLeida',async (data)=>{
-        this.etiqueta = data;
+      // A scan has been received
+      this.events.subscribe('data:scan', async (data: any) => {
+
+        console.log('scanned data ok');
+        // Update the list of scanned barcodes
+        let scannedData = data.scanData.extras["com.symbol.datawedge.data_string"];
+        let scannedType = data.scanData.extras["com.symbol.datawedge.label_type"];
+
+        // this.toastController.create({message: JSON.stringify(data.scanData), duration:5000}).then(t=>t.present());
+
+        // this.scans.unshift({ "data": scannedData, "type": scannedType, "timeAtDecode": data.time });
+
+        if (!scannedData || scannedData == "") {
+          return false;
+        }
+
+        this.playAudio();
+
+        // this.events.publish('etiquetaLeida',scannedData);
+
+        this.etiqueta = scannedData;
 
         if (localStorage.getItem('read_type') == 'grupal') {
 
@@ -135,10 +163,19 @@ export class QrPage implements OnInit {
           }
         }
 
-      })
+        // On older devices, if a scan is received we can assume the profile was correctly configured manually
+        // so remove the yellow highlight.
+        // this.uiDatawedgeVersionAttention = false;
 
-    })
+        this.changeDetectorRef.detectChanges();
+      });
 
+      // this.events.subscribe('etiquetaLeida',async (data)=>{
+        
+
+      // })
+
+    // })
   }
 
   async ngOnInit() {
