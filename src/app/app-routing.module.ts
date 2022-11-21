@@ -31,6 +31,10 @@ const routes: Routes = [
     path: 'nueva-entrega-directa',
     loadChildren: () => import('./pages/nueva-entrega-directa/nueva-entrega-directa.module').then( m => m.NuevaEntregaDirectaPageModule)
   },
+  {
+    path: 'reutilizaciones',
+    loadChildren: () => import('./pages/reutilizaciones/reutilizaciones.module').then( m => m.ReutilizacionesPageModule)
+  },
 ];
 
 /*const routes: Routes = [

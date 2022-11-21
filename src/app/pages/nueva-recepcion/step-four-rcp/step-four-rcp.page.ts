@@ -52,7 +52,8 @@ export class StepFourRcpPage implements OnInit {
     private storage: Storage) {
 
     this.myForm = this.fb.group({
-      origen: [this.origen.centro, Validators.required],
+      // origen: [this.origen.centro, Validators.required],
+      origen: ['', Validators.required],
       gestor_recogida: ['', Validators.required],
       nombre: ['', Validators.required],
       firma: ['', Validators.required],
@@ -84,7 +85,7 @@ export class StepFourRcpPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
-    this.myForm.patchValue({gestor_recogida: this.usuario.tercero.Nombre});
+    this.myForm.patchValue({gestor_recogida: this.origen.centro, origen: this.usuario.tercero.Nombre});
     console.log(this.usuario);
   }
 

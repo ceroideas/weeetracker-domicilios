@@ -212,6 +212,13 @@ export class PesarRaeesPage implements OnInit {
             pesoCertificado = this.pesoFraccion;
           }
 
+          for(let i of pesoCertificado)
+          {
+            if (i.peso == 0 || !i.peso) {
+              return this.alertCtrl.create({message:"Coloque un peso correcto", buttons: ["OK"]}).then(a=>a.present());
+            }
+          }
+
           this.loadingCtrl.create().then(l=>{
             l.present();
 
