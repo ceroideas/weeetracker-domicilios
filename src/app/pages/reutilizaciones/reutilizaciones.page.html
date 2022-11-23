@@ -5,25 +5,27 @@
     <br>
 
     <ion-row *ngIf="usuario">
-        <!-- *ngIf="(usuario?.responsabilidades | checkResp:'RUD') ||
-            (usuario?.responsabilidades | checkResp:'REU')" -->
         <ion-col size="6"
-            >
+            *ngIf="(usuario?.responsabilidades | checkResp:'RCR') || (usuario?.responsabilidades | checkResp:'RSR')">
+            <ion-button [routerLink]="['/reutilizaciones/nueva-recogida-reutilizacion']" class="ecobtn"
+            size="large" style="font-size: 12px;" expand="block">NUEVA RECOGIDA <br> DE REUTILIZACIÓN</ion-button>
+        </ion-col>
+
+        <ion-col size="6"
+            *ngIf="(usuario?.responsabilidades | checkResp:'RCR')">
             <ion-button [routerLink]="['/reutilizaciones/nueva-reutilizacion']" class="ecobtn"
             size="large" style="font-size: 12px;" expand="block">NUEVA REUTILIZACIÓN</ion-button>
         </ion-col>
 
 
-        <!-- *ngIf="(usuario?.responsabilidades | checkResp:'REP')" -->
         <ion-col size="6"
-        >
+            *ngIf="(usuario?.responsabilidades | checkResp:'REP')">
             <ion-button [routerLink]="['/reutilizaciones/nueva-reutilizacion-ent']" class="ecobtn"
             size="large" style="font-size: 12px;" expand="block">NUEVA REUTILIZACIÓN <br> ENTREGA</ion-button>
         </ion-col>
 
-        <!-- *ngIf="(usuario?.responsabilidades | checkResp:'REN')" -->
         <ion-col size="6"
-        >
+            *ngIf="(usuario?.responsabilidades | checkResp:'REN')">
             <ion-button [routerLink]="['/reutilizaciones/nueva-reutilizacion-end']" class="ecobtn"
             size="large" style="font-size: 12px;" expand="block">NUEVA REUTILIZACIÓN <br> ENTREGA DIRECTA</ion-button>
         </ion-col>

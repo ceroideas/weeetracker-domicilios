@@ -7,7 +7,14 @@ const routes: Routes = [
   {
     path: '',
     component: ReutilizacionesPage
-  }
+  },{
+    path: 'nueva-reutilizacion',
+    loadChildren: () => import('./nueva-reutilizacion/nueva-reutilizacion.module').then( m => m.NuevaReutilizacionPageModule)
+  },
+  {
+    path: 'nueva-recogida-reutilizacion',
+    loadChildren: () => import('./nueva-recogida-reutilizacion/nueva-recogida-reutilizacion.module').then( m => m.NuevaRecogidaReutilizacionPageModule)
+  },
 ];
 
 @NgModule({

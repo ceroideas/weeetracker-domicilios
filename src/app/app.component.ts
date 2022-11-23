@@ -80,6 +80,10 @@ export class AppComponent {
     public consultas: ConsultasService
   ) {
 
+    this.consultas.getVersion().subscribe((data:any)=>{
+      console.log(data)
+    })
+
     this.nativeAudio.preloadSimple('uniqueId1', 'assets/beep.mp3').then(()=>{
       console.log('Beep loaded ok')
     }, (err)=>{
@@ -136,18 +140,28 @@ export class AppComponent {
           result => {
             if (result.hasPermission) {
               // code
+              /*this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.MANAGE_EXTERNAL_STORAGE).then(result => {
+                if (result.hasPermission) {
+                  // code
+                  this.configXML();
+                }
+              },err=>{
+                this.configXML();
+              });*/
               this.configXML();
             } else {
               this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE).then(result => {
                 if (result.hasPermission) {
                   // code
-                  // this.configXML();
-                  this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.MANAGE_EXTERNAL_STORAGE).then(result => {
+                  this.configXML();
+                  /*this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.MANAGE_EXTERNAL_STORAGE).then(result => {
                     if (result.hasPermission) {
                       // code
                       this.configXML();
                     }
-                  });
+                  },err=>{
+                    this.configXML();
+                  });*/
                 }
               });
 
@@ -155,7 +169,7 @@ export class AppComponent {
           },
           err => {
             this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE);
-            this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.MANAGE_EXTERNAL_STORAGE);
+            // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.MANAGE_EXTERNAL_STORAGE);
           }
         );
 

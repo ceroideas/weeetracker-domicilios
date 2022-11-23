@@ -341,6 +341,14 @@ export class EditReadPage implements OnInit {
   loadFracciones(f)
   {
     let operacion = localStorage.getItem('tipo_operativa');
+
+    if (operacion == 'RUD') {
+      operacion = 'RED';
+    }
+    if (operacion == 'REU') {
+      operacion = 'REF';
+    }
+    
     function filtro(a,b,c)
     {
       for(let j of f)

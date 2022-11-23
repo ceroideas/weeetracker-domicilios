@@ -1,0 +1,54 @@
+<app-header  [titulo]="titulo"></app-header>
+
+<ion-content color="medium" fullscreen="fullscreen" padding="padding">
+
+  <form [formGroup]="myForm" #formulario="ngForm" novalidate>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <!-- <ion-label>Fecha de recogida:</ion-label> -->
+          <ion-radio-group formControlName="type">
+            <ion-item lines="none">
+              <ion-label>Individual</ion-label>
+              <ion-radio slot="start" value="individual"></ion-radio>
+
+              <!-- <ion-input slot="end" formControlName="request_n" placeholder="Nº"> -->
+                
+              <!-- </ion-input> -->
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label>Agrupada</ion-label>
+              <ion-radio slot="start" value="grupal"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+
+          <ion-button *ngIf="lecturas?.length" color="dark" size="medium"
+          (click)="goSummary()"
+          expand="block">Ver resumen de lecturas</ion-button>
+        </ion-col>
+        <!-- <p class="error" ion-text *ngIf="myForm.get('date').hasError('required') && myForm.get('date').touched;">
+          {{ 'FORMULARIO.REQUERIDO' | translate }}</p> -->
+
+      </ion-row>
+
+    </ion-grid>
+  </form>
+
+</ion-content>
+
+<ion-footer no-shadow no-border>
+        <ion-buttons>
+            <!-- <ion-button (click)="logOut()" *ngIf="!submenu" class="derecha">
+                <span><ion-img src="../../assets/img/Cerrar_sesion.png"></ion-img></span>
+            </ion-button> -->
+            <ion-button class="derecha" (click)="adelante()">
+                <!-- <ion-icon name="arrow-round-back"></ion-icon> -->
+                <span><ion-img src="../../assets/img/Derecha.png"></ion-img></span>
+            </ion-button>
+            <ion-button class="izquierda" (click)="atras()">
+                <!-- <ion-icon  name="arrow-round-back"></ion-icon> -->
+                <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+            </ion-button>
+        </ion-buttons>
+        <img src="../../../assets/img/logo-ecolec.png">
+</ion-footer>

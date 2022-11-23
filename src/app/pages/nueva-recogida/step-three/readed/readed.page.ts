@@ -288,6 +288,10 @@ export class ReadedPage implements OnInit {
   loadFracciones(f)
   {
     let operacion = localStorage.getItem('tipo_operativa');
+
+    if (operacion == 'RUD' || operacion == 'REU') {
+      operacion = 'RCR';
+    }
     function filtro(a,b,c)
     {
       for(let j of f)
@@ -485,6 +489,8 @@ export class ReadedPage implements OnInit {
         localStorage.setItem('alt_title_sm','NUEVA ENTREGA 3 - RAEE: Listado RAEE');
       }else if (localStorage.getItem('alt_title_rd_3')) {
         localStorage.setItem('alt_title_sm','NUEVA ENTREGA DIRECTA 3 - RAEE: Listado RAEE');
+      }else if (localStorage.getItem('alt_title_rd_4')) {
+        localStorage.setItem('alt_title_sm','NUEVA REUTILIZACIÓN 3 - RAEE: Listado RAEE');
       }else if (localStorage.getItem('alt_title_rd')) {
         localStorage.setItem('alt_title_sm','NUEVA RECEPCIÓN 3 - RAEE: Listado RAEE');
       }else{

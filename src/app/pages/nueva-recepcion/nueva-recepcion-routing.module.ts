@@ -17,10 +17,6 @@ const routes: Routes = [
     loadChildren: () => import('./step-two-rcp/step-two-rcp.module').then( m => m.StepTwoRcpPageModule)
   },
   {
-    path: 'step-two-alt-rcp',
-    loadChildren: () => import('./step-two-alt-rcp/step-two-alt-rcp.module').then( m => m.StepTwoAltRcpPageModule)
-  },
-  {
     path: 'step-three-rcp',
     loadChildren: () => import('./step-three-rcp/step-three-rcp.module').then( m => m.StepThreeRcpPageModule)
   },
@@ -36,10 +32,6 @@ const routes: Routes = [
     path: 'step-six-rcp',
     loadChildren: () => import('./step-six-rcp/step-six-rcp.module').then( m => m.StepSixRcpPageModule)
   },
-  {
-    path: 'step-one-alt-rcp',
-    loadChildren: () => import('./step-one-alt-rcp/step-one-alt-rcp.module').then( m => m.StepOneAltRcpPageModule)
-  }
 ];
 
 @NgModule({

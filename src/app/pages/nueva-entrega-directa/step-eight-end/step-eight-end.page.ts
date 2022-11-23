@@ -284,7 +284,7 @@ export class StepEightEndPage implements OnInit {
     //Certificado
     certificado = {
       PidCertificado: this.myForm.value.certificado,
-      SidTipoCertificado: 3,
+      SidTipoCertificado: 7,
       SidSig: this.usuario.sidsig,
       Fecha: fecha,
       SidSolicitud: this.origen.sid,
