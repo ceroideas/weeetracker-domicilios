@@ -95,6 +95,8 @@ export class StepOneEntPage implements OnInit {
       localStorage.removeItem('alt_title_rd_3');
       localStorage.removeItem('alt_title_rd_4');
       localStorage.removeItem('alt_title_rd_5');
+      localStorage.removeItem('alt_title_rd_6');
+      localStorage.removeItem('alt_title_rd_7');
 
     });
   }

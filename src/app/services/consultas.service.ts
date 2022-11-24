@@ -105,6 +105,10 @@ export class ConsultasService {
   getOperativas(idTercero, idCentro) {
     return this.http.get(apiUrl + '/solicitud/operativas/'+idTercero+'/'+idCentro);
   }
+
+  getReutilizaciones(idTercero, idCentro) {
+    return this.http.get(apiUrl + '/solicitud/reutilizaciones/'+idTercero+'/'+idCentro);
+  }
   
 
   contenedores() {
@@ -153,11 +157,11 @@ export class ConsultasService {
   centrosGestores(id1,id2){
     return this.http.get(apiUrl + '/solicitud/centrosGestores/'+id1+'/'+id2);
   }
-  centrosEntrega(id1,id2){
-    return this.http.get(apiUrl + '/solicitud/centrosEntrega/'+id1+'/'+id2);
+  centrosEntrega(id1,id2,id3){
+    return this.http.get(apiUrl + '/solicitud/centrosEntrega/'+id1+'/'+id2+'/'+id3);
   }
-  direccionesEntrega(id1,id2,id3){
-    return this.http.get(apiUrl + '/solicitud/direccionesEntrega/'+id1+'/'+id2+'/'+id3);
+  direccionesEntrega(id1,id2,id3,id4){
+    return this.http.get(apiUrl + '/solicitud/direccionesEntrega/'+id1+'/'+id2+'/'+id3+'/'+id4);
   }
   origenEntregaDirecta(id1,id2){
     return this.http.get(apiUrl + '/solicitud/origenEntregaDirecta/'+id1+'/'+id2);

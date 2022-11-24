@@ -100,6 +100,14 @@ export class SummaryPage implements OnInit {
       this.nav.navigateRoot('/reutilizaciones/nueva-reutilizacion/step-four-reu');
     }else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_5')) {
       this.nav.navigateRoot('/reutilizaciones/nueva-recogida-reutilizacion/step-four-rre');
+    }else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_6')) {
+
+      this.nav.navigateRoot('/reutilizaciones/nueva-reutilizacion-entrega/step-four-rep');
+
+    }else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_7')) {
+
+      this.nav.navigateRoot('/reutilizaciones/nueva-reutilizacion-entrega-directa/step-four-ren');
+
     }else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd')) {
       this.nav.navigateForward('/nueva-recepcion/step-four-rcp');
     }else{
@@ -120,7 +128,17 @@ export class SummaryPage implements OnInit {
     }else if(localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_4')){
       this.nav.navigateRoot('/reutilizaciones/nueva-reutilizacion/step-three-reu');
     }else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_5')) {
+
       this.nav.navigateRoot('/reutilizaciones/nueva-recogida-reutilizacion/step-four-rre');
+
+    }else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_6')) {
+      
+      this.nav.navigateRoot('/reutilizaciones/nueva-reutilizacion-entrega/step-four-rep');
+
+    }else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_7')) {
+      
+      this.nav.navigateRoot('/reutilizaciones/nueva-reutilizacion-entrega-directa/step-four-ren');
+
     }else if(localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd')){
       this.nav.navigateRoot('/nueva-recepcion/step-three-rcp');
     }else{
@@ -171,6 +189,10 @@ export class SummaryPage implements OnInit {
       localStorage.setItem('alt_title_ed','NUEVA REUTILIZACIÓN 3 - RAEE: Editar RAEE')
     } else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_5')) {
       localStorage.setItem('alt_title_ed','NUEVA RECOGIDA DE REUTILIZACIÓN 3 - RAEE: Editar RAEE')
+    } else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_6')) {
+      localStorage.setItem('alt_title_ed','NUEVA REUTILIZACIÓN ENTREGA 3 - RAEE: Editar RAEE')
+    } else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_7')) {
+      localStorage.setItem('alt_title_ed','NUEVA REUTILIZACIÓN ENTREGA DIRECTA 3 - RAEE: Editar RAEE')
     } else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd')) {
       localStorage.setItem('alt_title_ed','NUEVA RECEPCIÓN 3 - RAEE: Editar RAEE')
     } else {

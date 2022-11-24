@@ -15,6 +15,14 @@ const routes: Routes = [
     path: 'nueva-recogida-reutilizacion',
     loadChildren: () => import('./nueva-recogida-reutilizacion/nueva-recogida-reutilizacion.module').then( m => m.NuevaRecogidaReutilizacionPageModule)
   },
+  {
+    path: 'nueva-reutilizacion-entrega',
+    loadChildren: () => import('./nueva-reutilizacion-entrega/nueva-reutilizacion-entrega.module').then( m => m.NuevaReutilizacionEntregaPageModule)
+  },
+  {
+    path: 'reutilizaciones-realizadas',
+    loadChildren: () => import('./reutilizaciones-realizadas/reutilizaciones-realizadas.module').then( m => m.ReutilizacionesRealizadasPageModule)
+  },
 ];
 
 @NgModule({

@@ -289,9 +289,9 @@ export class ReadedPage implements OnInit {
   {
     let operacion = localStorage.getItem('tipo_operativa');
 
-    if (operacion == 'RUD' || operacion == 'REU') {
+    /*if (operacion == 'RUD' || operacion == 'REU') {
       operacion = 'RCR';
-    }
+    }*/
     function filtro(a,b,c)
     {
       for(let j of f)

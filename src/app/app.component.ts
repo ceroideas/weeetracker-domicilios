@@ -24,6 +24,7 @@ import { NativeAudio } from '@awesome-cordova-plugins/native-audio/ngx';
 
 import { BarcodeProvider } from './providers/barcode/barcode';
 
+import { Device } from '@awesome-cordova-plugins/device/ngx';
 
 declare var $:any;
 
@@ -57,6 +58,7 @@ export class AppComponent {
   /**/
 
   constructor(
+    private device: Device,
     private changeDetectorRef: ChangeDetectorRef,
     private nativeAudio: NativeAudio,
     private barcodeProvider: BarcodeProvider,
@@ -81,7 +83,11 @@ export class AppComponent {
   ) {
 
     this.consultas.getVersion().subscribe((data:any)=>{
-      console.log(data)
+      if (data.v.length && !data.v[0].activa) {
+        this.alertController.create({message: 'Su versión esta desactualizada póngase en contacto con el CAU para actualizarla', 
+          buttons: ["Aceptar"]
+        }).then(a=>a.present());
+      }
     })
 
     this.nativeAudio.preloadSimple('uniqueId1', 'assets/beep.mp3').then(()=>{
@@ -136,44 +142,34 @@ export class AppComponent {
 
       if (this.platform.is('cordova')) {
 
+        console.log('is cordova')
+
         this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE).then(
           result => {
             if (result.hasPermission) {
               // code
-              /*this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.MANAGE_EXTERNAL_STORAGE).then(result => {
-                if (result.hasPermission) {
-                  // code
-                  this.configXML();
-                }
-              },err=>{
-                this.configXML();
-              });*/
+              console.log('has read permission')
               this.configXML();
             } else {
               this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE).then(result => {
                 if (result.hasPermission) {
                   // code
+                  console.log('has read permission 2')
                   this.configXML();
-                  /*this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.MANAGE_EXTERNAL_STORAGE).then(result => {
-                    if (result.hasPermission) {
-                      // code
-                      this.configXML();
-                    }
-                  },err=>{
-                    this.configXML();
-                  });*/
                 }
               });
 
             }
           },
           err => {
+            console.log('warning no permission')
             this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE);
-            // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.MANAGE_EXTERNAL_STORAGE);
           }
         );
 
       }else{
+
+        console.log('is desktop')
 
         setTimeout(()=>{
           localStorage.removeItem('config');
@@ -194,6 +190,7 @@ export class AppComponent {
       if (!a) {
       let path = this.fileNavigator.externalRootDirectory+'CONFIG/CONFIG.XML';
         // path = this.webview.convertFileSrc(path);
+      console.log(path)
         
         this.fileNavigator.checkDir(this.fileNavigator.externalRootDirectory,'CONFIG').then(_ => {
 
@@ -201,7 +198,9 @@ export class AppComponent {
 
           this.initZebra();
 
-          console.log('directorio encontrado '+(this.webview.convertFileSrc(path)) + path.replace('file://','_app_file_'))
+          console.log(this.device.version);
+
+          console.log('directorio encontrado ' /*+(this.webview.convertFileSrc(path))*/ + path.replace('file://','_app_file_'));
 
           this.loadingCtrl.create({message:"Comprobando PDA"}).then(l=>{
             l.present();

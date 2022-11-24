@@ -96,7 +96,7 @@ export class StepTwoEntPage implements OnInit {
       // this.mostrarNuevo = false;
       let fr = JSON.parse(localStorage.getItem('fraccion_seleccionada'))
 
-      this.consultaService.centrosEntrega(this.usuario.dtercero,fr.pidFraccion).subscribe((data:any)=>{
+      this.consultaService.centrosEntrega(this.usuario.dtercero,fr.pidFraccion,'REX').subscribe((data:any)=>{
 
         let aux = data.centros;
 
@@ -468,7 +468,7 @@ export class StepTwoEntPage implements OnInit {
 
       let fr = JSON.parse(localStorage.getItem('fraccion_seleccionada'))
 
-      this.consultaService.direccionesEntrega(id,this.usuario.dtercero,fr.pidFraccion).subscribe((data:any)=>{
+      this.consultaService.direccionesEntrega(id,this.usuario.dtercero,fr.pidFraccion,'REX').subscribe((data:any)=>{
 
         this.consultaService.createLogger('Informacion del Centro Success');
 
