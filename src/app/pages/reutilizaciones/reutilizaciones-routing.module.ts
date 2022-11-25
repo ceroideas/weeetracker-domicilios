@@ -23,6 +23,10 @@ const routes: Routes = [
     path: 'reutilizaciones-realizadas',
     loadChildren: () => import('./reutilizaciones-realizadas/reutilizaciones-realizadas.module').then( m => m.ReutilizacionesRealizadasPageModule)
   },
+  {
+    path: 'pesar-reutilizaciones',
+    loadChildren: () => import('./pesar-reutilizaciones/pesar-reutilizaciones.module').then( m => m.PesarReutilizacionesPageModule)
+  },
 ];
 
 @NgModule({

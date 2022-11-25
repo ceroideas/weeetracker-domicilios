@@ -53,6 +53,9 @@ export class ConsultasService {
   RaeesDia(dia: string, centro: number) {
     return this.http.get(apiUrl + '/solicitud/RaeesDia/'+dia+'/'+centro);
   }
+  RaeesDia2(dia: string, centro: number) {
+    return this.http.get(apiUrl + '/solicitud/RaeesDia2/'+dia+'/'+centro);
+  }
 
   getConsultaResiduo(idTercero, idCentro, idResiduo) {
     let residuo = { idTercero: idTercero, idCentro: idCentro, idResiduo: idResiduo };

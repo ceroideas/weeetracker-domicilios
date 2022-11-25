@@ -1,0 +1,194 @@
+<app-header [titulo]="titulo"></app-header>
+
+<ion-content padding color="medium"  fullscreen="fullscreen">
+
+  <ion-grid *ngIf="!irPesar">
+
+    <ion-row>
+      
+      <ion-col size="4">
+        <ion-label class="left-label">Nº Certificado:</ion-label>
+      </ion-col>
+      <ion-col size="5">
+        <ion-input class="ion-no-margin mb-2" [(ngModel)]="certificado"></ion-input>
+      </ion-col>
+      <ion-col size="3">
+        <ion-button size="small" (click)="enterFilter()" color="primary">Filtrar</ion-button>
+      </ion-col>
+
+
+      <ion-col size="12">
+        <ion-label (click)="showCalendar()" class="left-label">Fecha:
+          <ion-icon style="font-size: 18px !important; position: relative; top: 4px;" *ngIf="!show" name="arrow-down-outline"></ion-icon>
+          <ion-icon style="font-size: 18px !important; position: relative; top: 4px;" *ngIf="show" name="arrow-up-outline"></ion-icon>
+
+          {{filterDate | date:'dd/MM/yyyy'}}
+        </ion-label>
+      </ion-col>
+      <ion-col size="12" *ngIf="show">
+            <ion-datetime style="width: 100%; max-width: 100%;"
+
+            firstDayOfWeek="1"
+
+            [isDateEnabled]='blockedDays'
+            presentation="date"
+            [(ngModel)]="filterDate"
+            displayFormat="DD-MM-YYYY"></ion-datetime>
+
+            <ion-button size="small" (click)="enterFilter()" color="primary">Filtrar</ion-button>
+      </ion-col>
+      <!-- <ion-col size="3">
+        <ion-button size="small" color="primary">Filtrar</ion-button>
+      </ion-col> -->
+
+      <!-- <ion-col size="12">
+        <br>
+      </ion-col> -->
+
+      <!-- <ion-col size="4">
+        <ion-checkbox (click)="addTipo()" name="tipo" value="R"></ion-checkbox> <ion-label style="position: relative; top: -2px;"> Recogida</ion-label>
+      </ion-col>
+
+      <ion-col size="4">
+        <ion-checkbox (click)="addTipo()" name="tipo" value="C"></ion-checkbox> <ion-label style="position: relative; top: -2px;"> Recepción</ion-label>
+      </ion-col>
+
+      <ion-col size="4">
+        <ion-checkbox (click)="addTipo()" name="tipo" value="E"></ion-checkbox> <ion-label style="position: relative; top: -2px;"> Entrega</ion-label>
+      </ion-col>
+
+      <ion-col>
+        <ion-checkbox (click)="addTipo()" name="tipo" value="N"></ion-checkbox> <ion-label style="position: relative; top: -2px;"> Entrega Directa</ion-label>
+      </ion-col> -->
+
+      <ion-col size="12">
+        <br>
+      </ion-col>
+
+
+    </ion-row>
+
+    <table style="width: 100%; text-align: left;">
+                
+          <thead style="font-size: 14px;">
+              <tr>
+                  <th>Nº Certificado</th>
+                  <th>Fecha</th>
+                  <th>PE o GS</th>
+                  <th>Unidad</th>
+              </tr>
+          </thead>
+
+          <tbody style="font-size: 10px;" *ngIf="certificados && certificados.length">
+              <tr *ngFor="let item of certificados; let i = index" [ngClass]="{'trselected': (detallePeso == i)}" (click)="detallePeso = i; detallePesoBtn = true">
+                  <td>{{item.pidCertificado}}</td>
+                  <td>{{item.fecha | date:'dd/MM/yyyy'}}</td>
+                  <td>{{item.auxEntidad ? item.auxEntidad : item.nombre}}</td>
+                  <td>{{item.raeesCertificados.length}}</td>
+              </tr>
+          </tbody>
+
+    </table>
+
+    <div text-center>
+      <ion-button class="boton" [disabled]="!detallePesoBtn" (click)="pesar()">Siguiente</ion-button>
+    </div>
+
+    
+  </ion-grid>
+
+  <ion-grid *ngIf="irPesar">
+
+    <ion-row>
+      
+      <ion-col size="6" style="margin-bottom: 8px;">
+        Nº Certificado: 
+      </ion-col>
+      <ion-col size="6" style="margin-bottom: 8px;">
+        {{certificados[detallePeso].pidCertificado}}
+      </ion-col>
+
+      <ion-col size="6" style="margin-bottom: 8px;">
+        Fecha: 
+      </ion-col>
+      <ion-col size="6" style="margin-bottom: 8px;">
+        {{certificados[detallePeso].fecha | date}}
+      </ion-col>
+
+      <ion-col size="6" style="margin-bottom: 8px;">
+        Origen: 
+      </ion-col>
+      <ion-col size="6" style="margin-bottom: 8px;">
+        {{certificados[detallePeso].nombre}}
+      </ion-col>
+
+      <ion-col size="6" style="margin-bottom: 8px;">
+        Destino: 
+      </ion-col>
+      <ion-col size="6" style="margin-bottom: 8px;">
+        {{certificados[detallePeso].destino}}
+      </ion-col>
+
+      <ion-col size="6" style="margin-bottom: 8px;" *ngIf="pesado == 1 || forcepesado">
+        Peso Certificado: 
+      </ion-col>
+      <ion-col size="6" style="margin-bottom: 8px;" *ngIf="pesado == 1 || forcepesado">
+        <ion-input type="number" step="0.01" min="0" style="margin: 0 !important" [(ngModel)]="pesoCertificado" (click)="select($event)"></ion-input>
+      </ion-col>
+
+      <ion-col size="12">
+        <br>
+      </ion-col>
+
+      <ion-col size="12">
+        <table style="width: 100%; text-align: left;">
+                
+            <thead style="font-size: 14px;">
+                <tr>
+                    <th>Fracción</th>
+                    <th>Unidad</th>
+                    <th>Peso</th>
+                </tr>
+            </thead>
+
+            <tbody style="font-size: 10px;" *ngIf="loaded">
+                <ng-container *ngFor="let f of fracciones; let i = index">
+                  <tr>
+                    <td>{{f[0].fraccion}}</td>
+                    <td>{{f.length}}</td>
+                    <td>
+                      <ion-input *ngIf="pesado == 2 && !forcepesado" style="border-bottom: 1px solid #f0f0f0;" type="number" step="0.01" min="0" [max]="f[0].pesoEstimado" style="margin: 0 !important" [(ngModel)]="pesoFraccion[i].peso" (click)="select($event)"></ion-input>
+
+                      <span *ngIf="pesado != 2 || forcepesado">N/A</span>
+                    </td>
+                  </tr>
+                </ng-container>
+            </tbody>
+
+        </table>
+      </ion-col>
+
+
+    </ion-row>
+
+    <div text-center>
+      <ion-button class="boton" (click)="guardarPeso()">Aceptar</ion-button>
+    </div>
+    
+  </ion-grid>
+
+
+
+</ion-content>
+
+<ion-footer no-border>
+    <ion-buttons>
+      <ion-button class="izquierda" *ngIf="!irPesar" style="left: -4px;" (click)="atras()">
+        <span style="padding: 0 4px; color: #fff">Volver Menú</span>
+      </ion-button>
+      <ion-button class="izquierda" *ngIf="irPesar" style="padding-left: 15px;" (click)="irPesar = false">
+        <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+      </ion-button>
+    </ion-buttons>
+    <img src="../../../assets/img/logo-ecolec.png">
+</ion-footer>
