@@ -133,7 +133,7 @@
         Peso Certificado: 
       </ion-col>
       <ion-col size="6" style="margin-bottom: 8px;" *ngIf="pesado == 1 || forcepesado">
-        <ion-input type="number" step="0.01" min="0" style="margin: 0 !important" [(ngModel)]="pesoCertificado"></ion-input>
+        <ion-input type="number" step="0.01" min="0" style="margin: 0 !important" [(ngModel)]="pesoCertificado" (click)="select($event)"></ion-input>
       </ion-col>
 
       <ion-col size="12">
@@ -157,7 +157,7 @@
                     <td>{{f[0].fraccion}}</td>
                     <td>{{f.length}}</td>
                     <td>
-                      <ion-input *ngIf="pesado == 2 && !forcepesado" style="border-bottom: 1px solid #f0f0f0;" type="number" step="0.01" min="0" [max]="f[0].pesoEstimado" style="margin: 0 !important" [(ngModel)]="pesoFraccion[i].peso"></ion-input>
+                      <ion-input *ngIf="pesado == 2 && !forcepesado" style="border-bottom: 1px solid #f0f0f0;" type="number" step="0.01" min="0" [max]="f[0].pesoEstimado" style="margin: 0 !important" [(ngModel)]="pesoFraccion[i].peso" (click)="select($event)"></ion-input>
 
                       <span *ngIf="pesado != 2 || forcepesado">N/A</span>
                     </td>

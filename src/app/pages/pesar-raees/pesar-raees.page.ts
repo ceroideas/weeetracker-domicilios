@@ -199,28 +199,28 @@ export class PesarRaeesPage implements OnInit {
   {
     console.log(this.pesoFraccion);
 
+    let pesoCertificado:any;
+
+    if (this.pesado == 1 || this.forcepesado) {
+      pesoCertificado =
+      [{peso:this.pesoCertificado, fraccion:null, tercero: this.idTercero,
+        certificadoSubordinado: "", direccion: this.idCentro,
+        certificado: this.certificados[this.detallePeso].pidCertificado, fecha: moment().format('Y-MM-DD')}];
+
+    }else if(this.pesado == 2 && !this.forcepesado){
+      pesoCertificado = this.pesoFraccion;
+    }
+
+    for(let i of pesoCertificado)
+    {
+      if (i.peso == 0 || !i.peso) {
+        return this.alertCtrl.create({message:"Escriba un peso correcto", buttons: ["OK"]}).then(a=>a.present());
+      }
+    }
+
     this.alertCtrl.create({message:"¿Guardar el peso del certificado?", buttons: [
       {text:"Si",
         handler:()=>{
-
-          let pesoCertificado:any;
-
-          if (this.pesado == 1 || this.forcepesado) {
-            pesoCertificado =
-            [{peso:this.pesoCertificado, fraccion:null, tercero: this.idTercero,
-              certificadoSubordinado: "", direccion: this.idCentro,
-              certificado: this.certificados[this.detallePeso].pidCertificado, fecha: moment().format('Y-MM-DD')}];
-
-          }else if(this.pesado == 2 && !this.forcepesado){
-            pesoCertificado = this.pesoFraccion;
-          }
-
-          for(let i of pesoCertificado)
-          {
-            if (i.peso == 0 || !i.peso) {
-              return this.alertCtrl.create({message:"Coloque un peso correcto", buttons: ["OK"]}).then(a=>a.present());
-            }
-          }
 
           this.loadingCtrl.create().then(l=>{
             l.present();
@@ -317,6 +317,11 @@ export class PesarRaeesPage implements OnInit {
 
       this.enterFilter();
     },10)
+  }
+
+  select(e)
+  {
+    e.target.select();
   }
 
 }
