@@ -124,16 +124,16 @@ export class SummaryPage implements OnInit {
     if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_2')) {
       this.nav.navigateRoot('/nueva-entrega/step-three-ent');
     }else if(localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_3')){
-      this.nav.navigateRoot('/nueva-entrega-directa/step-three-end');
+      this.nav.navigateRoot('/nueva-entrega-directa/step-four-end');
     }else if(localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_4')){
       this.nav.navigateRoot('/reutilizaciones/nueva-reutilizacion/step-three-reu');
     }else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_5')) {
 
-      this.nav.navigateRoot('/reutilizaciones/nueva-recogida-reutilizacion/step-four-rre');
+      this.nav.navigateRoot('/reutilizaciones/nueva-recogida-reutilizacion/step-three-rre');
 
     }else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_6')) {
       
-      this.nav.navigateRoot('/reutilizaciones/nueva-reutilizacion-entrega/step-four-rep');
+      this.nav.navigateRoot('/reutilizaciones/nueva-reutilizacion-entrega/step-three-rep');
 
     }else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_7')) {
       

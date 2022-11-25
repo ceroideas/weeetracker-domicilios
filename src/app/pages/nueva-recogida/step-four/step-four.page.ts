@@ -150,7 +150,7 @@ export class StepFourPage implements OnInit {
     
     this._storage?.set('firma_origen', this.myForm.value);
 
-    this.nav.navigateForward('/nueva-recogida/step-five');
+    this.nav.navigateForward('/nueva-recogida/step-six');
   }
 
   atras() {

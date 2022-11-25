@@ -82,6 +82,9 @@ export class StepSixRcpPage implements OnInit {
       albaran_origen: [localStorage.getItem('albaran_origen') ? localStorage.getItem('albaran_origen') : "", Validators.required],
       codigo_externo: [localStorage.getItem('codigo_externo') ? localStorage.getItem('codigo_externo') : "", Validators.required],
       fecha_operacion: [moment(localStorage.getItem('date')).format('DD-MM-Y'), Validators.required],
+      gestor_origen: ['', Validators.required],
+      centro_origen: ['', Validators.required],
+
       gestor_recepcion: ['', Validators.required],
       centro_recepcion: ['', Validators.required],
       total: [null],
@@ -101,6 +104,9 @@ export class StepSixRcpPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
+    this.myForm.patchValue({gestor_origen: this.origen.nombre});
+    this.myForm.patchValue({centro_origen: this.origen.centro});
+
     this.myForm.patchValue({gestor_recepcion: this.usuario.tercero.Nombre});
     this.myForm.patchValue({centro_recepcion: this.usuario.centro});
     console.log(this.usuario);

@@ -274,7 +274,9 @@ export class EditReadPage implements OnInit {
         if (!this.loadedResiduoEsp) {
           console.log('cargado especifico',this.read.values)
           this.loadedResiduoEsp = true;
-          this.myForm.patchValue({residuo_especifico: this.read.values.residuo_especifico});
+          setTimeout(()=>{
+            this.myForm.patchValue({residuo_especifico: this.read?.values.residuo_especifico});
+          },10)
           console.log(this.myForm.value);
         }
       },err=>{
