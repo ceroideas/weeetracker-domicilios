@@ -56,7 +56,14 @@ export class OperativasRealizadasPage implements OnInit {
       res.push(i.TipoOperacion);
     }
 
-    this.tipooperativas = res.filter(this.onlyUnique);
+    this.tipooperativas = res.filter(this.onlyUnique).filter(
+      x=>
+      x != 'REU' &&
+      x != 'RUD' &&
+      x != 'REN' &&
+      x != 'RCR' &&
+      x != 'RSR' &&
+      x != 'REP');
 
       this.idCentro =  this.usuario.dtercero;
       this.idTercero = this.usuario.tercero.PidTercero;

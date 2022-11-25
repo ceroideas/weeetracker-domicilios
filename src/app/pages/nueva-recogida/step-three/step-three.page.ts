@@ -66,7 +66,7 @@ export class StepThreePage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
-    console.log(this.usuario);
+    console.log('usuario',this.usuario);
   }
 
   onlyUnique(value, index, self) {

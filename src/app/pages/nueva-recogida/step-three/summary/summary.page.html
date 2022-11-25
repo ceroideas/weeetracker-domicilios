@@ -38,6 +38,12 @@
         <ion-button (click)="eliminar()" size="small" style="height: 40px;" class="ecobtn">Borrar</ion-button>
 
         <ion-button (click)="editar()" size="small" style="height: 40px;" class="ecobtn">Mod.RAEE</ion-button>
+
+    </div>
+    <div style="text-align: center;" *ngIf="!noFwd">
+        <br>
+
+        <ion-button (click)="atras()" size="small" style="height: 40px;" class="ecobtn">Añadir más RAEEs</ion-button>
     </div>
 
 

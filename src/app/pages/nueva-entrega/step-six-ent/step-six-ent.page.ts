@@ -21,7 +21,7 @@ declare var SignaturePad:any;
 })
 export class StepSixEntPage implements OnInit {
 
-  titulo = "NUEVA ENTREGA 6 - Firma Gestor Destino";
+  titulo = "NUEVA ENTREGA 5 - Firma Gestor Destino";
   myForm: FormGroup;
 
   usuario: Usuario = new Usuario();
@@ -52,10 +52,10 @@ export class StepSixEntPage implements OnInit {
     private storage: Storage) {
 
     this.myForm = this.fb.group({
-      origen: ['', Validators.required],
-      gestor_destino: [this.origen.centro, Validators.required],
+      gestor_origen: ['', Validators.required],
+      gestor_destino: [this.origen.nombre, Validators.required],
       nombre: ['', Validators.required],
-      cargo: ['', Validators.required],
+      // cargo: ['', Validators.required],
       firma: ['', Validators.required],
     });
     this.cargarUsuario();
@@ -85,7 +85,7 @@ export class StepSixEntPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
-    this.myForm.patchValue({origen: this.usuario.tercero.Nombre});
+    this.myForm.patchValue({gestor_origen: this.usuario.tercero.Nombre});
     console.log(this.usuario);
   }
 
@@ -123,10 +123,10 @@ export class StepSixEntPage implements OnInit {
 
     if (firma) {
       this.myForm.patchValue({
-        origen: firma.origen,
+        gestor_origen: firma.origen,
         gestor_destino: firma.gestor_destino,
         nombre: firma.nombre,
-        cargo: firma.cargo,
+        // cargo: firma.cargo,
         firma: firma.firma,
       });
 

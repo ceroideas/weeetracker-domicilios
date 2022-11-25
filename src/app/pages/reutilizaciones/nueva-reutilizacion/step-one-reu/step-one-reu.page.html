@@ -4,7 +4,7 @@
 
   <form [formGroup]="myForm" #formulario="ngForm" novalidate (ngSubmit)="adelante()">
     <ion-grid>
-      <ion-row *ngIf="!(usuario?.responsabilidades | checkResp:'CSR') || forceButtons">
+      <ion-row *ngIf="!(usuario?.responsabilidades | checkResp:'RCR') || forceButtons">
 
           <ion-col size="12">
               <ion-button class="ecobtn" (click)="nuevaRecepcion('RUD')"
@@ -24,7 +24,7 @@
           </ion-col>
       </ion-row>
 
-      <ion-row *ngIf="(usuario?.responsabilidades | checkResp:'CSR') && !forceButtons">
+      <ion-row *ngIf="(usuario?.responsabilidades | checkResp:'RCR') && !forceButtons">
         
         <ion-col size="12">
           <ion-radio-group formControlName="type">

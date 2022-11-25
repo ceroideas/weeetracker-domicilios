@@ -53,8 +53,8 @@ export class StepFiveRenPage implements OnInit {
     private storage: Storage) {
 
     this.myForm = this.fb.group({
-      origen: [this.origen.tnombre, Validators.required],
-      gestor_recogida: ['', Validators.required],
+      gestor_origen: [this.origen.tnombre, Validators.required],
+      gestor_destino: ['', Validators.required],
       nombre: ['', Validators.required],
       cargo: ['', Validators.required],
       firma: ['', Validators.required],
@@ -86,7 +86,7 @@ export class StepFiveRenPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
-    this.myForm.patchValue({gestor_recogida: this.destino.nombre});
+    this.myForm.patchValue({gestor_destino: this.destino.nombre});
     console.log(this.usuario);
   }
 
@@ -124,8 +124,8 @@ export class StepFiveRenPage implements OnInit {
 
     if (firma) {
       this.myForm.patchValue({
-        origen: firma.origen,
-        gestor_recogida: firma.gestor_recogida,
+        gestor_origen: firma.gestor_origen,
+        gestor_destino: firma.gestor_destino,
         nombre: firma.nombre,
         cargo: firma.cargo,
         firma: firma.firma,

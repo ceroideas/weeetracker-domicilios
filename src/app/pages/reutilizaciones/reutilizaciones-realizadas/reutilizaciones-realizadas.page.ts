@@ -51,10 +51,15 @@ export class ReutilizacionesRealizadasPage implements OnInit {
 
     let res = [];
 
-    for (let i of this.usuario.responsabilidades)
+    /*for (let i of this.usuario.responsabilidades)
     {
-      res.push(i.TipoOperacion);
-    }
+    }*/
+    res.push('RCR');
+    res.push('RSR');
+    res.push('RUD');
+    res.push('REU');
+    res.push('REP');
+    res.push('REN');
 
     this.tipooperativas = res.filter(this.onlyUnique);
 

@@ -52,7 +52,7 @@ export class StepFiveRrePage implements OnInit {
     private storage: Storage) {
 
     this.myForm = this.fb.group({
-      origen: [this.origen.centro, Validators.required],
+      gestor_origen: [this.origen.nombre, Validators.required],
       gestor_recogida: ['', Validators.required],
       nombre: ['', Validators.required],
       firma: ['', Validators.required],
@@ -122,7 +122,7 @@ export class StepFiveRrePage implements OnInit {
 
     if (firma) {
       this.myForm.patchValue({
-        origen: firma.origen,
+        gestor_origen: firma.gestor_origen,
         gestor_recogida: firma.gestor_recogida,
         nombre: firma.nombre,
         firma: firma.firma,

@@ -127,7 +127,7 @@ export class QrPage implements OnInit {
 
             }
             this.scans.unshift(this.etiqueta);
-            this.scans = this.scans.filter(this.onlyUnique);
+            this.scans = this.scans.filter(this.onlyUnique).sort((a, b) => a.localeCompare(b));
           }else{
             this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
           }
@@ -268,7 +268,7 @@ export class QrPage implements OnInit {
 
             }
             this.scans.unshift(this.etiqueta);
-            this.scans = this.scans.filter(this.onlyUnique);
+            this.scans = this.scans.filter(this.onlyUnique).sort((a, b) => a.localeCompare(b));
           }else{
             this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
           }
@@ -345,7 +345,7 @@ export class QrPage implements OnInit {
 
         }
         this.scans.unshift(this.etiqueta);
-        this.scans = this.scans.filter(this.onlyUnique);
+        this.scans = this.scans.filter(this.onlyUnique).sort((a, b) => a.localeCompare(b));
       }else{
         this.alertCtrl.create({message:"La etiqueta leida es inválida, intente nuevamente", buttons:["Ok"]}).then(a=>a.present());
       }

@@ -52,7 +52,7 @@ export class StepOneReuPage implements OnInit {
   {
     this.usuario = await this.usuarioService.cargarToken();
 
-    if (this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'CSR')) {
+    if (this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'RCR')) {
       this.titulo = "NUEVA REUTILIZACIÓN 1 - Solicitud";
     }else{
       this.titulo = "NUEVA REUTILIZACIÓN - 1";
@@ -143,7 +143,7 @@ export class StepOneReuPage implements OnInit {
   }
 
   atras() {
-    if (!this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'CSR')) {
+    if (!this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'RSR')) {
       this._location.back();
     }else{
       if (this.forceButtons) {

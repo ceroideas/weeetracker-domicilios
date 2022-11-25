@@ -53,8 +53,10 @@ export class StepFourRcpPage implements OnInit {
 
     this.myForm = this.fb.group({
       // origen: [this.origen.centro, Validators.required],
-      origen: ['', Validators.required],
-      gestor_recogida: ['', Validators.required],
+      gestor_origen: ['', Validators.required],
+      centro_origen: ['', Validators.required],
+      gestor_recepcion: ['', Validators.required],
+      centro_recepcion: ['', Validators.required],
       nombre: ['', Validators.required],
       firma: ['', Validators.required],
     });
@@ -85,7 +87,10 @@ export class StepFourRcpPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
-    this.myForm.patchValue({gestor_recogida: this.origen.centro, origen: this.usuario.tercero.Nombre});
+    this.myForm.patchValue({gestor_origen: this.origen.nombre});
+    this.myForm.patchValue({centro_origen: this.origen.centro});
+    this.myForm.patchValue({gestor_recepcion: this.usuario.tercero.Nombre});
+    this.myForm.patchValue({centro_recepcion: this.usuario.centro});
     console.log(this.usuario);
   }
 
@@ -123,8 +128,10 @@ export class StepFourRcpPage implements OnInit {
 
     if (firma) {
       this.myForm.patchValue({
-        origen: firma.origen,
-        gestor_recogida: firma.gestor_recogida,
+        gestor_origen: firma.gestor_origen,
+        centro_origen: firma.centro_origen,
+        gestor_recepcion: firma.gestor_recepcion,
+        centro_recepcion: firma.centro_recepcion,
         nombre: firma.nombre,
         firma: firma.firma,
       });
@@ -151,7 +158,7 @@ export class StepFourRcpPage implements OnInit {
     
     this._storage?.set('firma_origen', this.myForm.value);
 
-    this.nav.navigateForward('/nueva-recepcion/step-five-rcp');
+    this.nav.navigateForward('/nueva-recepcion/step-six-rcp');
   }
 
   atras() {

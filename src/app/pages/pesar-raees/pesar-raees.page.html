@@ -28,6 +28,8 @@
       <ion-col size="12" *ngIf="show">
             <ion-datetime style="width: 100%; max-width: 100%;"
 
+            firstDayOfWeek="1"
+
             [isDateEnabled]='blockedDays'
             presentation="date"
             [(ngModel)]="filterDate"

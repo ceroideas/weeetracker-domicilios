@@ -27,7 +27,7 @@ declare var moment:any;
 })
 export class StepSevenEntPage implements OnInit {
 
-  titulo = "NUEVA ENTREGA 7 - Entrega Completada";
+  titulo = "NUEVA ENTREGA 6 - Entrega Completada";
   myForm: FormGroup;
 
   usuario: Usuario = new Usuario();
@@ -82,7 +82,9 @@ export class StepSevenEntPage implements OnInit {
       albaran_origen: [localStorage.getItem('albaran_origen') ? localStorage.getItem('albaran_origen') : "", Validators.required],
       codigo_externo: [localStorage.getItem('codigo_externo') ? localStorage.getItem('codigo_externo') : "", Validators.required],
       fecha_operacion: [moment(localStorage.getItem('date')).format('DD-MM-Y'), Validators.required],
-      gestor_recogida: ['', Validators.required],
+      centro_origen: ['', Validators.required],
+      gestor_destino: [this.origen.nombre, Validators.required],
+      centro_destino: [this.origen.centro, Validators.required],
       total: [null],
     });
     this.cargarUsuario();
@@ -100,7 +102,7 @@ export class StepSevenEntPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
-    this.myForm.patchValue({gestor_recogida: this.usuario.tercero.Nombre});
+    this.myForm.patchValue({centro_origen: this.usuario.centro});
     console.log(this.usuario);
 
     this.initial = 'E'+last2+String(this.usuario.terminal).padStart(4, '0');
@@ -211,7 +213,7 @@ export class StepSevenEntPage implements OnInit {
     }
 
     let firma_1 = await this._storage.get('firma_origen');
-    let firma_2 = await this._storage.get('firma_transportista');
+    // let firma_2 = await this._storage.get('firma_transportista');
     let firma_3 = await this._storage.get('firma_destino');
 
     this.contadores.firmas++;
@@ -220,11 +222,11 @@ export class StepSevenEntPage implements OnInit {
     firma_1.id = this.pidFirma+String(this.contadores.firmas).padStart(4, '0');
     await this.consultas.uploadFTP(firma_1.firma,firma_1.archivo,'/Firmas');
 
-    this.contadores.firmas++;
+    /*this.contadores.firmas++;
 
     firma_2.archivo = 'Fr'+this.myForm.value.certificado+'_12.png';
     firma_2.id = this.pidFirma+String(this.contadores.firmas).padStart(4, '0');
-    await this.consultas.uploadFTP(firma_2.firma,firma_2.archivo,'/Firmas');
+    await this.consultas.uploadFTP(firma_2.firma,firma_2.archivo,'/Firmas');*/
 
     this.contadores.firmas++;
 
@@ -261,21 +263,21 @@ export class StepSevenEntPage implements OnInit {
       PidFirmaCertificado: firma_1.id,
       Firma: firma_1.archivo,
       Nombre: firma_1.nombre,
-      Cargo: firma_1.cargo,
+      // Cargo: firma_1.cargo,
     });
 
-    firmas.push({
+    /*firmas.push({
       PidFirmaCertificado: firma_2.id,
       Firma: firma_2.archivo,
       Nombre: firma_2.nombre,
       Cargo: firma_2.cargo,
-    });
+    });*/
 
     firmas.push({
       PidFirmaCertificado: firma_3.id,
       Firma: firma_3.archivo,
       Nombre: firma_3.nombre,
-      Cargo: firma_3.cargo,
+      // Cargo: firma_3.cargo,
     });
     
 
@@ -301,7 +303,7 @@ export class StepSevenEntPage implements OnInit {
 
       SidEstadoCertificado: 0,
       SidFirmaProcedencia: firma_1.id,
-      SidFirmaTransporte: firma_2.id,
+      SidFirmaTransporte: null, // firma_2.id,
       SidFirmaDestino: firma_3.id,
       Observaciones: null,
       SidTipoOperativa: tipo_operativa,

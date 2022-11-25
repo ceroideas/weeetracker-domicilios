@@ -326,6 +326,12 @@ input {
     display: block;
     font-size: 14px;
 }
+.left-label-alt {
+    margin: 11px 0;
+    margin-top: 0 !important;
+    display: block;
+    font-size: 14px;
+}
 
 .keyboard-is-open ion-footer {
     display: none !important;
@@ -523,6 +529,7 @@ ion-datetime {
 
 .select2-results__option {
     color: #000 !important;
+    font-size: 12px !important;
 }
 
 .select2-container--default .select2-search--dropdown .select2-search__field {

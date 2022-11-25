@@ -53,10 +53,10 @@ export class StepSevenEndPage implements OnInit {
     private storage: Storage) {
 
     this.myForm = this.fb.group({
-      origen: [this.origen.tnombre, Validators.required],
+      gestor_origen: [this.origen.tnombre, Validators.required],
       gestor_destino: ['', Validators.required],
       nombre: ['', Validators.required],
-      cargo: ['', Validators.required],
+      // cargo: ['', Validators.required],
       firma: ['', Validators.required],
     });
     this.cargarUsuario();
@@ -124,10 +124,10 @@ export class StepSevenEndPage implements OnInit {
 
     if (firma) {
       this.myForm.patchValue({
-        origen: firma.origen,
+        gestor_origen: firma.gestor_origen,
         gestor_destino: firma.gestor_destino,
         nombre: firma.nombre,
-        cargo: firma.cargo,
+        // cargo: firma.cargo,
         firma: firma.firma,
       });
 

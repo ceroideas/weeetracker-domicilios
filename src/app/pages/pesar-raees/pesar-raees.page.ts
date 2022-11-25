@@ -57,6 +57,8 @@ export class PesarRaeesPage implements OnInit {
       this.idCentro =  this.usuario.dtercero;
       this.idTercero = this.usuario.tercero.PidTercero;
 
+      console.log(this.usuario.direccionTercero.diasPesado);
+
       this.blockedDays = (dateString: string) => {
         const date = new Date(dateString);
         const days = moment().subtract(this.usuario.direccionTercero.diasPesado,'days');
@@ -107,6 +109,7 @@ export class PesarRaeesPage implements OnInit {
           this.detallePesoBtn = true
 
           localStorage.removeItem('certificado_pesado');
+          localStorage.setItem('back_to_home','1');
 
           this.pesar();
         }
@@ -228,9 +231,14 @@ export class PesarRaeesPage implements OnInit {
 
               this.certificados[this.detallePeso].peso = this.pesoCertificado;
 
-              this.consultar();
+              if (localStorage.getItem('back_to_home')) {
+                localStorage.removeItem('back_to_home');
+                this.nav.navigateRoot('/home');
+              }else{
+                this.consultar();
+              }
 
-              this.alertCtrl.create({message:"Se ha guardado el peso del certficado", buttons: ['Ok']}).then(a=>a.present());
+              this.alertCtrl.create({message:"Se ha guardado el peso del certificado", buttons: ['Ok']}).then(a=>a.present());
               
             },err=>{
               l.dismiss();

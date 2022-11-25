@@ -52,10 +52,10 @@ export class StepFourEntPage implements OnInit {
     private storage: Storage) {
 
     this.myForm = this.fb.group({
-      origen: [this.origen.centro, Validators.required],
-      gestor_recogida: ['', Validators.required],
+      gestor_origen: ['', Validators.required],
+      gestor_destino: [this.origen.nombre, Validators.required],
       nombre: ['', Validators.required],
-      cargo: ['', Validators.required],
+      // cargo: ['', Validators.required],
       firma: ['', Validators.required],
     });
     this.cargarUsuario();
@@ -85,7 +85,7 @@ export class StepFourEntPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
-    this.myForm.patchValue({gestor_recogida: this.usuario.tercero.Nombre});
+    this.myForm.patchValue({gestor_origen: this.usuario.tercero.Nombre});
     console.log(this.usuario);
   }
 
@@ -123,8 +123,8 @@ export class StepFourEntPage implements OnInit {
 
     if (firma) {
       this.myForm.patchValue({
-        origen: firma.origen,
-        gestor_recogida: firma.gestor_recogida,
+        gestor_origen: firma.origen,
+        gestor_destino: firma.gestor_destino,
         nombre: firma.nombre,
         cargo: firma.cargo,
         firma: firma.firma,
@@ -152,7 +152,7 @@ export class StepFourEntPage implements OnInit {
     
     this._storage?.set('firma_origen', this.myForm.value);
 
-    this.nav.navigateForward('/nueva-entrega/step-five-ent');
+    this.nav.navigateForward('/nueva-entrega/step-six-ent');
   }
 
   atras() {

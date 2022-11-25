@@ -27,7 +27,7 @@ declare var moment:any;
 })
 export class StepSixRcpPage implements OnInit {
 
-  titulo = "NUEVA RECEPCIÓN 6 - Recepción Completada";
+  titulo = "NUEVA RECEPCIÓN 5 - Recepción Completada";
   myForm: FormGroup;
 
   usuario: Usuario = new Usuario();
@@ -82,7 +82,8 @@ export class StepSixRcpPage implements OnInit {
       albaran_origen: [localStorage.getItem('albaran_origen') ? localStorage.getItem('albaran_origen') : "", Validators.required],
       codigo_externo: [localStorage.getItem('codigo_externo') ? localStorage.getItem('codigo_externo') : "", Validators.required],
       fecha_operacion: [moment(localStorage.getItem('date')).format('DD-MM-Y'), Validators.required],
-      gestor_recogida: ['', Validators.required],
+      gestor_recepcion: ['', Validators.required],
+      centro_recepcion: ['', Validators.required],
       total: [null],
     });
     this.cargarUsuario();
@@ -100,7 +101,8 @@ export class StepSixRcpPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
-    this.myForm.patchValue({gestor_recogida: this.usuario.tercero.Nombre});
+    this.myForm.patchValue({gestor_recepcion: this.usuario.tercero.Nombre});
+    this.myForm.patchValue({centro_recepcion: this.usuario.centro});
     console.log(this.usuario);
 
     this.initial = 'C'+last2+String(this.usuario.terminal).padStart(4, '0');
@@ -211,7 +213,7 @@ export class StepSixRcpPage implements OnInit {
     }
 
     let firma_1 = await this._storage.get('firma_origen');
-    let firma_2 = await this._storage.get('firma_transportista');
+    // let firma_2 = await this._storage.get('firma_transportista');
 
     this.contadores.firmas++;
     
@@ -219,11 +221,11 @@ export class StepSixRcpPage implements OnInit {
     firma_1.id = this.pidFirma+String(this.contadores.firmas).padStart(4, '0');
     await this.consultas.uploadFTP(firma_1.firma,firma_1.archivo,'/Firmas');
 
-    this.contadores.firmas++;
+    /*this.contadores.firmas++;
 
     firma_2.archivo = 'Fr'+this.myForm.value.certificado+'_12.png';
     firma_2.id = this.pidFirma+String(this.contadores.firmas).padStart(4, '0');
-    await this.consultas.uploadFTP(firma_2.firma,firma_2.archivo,'/Firmas');
+    await this.consultas.uploadFTP(firma_2.firma,firma_2.archivo,'/Firmas');*/
 
     let origen = JSON.parse(localStorage.getItem('origen'));
     let fecha = localStorage.getItem('date');
@@ -257,12 +259,12 @@ export class StepSixRcpPage implements OnInit {
       Cargo: null,
     });
 
-    firmas.push({
+    /*firmas.push({
       PidFirmaCertificado: firma_2.id,
       Firma: firma_2.archivo,
       Nombre: firma_2.nombre,
       Cargo: null,
-    });
+    });*/
     
 
 
@@ -286,7 +288,7 @@ export class StepSixRcpPage implements OnInit {
 
       SidEstadoCertificado: 0,
       SidFirmaProcedencia: firma_1.id,
-      SidFirmaTransporte: firma_2.id,
+      SidFirmaTransporte: null, //firma_2.id,
       SidFirmaDestino: null,
       Observaciones: null,
       SidTipoOperativa: tipo_operativa,

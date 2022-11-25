@@ -71,7 +71,7 @@ export class SummaryPage implements OnInit {
     // })
   }
 
-  ionViewDidEnter()
+  ionViewWillEnter()
   {
     if (localStorage.getItem('noFwd')) {
       this.noFwd = true;
