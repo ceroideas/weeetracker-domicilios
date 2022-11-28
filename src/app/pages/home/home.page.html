@@ -55,6 +55,8 @@
             *ngIf="
             (usuario?.responsabilidades | checkResp:'RCR') ||
             (usuario?.responsabilidades | checkResp:'RSR') ||
+            (usuario?.responsabilidades | checkResp:'RUD') ||
+            (usuario?.responsabilidades | checkResp:'REU') ||
             (usuario?.responsabilidades | checkResp:'REP') ||
             (usuario?.responsabilidades | checkResp:'REN')"
         >
