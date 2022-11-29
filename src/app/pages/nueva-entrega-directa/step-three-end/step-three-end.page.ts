@@ -203,7 +203,7 @@ export class StepThreeEndPage implements OnInit {
 
   atras() {
     
-    this.alertCtrl.create({message:"¿Está seguro de volver atrás? La información actual se perderá", buttons: [
+    return this.alertCtrl.create({message:"¿Está seguro de volver atrás? La información actual se perderá", buttons: [
     {
       text:"Si, regresar",
       handler:()=>{
@@ -226,15 +226,13 @@ export class StepThreeEndPage implements OnInit {
             insRnP:null,
           });
 
-          return false;
-
+        }else{
+          this.nav.navigateRoot('/home');
         }
-    
-        this.nav.navigateRoot('/home');
       }
     },{
       text:"Cancelar"
-    }]}).then(a=>a.present())
+    }]}).then(a=>a.present());
   }
 
   /*nuevoOrigen()

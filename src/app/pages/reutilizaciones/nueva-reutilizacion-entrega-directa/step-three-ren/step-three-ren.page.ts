@@ -226,11 +226,12 @@ export class StepThreeRenPage implements OnInit {
             insRnP:null,
           });
 
-          return false;
+          // return false;
 
+        }else{
+          this.nav.navigateRoot('/home');
         }
     
-        this.nav.navigateRoot('/home');
       }
     },{
       text:"Cancelar"
