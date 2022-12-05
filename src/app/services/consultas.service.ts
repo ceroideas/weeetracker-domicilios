@@ -107,6 +107,10 @@ export class ConsultasService {
     let stock = { idTercero: idTercero, idCentro: idCentro };
     return this.http.post(apiUrl + '/stock', stock);
   }
+  getConsultaStock2(idTercero, idCentro) {
+    let stock = { idTercero: idTercero, idCentro: idCentro };
+    return this.http.post(apiUrl + '/stock/stock2', stock);
+  }
 
   getOperativas(idTercero, idCentro) {
     return this.http.get(apiUrl + '/solicitud/operativas/'+idTercero+'/'+idCentro);

@@ -27,6 +27,10 @@ const routes: Routes = [
     path: 'pesar-reutilizaciones',
     loadChildren: () => import('./pesar-reutilizaciones/pesar-reutilizaciones.module').then( m => m.PesarReutilizacionesPageModule)
   },
+  {
+    path: 'stock2',
+    loadChildren: () => import('./stock2/stock2.module').then( m => m.Stock2PageModule)
+  },
 ];
 
 @NgModule({

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ConsultasService } from 'src/app/services/consultas.service';
 import { Location } from '@angular/common';
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
@@ -16,6 +16,7 @@ export class CambioPasswordPage implements OnInit {
   titulo = "CAMBIAR CONTRASEÑA";
   myForm: FormGroup;
   usuario: Usuario = new Usuario();
+  validation_messages: any;
 
   constructor(
     private usuarioService: UsuarioService,
@@ -26,11 +27,30 @@ export class CambioPasswordPage implements OnInit {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController) {
 
+    this.validation_messages = {
+      'Password': [
+        { type: 'required', message: ''},
+        { type: 'pattern', message: 'La contraseña debe tener al menos 8 caracteres, letras, numeros y 1 MAYÚSCULA' }
+      ],
+      'RepeatPassword': [
+        { type: 'required', message: ''},
+        { type: 'pattern', message: 'La contraseña debe tener al menos 8 caracteres, letras, numeros y 1 MAYÚSCULA' }
+      ],
+    };
+
     this.myForm = this.fb.group({
-      id: [''],
-      ActualPassword: ['',Validators.required],
-      Password: ['',Validators.required],
-      RepeatPassword: ['',Validators.required],
+      id: new FormControl(''),
+      ActualPassword: new FormControl('',Validators.required),
+      Password: new FormControl('',Validators.compose(
+        [
+          Validators.required,
+          Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)
+        ])),
+      RepeatPassword: new FormControl('',Validators.compose(
+        [
+          Validators.required,
+          Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)
+        ])),
     });
 
     this.cargarUsuario();
@@ -64,7 +84,7 @@ export class CambioPasswordPage implements OnInit {
 
       },err=>{
         l.dismiss();
-        return this.alertCtrl.create({message:"Ha ocurrido un error al procesar la solicitud.", buttons: ['Ok']}).then(a=>a.present());
+        return this.alertCtrl.create({message:"La contraseña actual ingresada es incorrecta.", buttons: ['Ok']}).then(a=>a.present());
       })
     });
   }
