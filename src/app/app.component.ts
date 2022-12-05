@@ -36,6 +36,7 @@ declare var $:any;
 
 export class AppComponent {
 
+  showWindow = true;
   /**/
   public scans = [];
   public scanners = [{ "SCANNER_NAME": "Please Wait...", "SCANNER_INDEX": 0, "SCANNER_CONNECTION_STATE": true }];
@@ -85,8 +86,12 @@ export class AppComponent {
     this.consultas.getVersion().subscribe((data:any)=>{
       if (data.v.length && !data.v[0].activa) {
         this.alertController.create({message: 'Su versión esta desactualizada póngase en contacto con el CAU para actualizarla', 
-          buttons: ["Aceptar"]
-        }).then(a=>a.present());
+          buttons: [{text:"Aceptar", handler:(a)=>{
+
+            navigator['app'].exitApp();
+
+          }}]
+        ,backdropDismiss: false}).then(a=>a.present());
       }
     })
 
@@ -173,8 +178,8 @@ export class AppComponent {
 
         setTimeout(()=>{
           localStorage.removeItem('config');
-          this.events.publish('setLoaded');
-          // this.configXMLdesktop();
+          // this.events.publish('setLoaded');
+          this.configXMLdesktop();
         },100)
       }
     
@@ -196,7 +201,9 @@ export class AppComponent {
 
           localStorage.setItem('zebra','1');
 
-          this.initZebra();
+          setTimeout(()=>{
+            this.initZebra();
+          },1000);
 
           console.log(this.device.version);
 

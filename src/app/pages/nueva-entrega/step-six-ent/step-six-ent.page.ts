@@ -53,7 +53,9 @@ export class StepSixEntPage implements OnInit {
 
     this.myForm = this.fb.group({
       gestor_origen: ['', Validators.required],
+      centro_origen: ['', Validators.required],
       gestor_destino: [this.origen.nombre, Validators.required],
+      centro_destino: [this.origen.centro, Validators.required],
       nombre: ['', Validators.required],
       // cargo: ['', Validators.required],
       firma: ['', Validators.required],
@@ -86,6 +88,7 @@ export class StepSixEntPage implements OnInit {
   {
     this.usuario = await this.usuarioService.cargarToken();
     this.myForm.patchValue({gestor_origen: this.usuario.tercero.Nombre});
+    this.myForm.patchValue({centro_origen: this.usuario.centro});
     console.log(this.usuario);
   }
 

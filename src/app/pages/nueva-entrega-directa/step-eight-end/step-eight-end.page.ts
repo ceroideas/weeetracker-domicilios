@@ -84,9 +84,9 @@ export class StepEightEndPage implements OnInit {
       codigo_externo: [localStorage.getItem('codigo_externo') ? localStorage.getItem('codigo_externo') : "", Validators.required],
       fecha_operacion: [moment(localStorage.getItem('date')).format('DD-MM-Y'), Validators.required],
       gestor_origen: [this.origen.tnombre, Validators.required],
-      gestor_destino: [this.destino.nombre, Validators.required],
-
       centro_origen: [this.origen.nombre, Validators.required],
+
+      gestor_destino: [this.destino.nombre, Validators.required],
       centro_destino: [this.destino.centro, Validators.required],
       total: [null],
     });

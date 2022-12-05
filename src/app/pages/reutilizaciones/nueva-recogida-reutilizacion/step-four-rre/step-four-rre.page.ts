@@ -53,7 +53,9 @@ export class StepFourRrePage implements OnInit {
 
     this.myForm = this.fb.group({
       gestor_origen: [this.origen.nombre, Validators.required],
+      centro_origen: [this.origen.centro, Validators.required],
       gestor_recogida: ['', Validators.required],
+      centro_recogida: ['', Validators.required],
       nombre: ['', Validators.required],
       firma: ['', Validators.required],
     });
@@ -85,6 +87,7 @@ export class StepFourRrePage implements OnInit {
   {
     this.usuario = await this.usuarioService.cargarToken();
     this.myForm.patchValue({gestor_recogida: this.usuario.tercero.Nombre});
+    this.myForm.patchValue({centro_recogida: this.usuario.centro});
     console.log(this.usuario);
   }
 

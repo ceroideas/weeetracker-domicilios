@@ -54,7 +54,11 @@ export class StepFiveEndPage implements OnInit {
 
     this.myForm = this.fb.group({
       gestor_origen: [this.origen.tnombre, Validators.required],
-      gestor_destino: ['', Validators.required],
+      centro_origen: [this.origen.nombre, Validators.required],
+
+      gestor_destino: [this.destino.nombre, Validators.required],
+      centro_destino: [this.destino.centro, Validators.required],
+      
       nombre: ['', Validators.required],
       // cargo: ['', Validators.required],
       firma: ['', Validators.required],
@@ -86,7 +90,7 @@ export class StepFiveEndPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
-    this.myForm.patchValue({gestor_destino: this.destino.nombre});
+    // this.myForm.patchValue({gestor_destino: this.destino.nombre});
     console.log(this.usuario);
   }
 

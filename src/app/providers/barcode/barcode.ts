@@ -5,15 +5,17 @@
 
 import { Injectable } from '@angular/core';
 import { EventsService } from '../../services/events.service';
-import { Platform } from '@ionic/angular';
+import { Platform, AlertController } from '@ionic/angular';
 import { Device } from '@awesome-cordova-plugins/device/ngx';
+import { ConsultasService } from 'src/app/services/consultas.service';
 
 @Injectable()
 export class BarcodeProvider {
 
   private requestResultCodes = "false";
 
-  constructor(public events: EventsService, private platform: Platform, private device: Device) {
+  constructor(public events: EventsService, private platform: Platform, private device: Device,
+    public alertCtrl: AlertController, public consultas: ConsultasService) {
 
     this.platform.ready().then(()=>{
       if (!(this.device.manufacturer.toLowerCase().includes("zebra") || this.device.manufacturer.toLowerCase().includes("motorola solutions"))) {
@@ -54,12 +56,11 @@ export class BarcodeProvider {
             console.log("Datawedge version: " + datawedgeVersion);
 
             //  Fire events sequentially so the application can gracefully degrade the functionality available on earlier DW versions
-            if (datawedgeVersion >= "6.3")
+            // if (datawedgeVersion >= "6.3")
               this.events.publish('status:dw63ApisAvailable', true);
-            if (datawedgeVersion >= "6.4")
-              console.log('La version del DataWedge es mayor a 6.4');
+            // if (datawedgeVersion >= "6.4")
               this.events.publish('status:dw64ApisAvailable', true);
-            if (datawedgeVersion >= "6.5")
+            // if (datawedgeVersion >= "6.5")
               this.events.publish('status:dw65ApisAvailable', true);
           }
           else if (intent.extras.hasOwnProperty('com.symbol.datawedge.api.RESULT_ENUMERATE_SCANNERS')) {

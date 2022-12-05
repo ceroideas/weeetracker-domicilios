@@ -14,6 +14,7 @@ import { BarcodeProvider } from '../../../providers/barcode/barcode';
 import { Storage } from '@ionic/storage-angular';
 
 import { NativeAudio } from '@awesome-cordova-plugins/native-audio/ngx';
+import { ConsultasService } from 'src/app/services/consultas.service';
 
 @Component({
   selector: 'app-qr',
@@ -51,7 +52,7 @@ export class QrPage implements OnInit {
 
   constructor(/*private qrScanner: QRScanner,*/ private nativeAudio: NativeAudio, private barcodeScanner: BarcodeScanner, public nav: NavController, public alertCtrl: AlertController,
     public events: EventsService, public events1: Events, private menu: MenuController, public loading: LoadingController,
-    private storage: Storage, private params: ParamsService,
+    private storage: Storage, private params: ParamsService, public consultas: ConsultasService,
     private barcodeProvider: BarcodeProvider, public _location: Location,
     private changeDetectorRef: ChangeDetectorRef, private device: Device,
     private alertController: AlertController, private platform: Platform, private toastController: ToastController
@@ -99,10 +100,18 @@ export class QrPage implements OnInit {
           return false;
         }
 
+        // this.alertCtrl.create({message: JSON.stringify(data.scanData)}).then(a=>a.present());
+
+        // this.consultas.createLogger("BARCODE SCANNED");
+        // this.consultas.createLogger(data);
+        // this.consultas.createLogger(scannedData);
+
         this.playAudio();
 
-        // this.events.publish('etiquetaLeida',scannedData);
+        // let idx = scannedData.indexOf('00');
 
+        // this.etiqueta = scannedData.substring(idx,idx+20);
+        
         this.etiqueta = scannedData;
 
         if (localStorage.getItem('read_type') == 'grupal') {
@@ -245,6 +254,8 @@ export class QrPage implements OnInit {
       this.etiqueta = barcodeData.text;
 
       this.playAudio();
+
+      this.consultas.createLogger('NUEVA LECTURA');
 
       if (localStorage.getItem('read_type') == 'grupal') {
 

@@ -53,9 +53,11 @@ export class StepFourRepPage implements OnInit {
 
     this.myForm = this.fb.group({
       gestor_origen: ['', Validators.required],
+      centro_origen: ['', Validators.required],
       gestor_destino: [this.origen.nombre, Validators.required],
+      centro_destino: [this.origen.centro, Validators.required],
       nombre: ['', Validators.required],
-      cargo: ['', Validators.required],
+      // cargo: ['', Validators.required],
       firma: ['', Validators.required],
     });
     this.cargarUsuario();
@@ -126,7 +128,7 @@ export class StepFourRepPage implements OnInit {
         gestor_origen: firma.gestor_origen,
         gestor_recogida: firma.gestor_recogida,
         nombre: firma.nombre,
-        cargo: firma.cargo,
+        // cargo: firma.cargo,
         firma: firma.firma,
       });
 

@@ -54,9 +54,12 @@ export class StepSevenRenPage implements OnInit {
 
     this.myForm = this.fb.group({
       gestor_origen: [this.origen.tnombre, Validators.required],
-      gestor_destino: ['', Validators.required],
+      centro_origen: [this.origen.nombre, Validators.required],
+
+      gestor_destino: [this.destino.nombre, Validators.required],
+      centro_destino: [this.destino.centro, Validators.required],
       nombre: ['', Validators.required],
-      cargo: ['', Validators.required],
+      // cargo: ['', Validators.required],
       firma: ['', Validators.required],
     });
     this.cargarUsuario();
@@ -86,7 +89,7 @@ export class StepSevenRenPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
-    this.myForm.patchValue({gestor_destino: this.destino.nombre});
+    // this.myForm.patchValue({gestor_destino: this.destino.nombre});
     console.log(this.usuario);
   }
 
@@ -127,7 +130,7 @@ export class StepSevenRenPage implements OnInit {
         gestor_origen: firma.gestor_origen,
         gestor_destino: firma.gestor_destino,
         nombre: firma.nombre,
-        cargo: firma.cargo,
+        // cargo: firma.cargo,
         firma: firma.firma,
       });
 

@@ -20,13 +20,16 @@ export class ConsultasService {
 
   url = environment.apiUrl;
 
-  public actualV = '1.0.23';
+  public actualV = '1.0.24';
 
   constructor(private http: HttpClient, private file: _File, private platform: Platform, private keyboard: Keyboard) {
   }
   
   getVersion() {
     return this.http.get(apiUrl + '/users/getVersion/'+this.actualV);
+  }
+  changePassword(values) {
+    return this.http.post(apiUrl + '/users/changePassword', values);
   }
   getIdentificacion(etiqueta: string) {
     let etiquetaObj = { Etiqueta: etiqueta };

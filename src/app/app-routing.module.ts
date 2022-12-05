@@ -35,6 +35,10 @@ const routes: Routes = [
     path: 'reutilizaciones',
     loadChildren: () => import('./pages/reutilizaciones/reutilizaciones.module').then( m => m.ReutilizacionesPageModule)
   },
+  {
+    path: 'cambio-password',
+    loadChildren: () => import('./pages/cambio-password/cambio-password.module').then( m => m.CambioPasswordPageModule)
+  },
 ];
 
 /*const routes: Routes = [
