@@ -178,8 +178,8 @@ export class AppComponent {
 
         setTimeout(()=>{
           localStorage.removeItem('config');
-          // this.events.publish('setLoaded');
-          this.configXMLdesktop();
+          this.events.publish('setLoaded');
+          // this.configXMLdesktop();
         },100)
       }
     

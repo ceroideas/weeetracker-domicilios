@@ -20,7 +20,7 @@ export class ConsultasService {
 
   url = environment.apiUrl;
 
-  public actualV = '1.0.24';
+  public actualV = '1.0.26';
 
   constructor(private http: HttpClient, private file: _File, private platform: Platform, private keyboard: Keyboard) {
   }
@@ -35,8 +35,8 @@ export class ConsultasService {
     let etiquetaObj = { Etiqueta: etiqueta };
     return this.http.post(apiUrl + '/residuo', etiquetaObj);
   }
-  GetRaee(etiqueta: string, centro: number) {
-    let etiquetaObj = { Etiqueta: etiqueta, IdCentro: centro };
+  GetRaee(etiqueta: string, centro: number, operativa = '') {
+    let etiquetaObj = { Etiqueta: etiqueta, IdCentro: centro, Operativa: operativa };
     return this.http.post(apiUrl + '/residuo/GetRaee', etiquetaObj);
   }
   GetRaee2(etiqueta: string, centro: number) {
@@ -173,11 +173,11 @@ export class ConsultasService {
   direccionesEntrega(id1,id2,id3,id4){
     return this.http.get(apiUrl + '/solicitud/direccionesEntrega/'+id1+'/'+id2+'/'+id3+'/'+id4);
   }
-  origenEntregaDirecta(id1,id2){
-    return this.http.get(apiUrl + '/solicitud/origenEntregaDirecta/'+id1+'/'+id2);
+  origenEntregaDirecta(id1,id2,id3){
+    return this.http.get(apiUrl + '/solicitud/origenEntregaDirecta/'+id1+'/'+id2+'/'+id3);
   }
-  direccionesEntregaDirecta(id1,id2,id3){
-    return this.http.get(apiUrl + '/solicitud/direccionesEntregaDirecta/'+id1+'/'+id2+'/'+id3);
+  direccionesEntregaDirecta(id1,id2,id3,id4){
+    return this.http.get(apiUrl + '/solicitud/direccionesEntregaDirecta/'+id1+'/'+id2+'/'+id3+'/'+id4);
   }
   fraccionesEntregaDirecta(id1,id2,id3,id4){
     return this.http.get(apiUrl + '/solicitud/fraccionesEntregaDirecta/'+id1+'/'+id2+'/'+id3+'/'+id4);

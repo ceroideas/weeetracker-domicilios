@@ -20,6 +20,10 @@ const routes: Routes = [
     loadChildren: () => import('./nueva-reutilizacion-entrega/nueva-reutilizacion-entrega.module').then( m => m.NuevaReutilizacionEntregaPageModule)
   },
   {
+    path: 'nueva-reutilizacion-entrega-directa',
+    loadChildren: () => import('./nueva-reutilizacion-entrega-directa/nueva-reutilizacion-entrega-directa.module').then( m => m.NuevaReutilizacionEntregaDirectaPageModule)
+  },
+  {
     path: 'reutilizaciones-realizadas',
     loadChildren: () => import('./reutilizaciones-realizadas/reutilizaciones-realizadas.module').then( m => m.ReutilizacionesRealizadasPageModule)
   },

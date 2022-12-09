@@ -153,7 +153,7 @@ export class StepFourRrePage implements OnInit {
     
     this._storage?.set('firma_origen', this.myForm.value);
 
-    this.nav.navigateForward('/reutilizaciones/nueva-recogida-reutilizacion/step-six-rre');
+    this.nav.navigateForward('/reutilizaciones/nueva-recogida-reutilizacion/step-five-rre');
   }
 
   atras() {

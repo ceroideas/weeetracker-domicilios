@@ -96,7 +96,7 @@ export class StepThreeRenPage implements OnInit {
       this.mostrarNuevo = false;
       let fr = JSON.parse(localStorage.getItem('fraccion_seleccionada'))
 
-      this.consultaService.origenEntregaDirecta(this.usuario.tercero.PidTercero, this.usuario.dtercero).subscribe((data:any)=>{
+      this.consultaService.origenEntregaDirecta(this.usuario.tercero.PidTercero, this.usuario.dtercero, 'REN').subscribe((data:any)=>{
         // console.log(data);
         this.listadoGestores = data.centros;
 
@@ -473,7 +473,7 @@ export class StepThreeRenPage implements OnInit {
 
       let fr = JSON.parse(localStorage.getItem('fraccion_seleccionada'))
 
-      this.consultaService.direccionesEntregaDirecta(this.usuario.tercero.PidTercero, this.usuario.dtercero, id).subscribe((data:any)=>{
+      this.consultaService.direccionesEntregaDirecta(this.usuario.tercero.PidTercero, this.usuario.dtercero, id, 'REN').subscribe((data:any)=>{
 
         this.consultaService.createLogger('Informacion del Centro Success');
 
