@@ -52,7 +52,7 @@ export class UsuarioService {
       }
 
       this.http.get(apiUrl + '/estado/centro/'+this.usuario.dtercero).subscribe((data:any)=>{
-        // console.log(data.centro);
+        console.log(data.centro);
         this.usuario.centro = data.centro.nombre; // puede ser nombre, verificar luego
         this.usuario.direccion = data.centro.direccion; // puede ser nombre, verificar luego
       })
