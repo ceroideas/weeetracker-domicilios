@@ -20,7 +20,7 @@ export class ConsultasService {
 
   url = environment.apiUrl;
 
-  public actualV = '1.0.26';
+  public actualV = '1.0.28';
 
   constructor(private http: HttpClient, private file: _File, private platform: Platform, private keyboard: Keyboard) {
   }
@@ -293,6 +293,9 @@ export class ConsultasService {
      .subscribe(data=>{
        return resolve(data);
      },err=>{
+
+       this.createLogger(type+': '+ "ERROR ENVIADO ARCHIVO VIA FTP");
+
        return resolve(err);
      });
 
@@ -377,6 +380,8 @@ export class ConsultasService {
 
             },err=>{
               // alert("0"+JSON.stringify(err))
+              this.createLogger('LOG: '+ "ERROR ENVIADO ARCHIVO VIA FTP");
+
               return resolve(false);
             });
 

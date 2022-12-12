@@ -421,7 +421,7 @@ export class StepSevenRepPage implements OnInit {
             text:'OK',
             handler: ()=>{
               this.consultas.createLogger('Datos guardados, regresando al Inicio Success');
-              this.nav.navigateRoot('/pesar-raees');
+              this.nav.navigateRoot('/reutilizaciones/pesar-reutilizaciones');
             }
           },{
             text:"No",

@@ -88,6 +88,7 @@ export class StepFourRepPage implements OnInit {
   {
     this.usuario = await this.usuarioService.cargarToken();
     this.myForm.patchValue({gestor_origen: this.usuario.tercero.Nombre});
+    this.myForm.patchValue({centro_origen: this.usuario.centro});
     console.log(this.usuario);
   }
 

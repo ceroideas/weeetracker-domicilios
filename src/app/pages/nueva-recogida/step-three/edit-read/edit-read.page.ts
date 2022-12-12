@@ -256,7 +256,7 @@ export class EditReadPage implements OnInit {
   }
 
   timeout;
-  interv = 500;
+  interv = 10;
 
   especificos()
   {
@@ -266,7 +266,22 @@ export class EditReadPage implements OnInit {
     clearTimeout(this.timeout);
     this.timeout = setTimeout(()=>{
 
-      this.consultaService.especificos(this.myForm.value.residuo).subscribe(data=>{
+      let data = JSON.parse(localStorage.getItem('todos_especificos'));
+
+      this.residuos_especificos = data.filter(x=>x.sidResiduo == this.myForm.value.residuo);
+
+      this.myForm.patchValue({residuo_especifico: null});
+
+      if (!this.loadedResiduoEsp) {
+        console.log('cargado especifico',this.read.values)
+        this.loadedResiduoEsp = true;
+        // setTimeout(()=>{
+          this.myForm.patchValue({residuo_especifico: this.read?.values.residuo_especifico});
+        // },100)
+        console.log(this.myForm.value);
+      }
+
+      /*this.consultaService.especificos(this.myForm.value.residuo).subscribe(data=>{
         this.residuos_especificos = data;
 
         this.myForm.patchValue({residuo_especifico: null});
@@ -275,13 +290,14 @@ export class EditReadPage implements OnInit {
           console.log('cargado especifico',this.read.values)
           this.loadedResiduoEsp = true;
           setTimeout(()=>{
+            // alert('hola')
             this.myForm.patchValue({residuo_especifico: this.read?.values.residuo_especifico});
-          },10)
+          },100)
           console.log(this.myForm.value);
         }
       },err=>{
         this.loadedResiduoEsp = true;
-      })
+      })*/
 
       this.interv = 100;
     },this.interv)
