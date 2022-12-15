@@ -106,7 +106,7 @@ export class SummaryPage implements OnInit {
 
     }else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_7')) {
 
-      this.nav.navigateRoot('/reutilizaciones/nueva-reutilizacion-entrega-directa/step-four-ren');
+      this.nav.navigateRoot('/reutilizaciones/nueva-reutilizacion-entrega-directa/step-five-ren');
 
     }else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd')) {
       this.nav.navigateForward('/nueva-recepcion/step-four-rcp');
@@ -184,7 +184,7 @@ export class SummaryPage implements OnInit {
     if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_2')) {
       localStorage.setItem('alt_title_ed','NUEVA ENTREGA 3 - RAEE: Editar RAEE')
     } else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_3')) {
-      localStorage.setItem('alt_title_ed','NUEVA ENTREGA DIRECTA 3 - RAEE: Editar RAEE')
+      localStorage.setItem('alt_title_ed','NUEVA ENTREGA DIRECTA 4 - RAEE: Editar RAEE')
     } else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_4')) {
       localStorage.setItem('alt_title_ed','NUEVA REUTILIZACIÓN 3 - RAEE: Editar RAEE')
     } else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_5')) {
@@ -192,7 +192,7 @@ export class SummaryPage implements OnInit {
     } else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_6')) {
       localStorage.setItem('alt_title_ed','NUEVA REUTILIZACIÓN ENTREGA 3 - RAEE: Editar RAEE')
     } else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd_7')) {
-      localStorage.setItem('alt_title_ed','NUEVA REUTILIZACIÓN ENTREGA DIRECTA 3 - RAEE: Editar RAEE')
+      localStorage.setItem('alt_title_ed','NUEVA REUTILIZACIÓN ENTREGA DIRECTA 4 - RAEE: Editar RAEE')
     } else if (localStorage.getItem('alt_title_sm') && localStorage.getItem('alt_title_rd')) {
       localStorage.setItem('alt_title_ed','NUEVA RECEPCIÓN 3 - RAEE: Editar RAEE')
     } else {

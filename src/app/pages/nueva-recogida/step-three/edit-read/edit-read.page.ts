@@ -371,7 +371,7 @@ export class EditReadPage implements OnInit {
     {
       for(let j of f)
       {
-        if (operacion == 'END' || operacion == 'REX')
+        if (operacion == 'END' || operacion == 'REX' || operacion == 'REN')
         {
           if (j.id == a.pidFraccion) {
             return a;

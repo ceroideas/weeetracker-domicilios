@@ -51,13 +51,14 @@ export class StepOneReuPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
+    this.titulo = "NUEVA REUTILIZACIÓN - 1";
 
-    if (this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'RCR')) {
+    /*if (this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'RCR')) {
       this.titulo = "NUEVA REUTILIZACIÓN 1 - Solicitud";
     }else{
       this.titulo = "NUEVA REUTILIZACIÓN - 1";
       this.myForm.patchValue({type: 'notpermission'});
-    }
+    }*/
     console.log(this.usuario);
   }
 
@@ -132,25 +133,42 @@ export class StepOneReuPage implements OnInit {
       // localStorage.setItem('tipo_operativa','REF');
       localStorage.removeItem('solicitud');
       // this.nav.navigateForward('/reutilizaciones/nueva-reutilizacion/step-two-reu');
-      this.forceButtons = true;
+      // this.forceButtons = true;
+      this.nav.navigateForward('/reutilizaciones/nueva-reutilizacion/step-two-reu');
     }
   }
 
   nuevaRecepcion(t)
   {
     localStorage.setItem('tipo_operativa',t);
-    this.nav.navigateForward('/reutilizaciones/nueva-reutilizacion/step-two-reu');
+    if (t == 'RUD') {
+      if (!this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'RSR')) {
+        this.nav.navigateForward('/reutilizaciones/nueva-reutilizacion/step-two-reu');
+      }else{  
+        this.titulo = "NUEVA REUTILIZACIÓN 1 - Solicitud";
+        this.forceButtons = true;
+      }
+    }else{
+      this.nav.navigateForward('/reutilizaciones/nueva-reutilizacion/step-two-reu');
+    }
   }
 
   atras() {
-    if (!this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'RSR')) {
+    if (!this.forceButtons)
+    {
+      this._location.back();
+    }else{
+      this.titulo = "NUEVA REUTILIZACIÓN 1";
+      return this.forceButtons = false;
+    }
+    /*if (!this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'RSR')) {
       this._location.back();
     }else{
       if (this.forceButtons) {
         return this.forceButtons = false;
       }
       this._location.back();
-    }
+    }*/
   }
 
   promptBack()

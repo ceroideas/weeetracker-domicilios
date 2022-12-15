@@ -51,13 +51,14 @@ export class StepOneRcpPage implements OnInit {
   async cargarUsuario()
   {
     this.usuario = await this.usuarioService.cargarToken();
+    this.titulo = "NUEVA RECEPCIÓN - 1";
 
-    if (this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'CSR')) {
+    /*if (this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'CSR')) {
       this.titulo = "NUEVA RECEPCIÓN 1 - Solicitud";
     }else{
       this.titulo = "NUEVA RECEPCIÓN - 1";
       this.myForm.patchValue({type: 'notpermission'});
-    }
+    }*/
     console.log(this.usuario);
   }
 
@@ -132,25 +133,42 @@ export class StepOneRcpPage implements OnInit {
       // localStorage.setItem('tipo_operativa','REF');
       localStorage.removeItem('solicitud');
       // this.nav.navigateForward('/nueva-recepcion/step-two-rcp');
-      this.forceButtons = true;
+      // this.forceButtons = true;
+      this.nav.navigateForward('/nueva-recepcion/step-two-rcp');
     }
   }
 
   nuevaRecepcion(t)
   {
     localStorage.setItem('tipo_operativa',t);
-    this.nav.navigateForward('/nueva-recepcion/step-two-rcp');
+    if (t == 'RED') {
+      if (!this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'CSR')) {
+        this.nav.navigateForward('/nueva-recepcion/step-two-rcp');
+      }else{  
+        this.titulo = "NUEVA RECEPCIÓN 1 - Solicitud";
+        this.forceButtons = true;
+      }
+    }else{
+      this.nav.navigateForward('/nueva-recepcion/step-two-rcp');
+    }
   }
 
   atras() {
-    if (!this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'CSR')) {
+    if (!this.forceButtons)
+    {
+      this._location.back();
+    }else{
+      this.titulo = "NUEVA RECEPCIÓN 1";
+      return this.forceButtons = false;
+    }
+    /*if (!this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'CSR')) {
       this._location.back();
     }else{
       if (this.forceButtons) {
         return this.forceButtons = false;
       }
       this._location.back();
-    }
+    }*/
   }
 
   promptBack()

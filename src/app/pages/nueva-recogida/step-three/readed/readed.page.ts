@@ -314,7 +314,7 @@ export class ReadedPage implements OnInit {
     {
       for(let j of f)
       {
-        if (operacion == 'END' || operacion == 'REX')
+        if (operacion == 'END' || operacion == 'REX' || operacion == 'REN')
         {
           if (j.id == a.pidFraccion) {
             return a;
@@ -327,6 +327,7 @@ export class ReadedPage implements OnInit {
       }
     }
     let data1 = JSON.parse(localStorage.getItem('fracciones')).filter(filtro);
+    console.log(data1);
     let data2 = JSON.parse(localStorage.getItem('fracciones'));
     this.fracciones = data1;
 
@@ -353,6 +354,7 @@ export class ReadedPage implements OnInit {
         this.loadedContenedor = true;
         let fracciones = [];
         let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
+        console.log(resp);
         for (let i of resp) {
           if (i.SidFraccion) {
             fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
@@ -506,9 +508,15 @@ export class ReadedPage implements OnInit {
       if (localStorage.getItem('alt_title_rd_2')) {
         localStorage.setItem('alt_title_sm','NUEVA ENTREGA 3 - RAEE: Listado RAEE');
       }else if (localStorage.getItem('alt_title_rd_3')) {
-        localStorage.setItem('alt_title_sm','NUEVA ENTREGA DIRECTA 3 - RAEE: Listado RAEE');
+        localStorage.setItem('alt_title_sm','NUEVA ENTREGA DIRECTA 4 - RAEE: Listado RAEE');
       }else if (localStorage.getItem('alt_title_rd_4')) {
         localStorage.setItem('alt_title_sm','NUEVA REUTILIZACIÓN 3 - RAEE: Listado RAEE');
+      }else if (localStorage.getItem('alt_title_rd_5')) {
+        localStorage.setItem('alt_title_sm','NUEVA RECOGIDA DE REUTILIZACIÓN 3 - RAEE: Listado RAEE');
+      }else if (localStorage.getItem('alt_title_rd_6')) {
+        localStorage.setItem('alt_title_sm','NUEVA REUTILIZACIÓN ENTREGA 3 - RAEE: Listado RAEE');
+      }else if (localStorage.getItem('alt_title_rd_7')) {
+        localStorage.setItem('alt_title_sm','NUEVA REUTILIZACIÓN ENTREGA DIRECTA 4 - RAEE: Listado RAEE');
       }else if (localStorage.getItem('alt_title_rd')) {
         localStorage.setItem('alt_title_sm','NUEVA RECEPCIÓN 3 - RAEE: Listado RAEE');
       }else{

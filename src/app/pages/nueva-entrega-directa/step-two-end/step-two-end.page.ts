@@ -55,7 +55,7 @@ export class StepTwoEndPage implements OnInit {
   }
 
   ngOnInit() {
-    this.consultaService.createLogger('NUEVA RECOGIDA');
+    this.consultaService.createLogger('NUEVA ENTREGA DIRECTA');
 
     this.storage.create().then(async (storage)=>{
 

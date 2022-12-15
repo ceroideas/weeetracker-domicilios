@@ -118,7 +118,7 @@ export class StepThreeRcpPage implements OnInit {
       this.loadingCtrl.create({message:"Comprobando etiqueta..."}).then(l=>{
         l.present();
         
-        this.consultaService.GetRaee(data,parseInt(this.usuario.dtercero),'RED').subscribe((data:any)=>{
+        this.consultaService.GetRaee(data,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
           if (data.statusCode && data.statusCode == 422) {
             l.dismiss();
@@ -271,7 +271,7 @@ export class StepThreeRcpPage implements OnInit {
   {
     return new Promise(resolve => {
 
-      this.consultaService.GetRaee(i,parseInt(this.usuario.dtercero),'RED').subscribe((data:any)=>{
+      this.consultaService.GetRaee(i,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
           if (data.statusCode && data.statusCode == 422) {
             this.alertCtrl.create({message:data.value,buttons: ['Ok']}).then(a=>a.present());
