@@ -91,7 +91,7 @@ export class StepOneRcpPage implements OnInit {
   adelante()
   {
     if (this.myForm.value.type == 'request') {
-      localStorage.setItem('tipo_operativa','RED');
+      // localStorage.setItem('tipo_operativa','RED');
       if (!this.myForm.value.request_n) {
         this.alertCtrl.create({message:"Debe escribir el número de la Solicitud", buttons:["Ok"]}).then(a=>a.present());
         this.consultaService.createLogger('E | No se ha escrito numero de solicitud');
@@ -141,16 +141,16 @@ export class StepOneRcpPage implements OnInit {
   nuevaRecepcion(t)
   {
     localStorage.setItem('tipo_operativa',t);
-    if (t == 'RED') {
+    // if (t == 'RED') {
       if (!this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'CSR')) {
         this.nav.navigateForward('/nueva-recepcion/step-two-rcp');
       }else{  
         this.titulo = "NUEVA RECEPCIÓN 1 - Solicitud";
         this.forceButtons = true;
       }
-    }else{
+    /*}else{
       this.nav.navigateForward('/nueva-recepcion/step-two-rcp');
-    }
+    }*/
   }
 
   atras() {

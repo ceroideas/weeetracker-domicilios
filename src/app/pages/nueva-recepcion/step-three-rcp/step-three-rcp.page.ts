@@ -140,10 +140,10 @@ export class StepThreeRcpPage implements OnInit {
 
           l.dismiss();
 
-          // if (data.recogido.length) {
-          //   this.consultaService.createLogger('Residuo ya recogido Success');
-          //   return this.alertCtrl.create({message:"El Residuo ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
-          // }
+          if (data.recogido.length) {
+            this.consultaService.createLogger('Residuo ya recogido Success');
+            return this.alertCtrl.create({message:"El Residuo ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
+          }
 
           if (data.raee) {
             let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
@@ -302,11 +302,11 @@ export class StepThreeRcpPage implements OnInit {
             }
           }
 
-          // if (data.recogido.length) {
-          //   this.consultaService.createLogger('Residuo ya recogido Success');
-          //   this.alertCtrl.create({message:"El Residuo "+i+" ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
-          //   return resolve(true);
-          // }
+          if (data.recogido.length) {
+            this.consultaService.createLogger('Residuo ya recogido Success');
+            this.alertCtrl.create({message:"El Residuo "+i+" ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
+            return resolve(true);
+          }
 
           if (data.raee) {
             let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));

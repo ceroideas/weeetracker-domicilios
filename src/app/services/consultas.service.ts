@@ -20,7 +20,7 @@ export class ConsultasService {
 
   url = environment.apiUrl;
 
-  public actualV = '1.0.30';
+  public actualV = '1.0.32';
 
   constructor(private http: HttpClient, private file: _File, private platform: Platform, private keyboard: Keyboard) {
   }
@@ -164,8 +164,8 @@ export class ConsultasService {
   buscarCentro(data){
     return this.http.post(apiUrl + '/solicitud/findCentros', data);
   }
-  centrosGestores(id1,id2){
-    return this.http.get(apiUrl + '/solicitud/centrosGestores/'+id1+'/'+id2);
+  centrosGestores(id1,id2,id3){
+    return this.http.get(apiUrl + '/solicitud/centrosGestores/'+id1+'/'+id2+'/'+id3);
   }
   centrosEntrega(id1,id2,id3){
     return this.http.get(apiUrl + '/solicitud/centrosEntrega/'+id1+'/'+id2+'/'+id3);
@@ -190,9 +190,9 @@ export class ConsultasService {
   {
     return this.http.get(apiUrl + '/solicitud/infoTercero/'+idCentro);
   }
-  centroData2(id,id1,id2)
+  centroData2(id,id1,id2,op)
   {
-    return this.http.get(apiUrl + '/solicitud/infoTercero2/'+id+'/'+id1+'/'+id2);
+    return this.http.get(apiUrl + '/solicitud/infoTercero2/'+id+'/'+id1+'/'+id2+'/'+op);
   }
   ubicacionCentro(data)
   {

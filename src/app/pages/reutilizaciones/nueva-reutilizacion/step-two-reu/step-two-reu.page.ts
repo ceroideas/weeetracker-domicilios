@@ -103,7 +103,7 @@ export class StepTwoReuPage implements OnInit {
       // this.mostrarNuevo = false;
       this.titulo = "NUEVA REUTILIZACIÓN 2 - Origen Residuo: Seleccion";
 
-      this.consultaService.centrosGestores(this.usuario.tercero.PidTercero,this.usuario.dtercero).subscribe((data:any)=>{
+      this.consultaService.centrosGestores(this.usuario.tercero.PidTercero,this.usuario.dtercero,'REU').subscribe((data:any)=>{
         this.listadoGestores = data.centros;
       })
 
@@ -505,7 +505,7 @@ export class StepTwoReuPage implements OnInit {
     this.loadingCtrl.create({message: "Obteniendo información de centro..."}).then(l=>{
       l.present();
 
-      this.consultaService.centroData2(id,this.usuario.tercero.PidTercero,this.usuario.dtercero).subscribe((data:any)=>{
+      this.consultaService.centroData2(id,this.usuario.tercero.PidTercero,this.usuario.dtercero,'REU').subscribe((data:any)=>{
 
         this.consultaService.createLogger('Informacion del Centro Success');
 

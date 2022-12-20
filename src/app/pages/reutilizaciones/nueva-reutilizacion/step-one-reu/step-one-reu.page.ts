@@ -91,7 +91,7 @@ export class StepOneReuPage implements OnInit {
   adelante()
   {
     if (this.myForm.value.type == 'request') {
-      localStorage.setItem('tipo_operativa','RUD');
+      // localStorage.setItem('tipo_operativa','RUD');
       if (!this.myForm.value.request_n) {
         this.alertCtrl.create({message:"Debe escribir el número de la Solicitud", buttons:["Ok"]}).then(a=>a.present());
         this.consultaService.createLogger('E | No se ha escrito numero de solicitud');
@@ -141,16 +141,16 @@ export class StepOneReuPage implements OnInit {
   nuevaRecepcion(t)
   {
     localStorage.setItem('tipo_operativa',t);
-    if (t == 'RUD') {
+    // if (t == 'RUD') {
       if (!this.usuario.responsabilidades.find(x=>x.TipoOperacion == 'RSR')) {
         this.nav.navigateForward('/reutilizaciones/nueva-reutilizacion/step-two-reu');
       }else{  
         this.titulo = "NUEVA REUTILIZACIÓN 1 - Solicitud";
         this.forceButtons = true;
       }
-    }else{
+    /*}else{
       this.nav.navigateForward('/reutilizaciones/nueva-reutilizacion/step-two-reu');
-    }
+    }*/
   }
 
   atras() {
