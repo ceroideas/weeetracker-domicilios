@@ -39,6 +39,10 @@ export class ConsultasService {
     let etiquetaObj = { Etiqueta: etiqueta, IdCentro: centro, Operativa: operativa };
     return this.http.post(apiUrl + '/residuo/GetRaee', etiquetaObj);
   }
+  GetRaeeReutilizacion(etiqueta: string, centro: number, operativa = '') {
+    let etiquetaObj = { Etiqueta: etiqueta, IdCentro: centro, Operativa: operativa };
+    return this.http.post(apiUrl + '/residuo/GetRaeeReutilizacion', etiquetaObj);
+  }
   GetRaee2(etiqueta: string, centro: number) {
     let etiquetaObj = { Etiqueta: etiqueta, IdCentro: centro };
     return this.http.post(apiUrl + '/residuo/GetRaee2', etiquetaObj);

@@ -289,7 +289,7 @@ export class PesarReutilizacionesPage implements OnInit {
     this.show = false;
 
     this.certificados = certificados.filter(x=>
-      (x.fecha.indexOf(this.filterDate) != -1 || !this.filterDate)
+      (x.ultimaActualizacion.indexOf(this.filterDate) != -1 || !this.filterDate)
         && (x.pidCertificado.indexOf(this.certificado) != -1 || !this.certificado)
     );
   }

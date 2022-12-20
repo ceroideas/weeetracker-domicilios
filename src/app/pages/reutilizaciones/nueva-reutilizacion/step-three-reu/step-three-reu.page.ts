@@ -118,11 +118,13 @@ export class StepThreeReuPage implements OnInit {
       this.loadingCtrl.create({message:"Comprobando etiqueta..."}).then(l=>{
         l.present();
         
-        this.consultaService.GetRaee(data,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
+        this.consultaService.GetRaeeReutilizacion(data,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
           let fracciones = [];
 
           let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
+
+          console.log("resps",resp);
           for (let i of resp) {
             if (i.SidFraccion) {
               fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
@@ -267,7 +269,7 @@ export class StepThreeReuPage implements OnInit {
   {
     return new Promise(resolve => {
 
-      this.consultaService.GetRaee(i,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
+      this.consultaService.GetRaeeReutilizacion(i,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
           var lectura = {
               etiqueta: i,
