@@ -175,7 +175,7 @@ export class StepSixReuPage implements OnInit {
   }
 
   async ngOnInit() {
-    this.consultas.createLogger('Recepción Completada Success');
+    this.consultas.createLogger('Reutilización Completada Success');
   }
 
   padLeft(num, size) {
@@ -386,7 +386,7 @@ export class StepSixReuPage implements OnInit {
 
     this.consultas.createLogger('Guardando los datos Success');
 
-    this.loadingCtrl.create({message:"Guardando la información de Recepción"}).then(l=>{
+    this.loadingCtrl.create({message:"Guardando la información de Reutilización"}).then(l=>{
       l.present();
 
       this.consultas.informacion({firmas:firmas, certificado:certificado, raees:raees, raeescertificados:raeescertificados, fotos:fotos}).subscribe(async (data:any)=>{

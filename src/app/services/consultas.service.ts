@@ -211,8 +211,8 @@ export class ConsultasService {
   listarUsuarios(centro){
     return this.http.get(apiUrl + '/users/listar/'+centro);
   }
-  getResponsabilities(tercero_origen, direccion_origen, tercero_destino, direccion_destino) {
-    return this.http.get(apiUrl + '/users/getResponsabilities/'+tercero_origen+'/'+direccion_origen+'/'+tercero_destino+'/'+direccion_destino);
+  getResponsabilities(tercero_origen, direccion_origen, tercero_destino, direccion_destino, operativa = "N") {
+    return this.http.get(apiUrl + '/users/getResponsabilities/'+tercero_origen+'/'+direccion_origen+'/'+tercero_destino+'/'+direccion_destino+'/'+operativa);
   }
   getResponsabilities2(tercero_destino, direccion_destino) {
     return this.http.get(apiUrl + '/users/getResponsabilities2/'+tercero_destino+'/'+direccion_destino);

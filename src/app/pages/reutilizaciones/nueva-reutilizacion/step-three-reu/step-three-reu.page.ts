@@ -120,6 +120,11 @@ export class StepThreeReuPage implements OnInit {
         
         this.consultaService.GetRaeeReutilizacion(data,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
+          if (data.statusCode && data.statusCode == 422) {
+            l.dismiss();
+            return this.alertCtrl.create({message:data.value,buttons: ['Ok']}).then(a=>a.present());
+          }
+
           let fracciones = [];
 
           let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
@@ -248,7 +253,7 @@ export class StepThreeReuPage implements OnInit {
         origen.sidTercero,
         origen.sidDireccionTercero,
         this.usuario.tercero.PidTercero,
-        this.usuario.dtercero).subscribe((data:any)=>{
+        this.usuario.dtercero, 'R').subscribe((data:any)=>{
         // console.log(data.resp,this.usuario.responsabilidades)
         console.log(data.resp);
         localStorage.setItem('other_resp',JSON.stringify(data.resp));
@@ -270,6 +275,11 @@ export class StepThreeReuPage implements OnInit {
     return new Promise(resolve => {
 
       this.consultaService.GetRaeeReutilizacion(i,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
+
+          if (data.statusCode && data.statusCode == 422) {
+            this.alertCtrl.create({message:data.value,buttons: ['Ok']}).then(a=>a.present());
+            return resolve(true);
+          }
 
           var lectura = {
               etiqueta: i,
