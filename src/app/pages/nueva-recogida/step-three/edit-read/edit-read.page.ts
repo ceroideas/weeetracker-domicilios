@@ -390,6 +390,11 @@ export class EditReadPage implements OnInit {
       let data2 = JSON.parse(localStorage.getItem('fracciones'));
       this.fracciones = data1;
 
+      if (localStorage.getItem('geoFracciones')) {
+        // code...
+        this.fracciones = this.fracciones.filter(x=>JSON.parse(localStorage.getItem('geoFracciones')).includes(x.pidFraccion));
+      }
+
       if (!this.loadedFraccion) {
         this.loadedFraccion = true;
         this.myForm.patchValue({fraccion: this.read?.values.fraccion});

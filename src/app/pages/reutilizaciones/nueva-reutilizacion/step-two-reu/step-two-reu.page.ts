@@ -247,6 +247,7 @@ export class StepTwoReuPage implements OnInit {
     this.loadingCtrl.create({message:"Buscando centros..."}).then(l=>{
       l.present();
       this.consultaService.buscarCentro({
+        direccion:this.usuario.dtercero,
         nombre:this.myForm.value.nombre, nif: this.myForm.value.nif,
         tercero: this.usuario.tercero.PidTercero, tipooperativa: this.solicitud ? localStorage.getItem('tipo_operativa')+'_S' : localStorage.getItem('tipo_operativa')}).subscribe((data:any)=>{
 
@@ -331,9 +332,13 @@ export class StepTwoReuPage implements OnInit {
     this.loadingCtrl.create({message: "Obteniendo información de centro..."}).then(l=>{
       l.present();
 
-      this.consultaService.centroData(id).subscribe((data:any)=>{
+      this.consultaService.centroData(id,this.usuario.tercero.PidTercero,this.usuario.dtercero).subscribe((data:any)=>{
 
         this.consultaService.createLogger('Informacion del Centro Success');
+
+        localStorage.removeItem('geoFracciones');
+
+        if (data.info.fracciones && data.info.fracciones[0] != null) {localStorage.setItem('geoFracciones',JSON.stringify(data.info.fracciones));}
 
         l.dismiss();
 

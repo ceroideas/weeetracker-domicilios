@@ -146,6 +146,11 @@ export class StepThreeRcpPage implements OnInit {
           }
 
           if (data.raee) {
+
+            if (localStorage.getItem('geoFracciones')) {
+              fracciones = fracciones.filter(x=>JSON.parse(localStorage.getItem('geoFracciones')).includes(x.id));
+            }
+
             let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
 
             if (!result) {
@@ -309,6 +314,11 @@ export class StepThreeRcpPage implements OnInit {
           }
 
           if (data.raee) {
+
+            if (localStorage.getItem('geoFracciones')) {
+              fracciones = fracciones.filter(x=>JSON.parse(localStorage.getItem('geoFracciones')).includes(x.id));
+            }
+            
             let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
 
             if (!result) {
