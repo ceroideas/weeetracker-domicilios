@@ -45,6 +45,7 @@ export class SummaryPage implements OnInit {
       this._storage.get('lecturas').then((storage)=>{
         this.lecturas = storage;
         console.log(storage);
+        this.lecturas = this.lecturas.sort((a, b) => a.values.etiqueta.localeCompare(b.values.etiqueta))
       })
     });
 

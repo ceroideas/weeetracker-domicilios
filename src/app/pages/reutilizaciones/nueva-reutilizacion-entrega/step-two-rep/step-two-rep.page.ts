@@ -109,6 +109,8 @@ export class StepTwoRepPage implements OnInit {
         }
         // this.listadoGestores = data.centros;
 
+        this.listadoGestores = this.listadoGestores.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
 
         if (data.centros.length == 0) {
           this.atras();
@@ -201,8 +203,13 @@ export class StepTwoRepPage implements OnInit {
 
   adelante()
   {
+    if (this.selected)
+    {
+      this.aceptar();
+      return this.selected = false;
+    }
     if (!this.myForm.valid) {
-      return this.alertCtrl.create({message:"Por favor, seleccione un origen válido.", buttons: ["Ok"]}).then(a=>a.present());
+      return this.alertCtrl.create({message:"Por favor, seleccione un gestor válido.", buttons: ["Ok"]}).then(a=>a.present());
     }
     localStorage.setItem('origen',JSON.stringify(this.myForm.value));
     this.nav.navigateForward('/reutilizaciones/nueva-reutilizacion-entrega/step-three-rep')

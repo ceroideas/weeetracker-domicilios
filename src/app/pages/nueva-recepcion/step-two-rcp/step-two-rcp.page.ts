@@ -83,10 +83,12 @@ export class StepTwoRcpPage implements OnInit {
 
     this.cargarUsuario();
 
-    if (localStorage.getItem('buscarDirecciones')) {
-      localStorage.removeItem('buscarDirecciones')
-      this.sendToSearch(this.solicitud.tercero);
-    }
+    setTimeout(()=>{
+      if (localStorage.getItem('buscarDirecciones')) {
+        localStorage.removeItem('buscarDirecciones')
+        this.sendToSearch(this.solicitud.tercero);
+      }
+    },500)
 
     this.storage.create().then(async (storage)=>{
       storage.remove('lecturas');
@@ -105,6 +107,8 @@ export class StepTwoRcpPage implements OnInit {
 
       this.consultaService.centrosGestores(this.usuario.tercero.PidTercero,this.usuario.dtercero,'REF').subscribe((data:any)=>{
         this.listadoGestores = data.centros;
+
+        this.listadoGestores = this.listadoGestores.sort((a, b) => a.nombre.localeCompare(b.nombre));
       })
 
     }
@@ -192,6 +196,11 @@ export class StepTwoRcpPage implements OnInit {
 
   adelante()
   {
+    if (this.selected)
+    {
+      this.aceptar();
+      return this.selected = false;
+    }
     if (!this.myForm.valid) {
       return this.alertCtrl.create({message:"Por favor, seleccione un origen válido.", buttons: ["Ok"]}).then(a=>a.present());
     }
@@ -336,9 +345,9 @@ export class StepTwoRcpPage implements OnInit {
 
         this.consultaService.createLogger('Informacion del Centro Success');
 
-        localStorage.removeItem('geoFracciones');
+        // localStorage.removeItem('geoFracciones');
 
-        if (data.info.fracciones && data.info.fracciones[0] != null) {localStorage.setItem('geoFracciones',JSON.stringify(data.info.fracciones));}
+        // if (data.info.fracciones && data.info.fracciones[0] != null) {localStorage.setItem('geoFracciones',JSON.stringify(data.info.fracciones));}
 
         l.dismiss();
 

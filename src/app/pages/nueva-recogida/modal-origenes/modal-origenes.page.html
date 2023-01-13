@@ -9,7 +9,12 @@
   <ion-list>
     
     <ion-item *ngFor="let c of origenes" (click)="select(c)">
-      {{c.nombre}}, {{c.codigoPostal}} - {{c.nombreMunicipio}}, {{c.nombreProvincia}}, {{c.nombrePais}}
+      <span>
+        
+      {{c.nombre}}, {{c.codigoPostal}} - {{c.nombreMunicipio}}, {{c.nombreProvincia}}, {{c.nombrePais}} - 
+
+      <small style="color: crimson">{{c.sidTipoTercero | tipotercero}}</small>
+      </span>
     </ion-item>
 
   </ion-list>

@@ -66,29 +66,37 @@
       </ion-col>
 
 
+      <ion-col class="fila" size="12" style="overflow: auto; height: 200px;">
+
+        <ion-grid class="tabla" style="width: 600px;">
+
+          <table style="width: 100%; text-align: left;">
+                      
+                <thead style="font-size: 14px;">
+                    <tr>
+                        <th>Nº Certificado</th>
+                        <th>Fecha</th>
+                        <th>Origen/Procedencia</th>
+                        <th>Unidad</th>
+                    </tr>
+                </thead>
+
+                <tbody style="font-size: 10px;" *ngIf="certificados && certificados.length">
+                    <tr *ngFor="let item of certificados; let i = index" [ngClass]="{'trselected': (detallePeso == i)}" (click)="detallePeso = i; detallePesoBtn = true">
+                        <td>{{item.pidCertificado}}</td>
+                        <td>{{item.fecha | date:'dd/MM/yyyy'}}</td>
+                        <td>{{item.auxEntidad ? item.auxEntidad : item.nombre}}</td>
+                        <td>{{item.raeesCertificados.length}}</td>
+                    </tr>
+                </tbody>
+
+          </table>
+
+        </ion-grid>
+      </ion-col>
     </ion-row>
 
-    <table style="width: 100%; text-align: left;">
-                
-          <thead style="font-size: 14px;">
-              <tr>
-                  <th>Nº Certificado</th>
-                  <th>Fecha</th>
-                  <th>Origen/Procedencia</th>
-                  <th>Unidad</th>
-              </tr>
-          </thead>
 
-          <tbody style="font-size: 10px;" *ngIf="certificados && certificados.length">
-              <tr *ngFor="let item of certificados; let i = index" [ngClass]="{'trselected': (detallePeso == i)}" (click)="detallePeso = i; detallePesoBtn = true">
-                  <td>{{item.pidCertificado}}</td>
-                  <td>{{item.fecha | date:'dd/MM/yyyy'}}</td>
-                  <td>{{item.auxEntidad ? item.auxEntidad : item.nombre}}</td>
-                  <td>{{item.raeesCertificados.length}}</td>
-              </tr>
-          </tbody>
-
-    </table>
 
     <div text-center>
       <ion-button class="boton" [disabled]="!detallePesoBtn" (click)="pesar()">Siguiente</ion-button>

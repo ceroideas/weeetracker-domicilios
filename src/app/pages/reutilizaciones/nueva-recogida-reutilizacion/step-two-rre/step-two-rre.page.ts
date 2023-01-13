@@ -82,10 +82,12 @@ export class StepTwoRrePage implements OnInit {
 
     this.cargarUsuario();
 
-    if (localStorage.getItem('buscarDirecciones')) {
-      localStorage.removeItem('buscarDirecciones')
-      this.sendToSearch(this.solicitud.tercero);
-    }
+    setTimeout(()=>{
+      if (localStorage.getItem('buscarDirecciones')) {
+        localStorage.removeItem('buscarDirecciones')
+        this.sendToSearch(this.solicitud.tercero);
+      }
+    },500)
 
     this.storage.create().then(async (storage)=>{
       storage.remove('lecturas');
@@ -298,9 +300,9 @@ export class StepTwoRrePage implements OnInit {
 
         this.consultaService.createLogger('Informacion del Centro Success');
 
-        localStorage.removeItem('geoFracciones');
+        // localStorage.removeItem('geoFracciones');
 
-        if (data.info.fracciones && data.info.fracciones[0] != null) {localStorage.setItem('geoFracciones',JSON.stringify(data.info.fracciones));}
+        // if (data.info.fracciones && data.info.fracciones[0] != null) {localStorage.setItem('geoFracciones',JSON.stringify(data.info.fracciones));}
         
         l.dismiss();
 

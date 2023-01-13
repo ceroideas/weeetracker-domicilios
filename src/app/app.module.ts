@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -43,6 +43,10 @@ export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http);
 }
 
+import localeEs from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+registerLocaleData(localeEs, 'es');
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -65,6 +69,7 @@ export function createTranslateLoader(http: HttpClient) {
     })
   ],
   providers: [
+    {provide: LOCALE_ID, useValue: 'es'},
     Device,
     NativeAudio,
     File,

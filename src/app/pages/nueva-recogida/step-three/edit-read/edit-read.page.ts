@@ -390,7 +390,7 @@ export class EditReadPage implements OnInit {
       let data2 = JSON.parse(localStorage.getItem('fracciones'));
       this.fracciones = data1;
 
-      if (localStorage.getItem('geoFracciones')) {
+      if (localStorage.getItem('geoFracciones') && localStorage.getItem('geoFracciones') != '[]' && localStorage.getItem('tipo_operativa') == 'SSR') {
         // code...
         this.fracciones = this.fracciones.filter(x=>JSON.parse(localStorage.getItem('geoFracciones')).includes(x.pidFraccion));
       }

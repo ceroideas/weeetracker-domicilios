@@ -20,7 +20,7 @@ export class ConsultasService {
 
   url = environment.apiUrl;
 
-  public actualV = '1.0.33';
+  public actualV = '1.0.34';
 
   constructor(private http: HttpClient, private file: _File, private platform: Platform, private keyboard: Keyboard) {
   }
@@ -190,13 +190,17 @@ export class ConsultasService {
     return this.http.post(apiUrl + '/solicitud/nuevoOrigen', data);
   }
 
-  centroData(idCentro,tercero,direccion)
+  centroData(idCentro,tercero,direccion,tipooperativa = "")
   {
-    return this.http.get(apiUrl + '/solicitud/infoTercero/'+idCentro+'/'+tercero+'/'+direccion);
+    return this.http.get(apiUrl + '/solicitud/infoTercero/'+idCentro+'/'+tercero+'/'+direccion+'/'+tipooperativa);
   }
   centroData2(id,id1,id2,op)
   {
     return this.http.get(apiUrl + '/solicitud/infoTercero2/'+id+'/'+id1+'/'+id2+'/'+op);
+  }
+  geoFracciones(id1,id2,id3,id4)
+  {
+    return this.http.get(apiUrl + '/solicitud/geoFracciones/'+id1+'/'+id2+'/'+id3+'/'+id4);
   }
   ubicacionCentro(data)
   {

@@ -102,6 +102,8 @@ export class StepThreeRenPage implements OnInit {
 
         console.log(this.listadoGestores);
 
+        this.listadoGestores = this.listadoGestores.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
 
         if (data.centros.length == 0) {
           this.atras();
@@ -194,6 +196,11 @@ export class StepThreeRenPage implements OnInit {
 
   adelante()
   {
+    if (this.selected)
+    {
+      this.aceptar();
+      return this.selected = false;
+    }
     if (!this.myForm.valid) {
       return this.alertCtrl.create({message:"Por favor, seleccione un destino válido.", buttons: ["Ok"]}).then(a=>a.present());
     }

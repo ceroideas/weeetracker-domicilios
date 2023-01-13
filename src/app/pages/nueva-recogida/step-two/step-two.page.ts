@@ -65,6 +65,8 @@ export class StepTwoPage implements OnInit {
 
       sidTercero: [''],
       sidDireccionTercero: [''],
+      codigoIsla: [''],
+      idProvincia: [''],
 
       nombre_comercial: ['',Validators.required],
 
@@ -82,10 +84,12 @@ export class StepTwoPage implements OnInit {
 
     this.cargarUsuario();
 
-    if (localStorage.getItem('buscarDirecciones')) {
-      localStorage.removeItem('buscarDirecciones')
-      this.sendToSearch(this.solicitud.tercero);
-    }
+    setTimeout(()=>{
+      if (localStorage.getItem('buscarDirecciones')) {
+        localStorage.removeItem('buscarDirecciones')
+        this.sendToSearch(this.solicitud.tercero);
+      }
+    },500)
 
     this.storage.create().then(async (storage)=>{
       storage.remove('lecturas');
@@ -125,6 +129,8 @@ export class StepTwoPage implements OnInit {
         
         sidTercero: null,
         sidDireccionTercero: null,
+        codigoIsla: null,
+        idProvincia: null,
 
         centro: null,// this.direcciones[last].nombre,
         localidad: null,// this.direcciones[last].nombreMunicipio,
@@ -160,6 +166,8 @@ export class StepTwoPage implements OnInit {
             
             // sidTercero: direccion.pidTercero,
             sidDireccionTercero: direccion.pidDireccionTercero,
+            codigoIsla: direccion.codigoIsla,
+            idProvincia: direccion.sidProvincia,
 
             centro: direccion.nombre,
             localidad: data1['ubicacion']['_municipio'].nombre,
@@ -170,6 +178,8 @@ export class StepTwoPage implements OnInit {
             insRP: direccion.insRp,
             insRnP: direccion.insRnP,
           });
+
+          this.geoFracciones();
 
           l.dismiss();
 
@@ -242,6 +252,8 @@ export class StepTwoPage implements OnInit {
             // nif: "",
             sidTercero: "",
             sidDireccionTercero: "",
+            codigoIsla: "",
+            idProvincia: "",
 
             nombre_comercial: "",
             centro: "",
@@ -289,18 +301,44 @@ export class StepTwoPage implements OnInit {
     return self.indexOf(value) === index;
   }
 
+  geoFracciones()
+  {
+    this.consultaService.geoFracciones(
+      this.usuario.tercero.PidTercero,
+      this.usuario.dtercero,
+      this.myForm.value.idProvincia ? this.myForm.value.idProvincia : 0,
+      this.myForm.value.codigoIsla ? this.myForm.value.codigoIsla : 0).subscribe((data:any)=>{
+
+        let fr = [];
+
+        for (let i of data.info)
+        {
+          if (i.sidFraccion == null)
+          {
+            fr = [];
+            break;
+          }else{
+            fr.push(i.sidFraccion);
+          }
+        }
+
+        localStorage.setItem('geoFracciones',JSON.stringify(fr));
+
+      });
+  }
+
   sendToSearch(id)
   {
     this.loadingCtrl.create({message: "Obteniendo información de centro..."}).then(l=>{
       l.present();
 
-      this.consultaService.centroData(id,this.usuario.tercero.PidTercero,this.usuario.dtercero).subscribe((data:any)=>{
+      this.consultaService.centroData(id,this.usuario.tercero.PidTercero,this.usuario.dtercero,localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
         this.consultaService.createLogger('Informacion del Centro Success');
 
-        localStorage.removeItem('geoFracciones');
+        // localStorage.removeItem('geoFracciones');
 
-        if (data.info.fracciones && data.info.fracciones[0] != null) {localStorage.setItem('geoFracciones',JSON.stringify(data.info.fracciones));}
+        // if (data.info.fracciones && data.info.fracciones[0] != null) {localStorage.setItem('geoFracciones',JSON.stringify(data.info.fracciones));}
 
         l.dismiss();
 
@@ -333,6 +371,8 @@ export class StepTwoPage implements OnInit {
 
             sidTercero: centro.pidTercero,
             sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+            codigoIsla: this.direcciones[0].codigoIsla,
+            idProvincia: this.direcciones[0].sidProvincia,
 
             nombre_comercial: centro.nombreComercial,
             centro: null, // this.direcciones[0].nombre,
@@ -369,6 +409,8 @@ export class StepTwoPage implements OnInit {
 
                 sidTercero: centro.pidTercero,
                 sidDireccionTercero: direccion.pidDireccionTercero,
+                codigoIsla: direccion.codigoIsla,
+                idProvincia: direccion.sidProvincia,
 
                 nombre_comercial: centro.nombreComercial,
                 centro: direccion.nombre,
@@ -380,6 +422,8 @@ export class StepTwoPage implements OnInit {
                 insRP: direccion.insRp,
                 insRnP: direccion.insRnP,
               });
+
+              this.geoFracciones();
             }else{
               if (this.direcciones.length > 1) {
                 this.myForm.patchValue({
@@ -388,6 +432,8 @@ export class StepTwoPage implements OnInit {
 
                   sidTercero: centro.pidTercero,
                   sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+                  codigoIsla: this.direcciones[0].codigoIsla,
+                  idProvincia: this.direcciones[0].sidProvincia,
 
                   nombre_comercial: centro.nombreComercial,
                   centro: null, // this.direcciones[0].nombre,
@@ -407,6 +453,8 @@ export class StepTwoPage implements OnInit {
 
                   sidTercero: centro.pidTercero,
                   sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+                  codigoIsla: this.direcciones[0].codigoIsla,
+                  idProvincia: this.direcciones[0].sidProvincia,
 
                   nombre_comercial: centro.nombreComercial,
                   centro: null, // this.direcciones[0].nombre,
@@ -428,6 +476,7 @@ export class StepTwoPage implements OnInit {
 
                 sidTercero: centro.pidTercero,
                 sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+                codigoIsla: this.direcciones[0].codigoIsla,
 
                 nombre_comercial: centro.nombreComercial,
                 centro: null, // this.direcciones[0].nombre,

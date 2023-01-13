@@ -8,11 +8,14 @@ import { ModalOrigenesPageRoutingModule } from './modal-origenes-routing.module'
 
 import { ModalOrigenesPage } from './modal-origenes.page';
 
+import { PipesModule } from '../../../pipes/pipes.module';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    PipesModule,
     ModalOrigenesPageRoutingModule
   ],
   declarations: [ModalOrigenesPage]
