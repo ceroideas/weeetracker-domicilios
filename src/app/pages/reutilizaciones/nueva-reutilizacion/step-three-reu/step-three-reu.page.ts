@@ -157,7 +157,7 @@ export class StepThreeReuPage implements OnInit {
 
             if (!result) {
               this.consultaService.createLogger('Residuo no puede ser recogido Success');
-              return this.alertCtrl.create({message:"No se puede Recoger esa etiqueta",buttons: ['Ok']}).then(a=>a.present());
+              return this.alertCtrl.create({message:"No se puede Recoger la etiqueta "+localStorage.getItem('etiqueta'),buttons: ['Ok']}).then(a=>a.present());
             }
 
             let raee = data.raee;

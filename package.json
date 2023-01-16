@@ -124,8 +124,6 @@
       "com-darryncampbell-cordova-plugin-intent": {},
       "cordova-plugin-nativeaudio": {}
     },
-    "platforms": [
-      "android"
-    ]
+    "platforms": []
   }
 }
