@@ -132,7 +132,7 @@ export class StepThreeRrePage implements OnInit {
 
           if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
-            return this.alertCtrl.create({message:"El Residuo ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
+            return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+" ya ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
           }
 
           if (data.raee) {
@@ -145,7 +145,7 @@ export class StepThreeRrePage implements OnInit {
 
             if (!result) {
               this.consultaService.createLogger('Residuo no puede ser recogido Success');
-              return this.alertCtrl.create({message:"No se puede Recoger esa etiqueta",buttons: ['Ok']}).then(a=>a.present());
+              return this.alertCtrl.create({message:"No se puede Recoger la etiqueta "+localStorage.getItem('etiqueta'),buttons: ['Ok']}).then(a=>a.present());
             }
 
             let raee = data.raee;
@@ -276,7 +276,7 @@ export class StepThreeRrePage implements OnInit {
 
           if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
-            this.alertCtrl.create({message:"El Residuo "+i+" ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
+            this.alertCtrl.create({message:"La etiqueta "+i+" ya ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
             return resolve(true);
           }
 

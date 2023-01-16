@@ -327,6 +327,10 @@ export class EditReadPage implements OnInit {
       this.showControls = false;
     }
 
+    if (this.lecturas.length > 1) {
+      this.showControls = true;
+    }
+
     this.idx = this.lecturas.findIndex(x=>x.values.etiqueta == this.read.values.etiqueta);
 
     console.log(this.idx,this.lecturas.length);
