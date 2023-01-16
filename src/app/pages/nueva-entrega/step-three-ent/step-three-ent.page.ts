@@ -144,10 +144,10 @@ export class StepThreeEntPage implements OnInit {
 
           if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
-            // return this.alertCtrl.create({message:"El Residuo ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
+            // return this.alertCtrl.create({message:"El Residuo ya ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
           }else{
             this.consultaService.createLogger('Residuo aún no recogido Success');
-            return this.alertCtrl.create({message:"El Residuo aún no ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
+            return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+" ya ha sido entregada",buttons: ['Ok']}).then(a=>a.present());
           }
 
           if (data.raee) {
@@ -158,7 +158,7 @@ export class StepThreeEntPage implements OnInit {
 
             if (!result) {
               this.consultaService.createLogger('Residuo no puede ser entregado Success');
-              return this.alertCtrl.create({message:"No se puede Entregar esta etiqueta",buttons: ['Ok']}).then(a=>a.present());
+              return this.alertCtrl.create({message:"No se puede Entregar la etiqueta "+localStorage.getItem('etiqueta'),buttons: ['Ok']}).then(a=>a.present());
             }
 
             let raee = data.raee;
@@ -316,7 +316,7 @@ export class StepThreeEntPage implements OnInit {
             this.consultaService.createLogger('Residuo ya recogido Success');
           }else{
             this.consultaService.createLogger('Residuo aún no recogido Success');
-            this.alertCtrl.create({message:"El Residuo "+i+" aún no ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
+            this.alertCtrl.create({message:"La etiqueta "+i+" ya ha sido entregada",buttons: ['Ok']}).then(a=>a.present());
             return resolve(false);
           }
 
@@ -330,7 +330,7 @@ export class StepThreeEntPage implements OnInit {
 
             if (!result) {
               this.consultaService.createLogger('Residuo no puede ser entregado Success');
-              this.alertCtrl.create({message:"No se puede Entregar esta etiqueta",buttons: ['Ok']}).then(a=>a.present());
+              this.alertCtrl.create({message:"No se puede Entregar la etiqueta "+i,buttons: ['Ok']}).then(a=>a.present());
               return resolve(false);
             }
 
@@ -358,7 +358,7 @@ export class StepThreeEntPage implements OnInit {
 
           /*if (data) {
             this.consultaService.createLogger('Residui ya recogido Success');
-            this.alertCtrl.create({message:"El Residuo "+i+" ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
+            this.alertCtrl.create({message:"El Residuo "+i+" ya ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
             return resolve(true);
           }
 
