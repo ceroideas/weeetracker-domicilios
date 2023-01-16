@@ -142,11 +142,7 @@ export class StepThreeRcpPage implements OnInit {
 
           if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
-<<<<<<< HEAD
             return this.alertCtrl.create({message:"El Residuo "+localStorage.getItem('etiqueta')+" ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
-=======
-            return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+"ya ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
->>>>>>> a9a126df771ea8a0b78d32c340ad29ad47ea07a4
           }
 
           if (data.raee) {

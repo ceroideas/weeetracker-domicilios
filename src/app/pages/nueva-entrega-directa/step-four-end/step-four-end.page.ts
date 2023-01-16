@@ -144,7 +144,7 @@ export class StepFourEndPage implements OnInit {
 
           if (data.contador > 0)
           {
-            return this.alertCtrl.create({message:"El Residuo ya ha sido recogido y se encuentra en éste centro",buttons: ['Ok']}).then(a=>a.present());
+            return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+" ya ha sido recogida y se encuentra en éste centro",buttons: ['Ok']}).then(a=>a.present());
           }
 
           if (data.recogido.length) {
@@ -162,7 +162,7 @@ export class StepFourEndPage implements OnInit {
 
             if (!result) {
               this.consultaService.createLogger('Residuo no puede ser entregado Success');
-              return this.alertCtrl.create({message:"No se puede entregar esta etiqueta porque el destino no recoge la fracción",buttons: ['Ok']}).then(a=>a.present());
+              return this.alertCtrl.create({message:"No se puede entregar la etiqueta "+localStorage.getItem('etiqueta')+" porque el destino no recoge la fracción",buttons: ['Ok']}).then(a=>a.present());
             }
 
             let raee = data.raee;
@@ -344,7 +344,7 @@ export class StepFourEndPage implements OnInit {
 
           if (data.contador > 0)
           {
-            this.alertCtrl.create({message:"El Residuo "+data.raee.pidRaee+" ya ha sido recogido y se encuentra en éste centro",buttons: ['Ok']}).then(a=>a.present());
+            this.alertCtrl.create({message:"La etiqueta "+data.raee.pidRaee+" ya ha sido recogida y se encuentra en éste centro",buttons: ['Ok']}).then(a=>a.present());
             return resolve(false);
           }
 
@@ -365,7 +365,7 @@ export class StepFourEndPage implements OnInit {
 
             if (!result) {
               this.consultaService.createLogger('Residuo no puede ser entregado Success');
-              this.alertCtrl.create({message:"No se puede Entregar esta etiqueta",buttons: ['Ok']}).then(a=>a.present());
+              this.alertCtrl.create({message:"No se puede Entregar la etiqueta "+data.raee.pidRaee+" porque el destino no recoge la fracción",buttons: ['Ok']}).then(a=>a.present());
               return resolve(false);
             }
 

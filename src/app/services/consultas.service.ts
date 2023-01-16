@@ -190,7 +190,7 @@ export class ConsultasService {
     return this.http.post(apiUrl + '/solicitud/nuevoOrigen', data);
   }
 
-  centroData(idCentro,tercero,direccion,tipooperativa = "")
+  centroData(idCentro,tercero,direccion,tipooperativa)
   {
     return this.http.get(apiUrl + '/solicitud/infoTercero/'+idCentro+'/'+tercero+'/'+direccion+'/'+tipooperativa);
   }
