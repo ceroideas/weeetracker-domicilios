@@ -2,7 +2,7 @@
 
 <ion-content color="medium" fullscreen="fullscreen" padding="padding">
 
-  <form [formGroup]="myForm" #formulario="ngForm" *ngIf="tipooperativa == 'RUD'" novalidate>
+  <form [formGroup]="myForm" #formulario="ngForm" *ngIf="tipooperativa == 'RUD' || (tipooperativa == 'REU' && solicitud)" novalidate>
     <ion-grid>
 
       <ion-row>
@@ -141,7 +141,7 @@
     </ion-grid>
   </form>
 
-  <div *ngIf="tipooperativa == 'REU'">
+  <div *ngIf="tipooperativa == 'REU' && !solicitud">
     <div *ngIf="showList">
       
       <ion-grid>
