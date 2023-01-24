@@ -394,7 +394,11 @@ export class EditReadPage implements OnInit {
       let data2 = JSON.parse(localStorage.getItem('fracciones'));
       this.fracciones = data1;
 
-      if (localStorage.getItem('geoFracciones') && localStorage.getItem('geoFracciones') != '[]' && localStorage.getItem('tipo_operativa') == 'SSR') {
+      if (localStorage.getItem('geoFracciones') && localStorage.getItem('geoFracciones') != '[]' &&
+      (  localStorage.getItem('tipo_operativa') == 'SSR'
+      || localStorage.getItem('tipo_operativa') == 'RED'
+      || localStorage.getItem('tipo_operativa') == 'RSR'
+      || localStorage.getItem('tipo_operativa') == 'RUD')) {
         // code...
         this.fracciones = this.fracciones.filter(x=>JSON.parse(localStorage.getItem('geoFracciones')).includes(x.pidFraccion));
       }

@@ -186,6 +186,8 @@ export class StepTwoRcpPage implements OnInit {
             insRnP: direccion.insRnP,
           });
 
+          this.geoFracciones();
+
           l.dismiss();
 
         });
@@ -334,6 +336,32 @@ export class StepTwoRcpPage implements OnInit {
     return self.indexOf(value) === index;
   }
 
+  geoFracciones()
+  {
+    this.consultaService.geoFracciones(
+      this.usuario.tercero.PidTercero,
+      this.usuario.dtercero,
+      this.myForm.value.idProvincia ? this.myForm.value.idProvincia : 0,
+      this.myForm.value.codigoIsla ? this.myForm.value.codigoIsla : 0, localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
+
+        let fr = [];
+
+        for (let i of data.info)
+        {
+          if (i.sidFraccion == null)
+          {
+            fr = [];
+            break;
+          }else{
+            fr.push(i.sidFraccion);
+          }
+        }
+
+        localStorage.setItem('geoFracciones',JSON.stringify(fr));
+
+      });
+  }
+
   sendToSearch(id)
   {
     this.available_provinces = [];
@@ -356,6 +384,7 @@ export class StepTwoRcpPage implements OnInit {
         this.direcciones = data.info.direcciones;
 
         if (!this.direcciones.length) {
+          this.atras();
           this.consultaService.createLogger('E | No hay direcciones que mostrar en el origen ERROR');
           return this.alertCtrl.create({message:"No hay direcciones que mostrar, por favor, ingrese nuevo origen", buttons: ['Ok']}).then(a=>{
             a.present();
@@ -402,6 +431,8 @@ export class StepTwoRcpPage implements OnInit {
                 insRP: direccion.insRp,
                 insRnP: direccion.insRnP,
               });
+
+              this.geoFracciones();
             }else{
 
               if (this.direcciones.length > 1) {

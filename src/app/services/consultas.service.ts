@@ -20,7 +20,7 @@ export class ConsultasService {
 
   url = environment.apiUrl;
 
-  public actualV = '1.0.36';
+  public actualV = '1.0.38';
 
   constructor(private http: HttpClient, private file: _File, private platform: Platform, private keyboard: Keyboard) {
   }
@@ -198,9 +198,9 @@ export class ConsultasService {
   {
     return this.http.get(apiUrl + '/solicitud/infoTercero2/'+id+'/'+id1+'/'+id2+'/'+op);
   }
-  geoFracciones(id1,id2,id3,id4)
+  geoFracciones(id1,id2,id3,id4,op)
   {
-    return this.http.get(apiUrl + '/solicitud/geoFracciones/'+id1+'/'+id2+'/'+id3+'/'+id4);
+    return this.http.get(apiUrl + '/solicitud/geoFracciones/'+id1+'/'+id2+'/'+id3+'/'+id4+'/'+op);
   }
   ubicacionCentro(data)
   {

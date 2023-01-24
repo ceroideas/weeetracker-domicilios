@@ -108,19 +108,37 @@ export class StepOneRcpPage implements OnInit {
           };
           this.consultaService.validacionSolicitud(solicitud).subscribe((res:any) => {
 
-            l.dismiss();
+            // l.dismiss();
 
             if (!res.solicitud) {
+              l.dismiss();
+
               this.consultaService.createLogger('E | No se encuentra la Solicitud');
               return this.alertCtrl.create({message:"No se encuentra la Solicitud", buttons:["Ok"]}).then(a=>a.present());
             }
 
             localStorage.setItem('buscarDirecciones','1');
             localStorage.setItem('solicitud',JSON.stringify(res.solicitud));
-            
-            this.consultaService.createLogger('Solicitud Encontrada Success');
 
-            this.nav.navigateForward('/nueva-recepcion/step-two-rcp');
+
+            this.consultaService.centroData(res.solicitud.response.tercero,this.usuario.tercero.PidTercero,this.usuario.dtercero,localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
+
+              this.consultaService.createLogger('Informacion del Centro Success');
+
+              l.dismiss();
+
+              let direcciones = data.info.direcciones;
+
+              if (!direcciones.length) {
+                this.consultaService.createLogger('E | No hay direcciones que mostrar en el origen ERROR');
+                return this.alertCtrl.create({message:"No hay direcciones que mostrar, por favor, ingrese nuevo origen", buttons: ['Ok']}).then(a=>{
+                  a.present();
+                });
+              }
+
+              this.consultaService.createLogger('Solicitud Encontrada Success');
+              this.nav.navigateForward('/nueva-recepcion/step-two-rcp');
+            });
           },err=>{
             console.log(err);
             l.dismiss();

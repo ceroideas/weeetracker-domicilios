@@ -356,6 +356,7 @@ export class StepTwoReuPage implements OnInit {
         this.direcciones = data.info.direcciones;
 
         if (!this.direcciones.length) {
+          this.atras();
           this.consultaService.createLogger('E | No hay direcciones que mostrar en el origen ERROR');
           return this.alertCtrl.create({message:"No hay direcciones que mostrar, por favor, ingrese nuevo origen", buttons: ['Ok']}).then(a=>{
             a.present();

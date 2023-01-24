@@ -307,7 +307,7 @@ export class StepTwoPage implements OnInit {
       this.usuario.tercero.PidTercero,
       this.usuario.dtercero,
       this.myForm.value.idProvincia ? this.myForm.value.idProvincia : 0,
-      this.myForm.value.codigoIsla ? this.myForm.value.codigoIsla : 0).subscribe((data:any)=>{
+      this.myForm.value.codigoIsla ? this.myForm.value.codigoIsla : 0, localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
         let fr = [];
 
