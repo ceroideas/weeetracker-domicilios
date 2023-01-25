@@ -38,6 +38,8 @@ export class StepTwoAltPage implements OnInit {
   filtermunicipios = [];
   showmunicipios = false;
 
+  solicitud = JSON.parse(localStorage.getItem('solicitud')) ? JSON.parse(localStorage.getItem('solicitud'))['response'] : null;
+
   constructor(private usuarioService: UsuarioService,
     public consultaService: ConsultasService,
     private _location: Location,
@@ -50,14 +52,36 @@ export class StepTwoAltPage implements OnInit {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,) {
 
+    let to = localStorage.getItem('tipo_operativa');
+
+    if (to == 'SSR' || to == 'CSR') {
+      this.titulo = "NUEVA RECOGIDA 2 - Origen Residuo Nuevo";
+    }
+
+    if (to == 'RCR' || to == 'RSR') {
+      this.titulo = "NUEVA REUTILIZACIÓN RECOGIDA 2 - Origen Residuo Nuevo";
+    }
+
+    if (to == 'RED' || to == 'REF') {
+      this.titulo = "NUEVA RECEPCIÓN 2 - Origen Residuo Nuevo";
+    }
+
+    if (to == 'RUD' || to == 'REU') {
+      this.titulo = "NUEVA REUTILIZACIÓN 2 - Origen Residuo Nuevo";
+    }
+
     this.myForm = this.fb.group({
-      // pidSolicitud: [this.gestor ? this.gestor.sid : '', Validators.required],
-      pidTercero: [this.gestor ? this.gestor.pidTercero : '', Validators.required],
+
+      pidSolicitud: [this.solicitud ? this.solicitud.sid : ''],
       nombre: [this.gestor ? this.gestor.nombre : '', Validators.required],
       nif: [this.gestor ? this.gestor.nif : '', Validators.required],
 
-      // codigo_postal: ['',Validators.required],
-      // nombre_comercial: [this.gestor ? this.gestor.nombre_comercial : '',Validators.required],
+      codigoIsla: [''],
+      idProvincia: [''],
+
+      sidDireccionTercero: [null],
+      sidTercero: [this.gestor ? this.gestor.pidTercero : '', Validators.required],
+
       centro: ['',Validators.required],
       contacto: ['',Validators.required],
       tlfn_contacto: ['',Validators.required],
@@ -79,6 +103,9 @@ export class StepTwoAltPage implements OnInit {
 
   adelante()
   {
+    if (!this.myForm.valid) {
+      return this.alertCtrl.create({message:"Por favor, complete todos los datos.", buttons: ["Ok"]}).then(a=>a.present());
+    }
     let val = this.myForm.value;
     let info = {
       Direccion: val.direccion,
@@ -102,12 +129,29 @@ export class StepTwoAltPage implements OnInit {
       insRnP: val.insRnP,
     }
 
-    this.consultaService.nuevoOrigen(info).subscribe((data:any)=>{
+    localStorage.setItem('nuevoOrigen',JSON.stringify(info));
+    localStorage.setItem('origen',JSON.stringify(this.myForm.value));
+    // this.events.publish('nuevoOrigen'/*,{centro:data.info.centro, direcciones: data.info.direcciones}*/);
+    let to = localStorage.getItem('tipo_operativa');
+    if (to == 'SSR' || to == 'CSR') {
+      this.nav.navigateForward('/nueva-recogida/step-three');
+    }
+
+    if (to == 'RCR' || to == 'RSR') {
+      this.nav.navigateForward('/reutilizaciones/nueva-recogida-reutilizacion/step-three-rre');
+    }
+
+    if (to == 'RED' || to == 'REF') {
+      this.nav.navigateForward('/nueva-recepcion/step-three-rcp');
+    }
+
+    if (to == 'RUD' || to == 'REU') {
+      this.nav.navigateForward('/reutilizaciones/nueva-reutilizacion/step-three-reu');
+    }
+    /*this.consultaService.nuevoOrigen(info).subscribe((data:any)=>{
       console.log(data);
-      localStorage.setItem('nuevoOrigen',JSON.stringify(info));
-      this.events.publish('nuevoOrigen',{centro:data.info.centro, direcciones: data.info.direcciones});
-      this._location.back();
-    })
+      // this._location.back();
+    })*/
   }
 
   atras() {

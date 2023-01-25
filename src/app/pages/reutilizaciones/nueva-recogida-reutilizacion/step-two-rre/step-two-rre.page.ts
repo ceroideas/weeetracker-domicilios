@@ -35,7 +35,7 @@ export class StepTwoRrePage implements OnInit {
   gestor:any = null;
   direcciones = null;
 
-  mostrarNuevo = false;
+  mostrarNuevo = true;
 
   available_provinces = [];
 
@@ -54,9 +54,9 @@ export class StepTwoRrePage implements OnInit {
 
     localStorage.removeItem('other_resp');
 
-    // if (localStorage.getItem('tipo_operativa') == 'CSR') {
-    //   this.mostrarNuevo = false;
-    // }
+    if (localStorage.getItem('tipo_operativa') == 'RCR') {
+      this.mostrarNuevo = false;
+    }
 
     this.myForm = this.fb.group({
       pidSolicitud: [this.solicitud ? this.solicitud.sid : ''],
@@ -196,7 +196,7 @@ export class StepTwoRrePage implements OnInit {
     this._location.back();
   }
 
-  /*nuevoOrigen()
+  nuevoOrigen()
   {
     if (!this.gestor) {
       this.consultaService.createLogger('E | Sin gestor de origen seleccionado');
@@ -206,7 +206,7 @@ export class StepTwoRrePage implements OnInit {
     }
     localStorage.setItem('gestor',JSON.stringify(this.gestor));
     this.nav.navigateForward('/nueva-recogida/step-two-alt');
-  }*/
+  }
 
   buscar()
   {

@@ -35,7 +35,7 @@ export class StepTwoRcpPage implements OnInit {
   gestor:any = null;
   direcciones = null;
 
-  mostrarNuevo = false;
+  mostrarNuevo = true;
 
   available_provinces = [];
   tipooperativa = localStorage.getItem('tipo_operativa');
@@ -101,8 +101,11 @@ export class StepTwoRcpPage implements OnInit {
     this.usuario = await this.usuarioService.cargarToken();
     console.log(this.usuario);
 
+    if (this.solicitud) {
+      this.mostrarNuevo = false;
+    }
+
     if (localStorage.getItem('tipo_operativa') == 'REF') {
-      // this.mostrarNuevo = false;
       this.titulo = "NUEVA RECEPCIÓN 2 - Origen Residuo: Seleccion";
 
       this.consultaService.centrosGestores(this.usuario.tercero.PidTercero,this.usuario.dtercero,'REF').subscribe((data:any)=>{
@@ -244,7 +247,7 @@ export class StepTwoRcpPage implements OnInit {
       });
     }
     localStorage.setItem('gestor',JSON.stringify(this.gestor));
-    this.nav.navigateForward('/nueva-recepcion/step-two-alt-rcp');
+    this.nav.navigateForward('/nueva-recogida/step-two-alt');
   }
 
   buscar()

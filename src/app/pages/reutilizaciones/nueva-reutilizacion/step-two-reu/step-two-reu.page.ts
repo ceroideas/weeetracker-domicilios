@@ -35,7 +35,7 @@ export class StepTwoReuPage implements OnInit {
   gestor:any = null;
   direcciones = null;
 
-  mostrarNuevo = false;
+  mostrarNuevo = true;
 
   available_provinces = [];
   tipooperativa = localStorage.getItem('tipo_operativa');
@@ -101,8 +101,11 @@ export class StepTwoReuPage implements OnInit {
     this.usuario = await this.usuarioService.cargarToken();
     console.log(this.usuario);
 
+    if (this.solicitud) {
+      this.mostrarNuevo = false;
+    }
+
     if (localStorage.getItem('tipo_operativa') == 'REU') {
-      // this.mostrarNuevo = false;
       this.titulo = "NUEVA REUTILIZACIÓN 2 - Origen Residuo: Seleccion";
 
       this.consultaService.centrosGestores(this.usuario.tercero.PidTercero,this.usuario.dtercero,'REU').subscribe((data:any)=>{
@@ -235,14 +238,14 @@ export class StepTwoReuPage implements OnInit {
 
   nuevoOrigen()
   {
-    // if (!this.gestor) {
-    //   this.consultaService.createLogger('E | Sin gestor de origen seleccionado');
-    //   return this.alertCtrl.create({message:"No ha seleccionado Gestor de origen", buttons: ['Ok']}).then(a=>{
-    //     a.present();
-    //   });
-    // }
-    // localStorage.setItem('gestor',JSON.stringify(this.gestor));
-    // this.nav.navigateForward('/nueva-recepcion/step-two-alt-rcp');
+    if (!this.gestor) {
+      this.consultaService.createLogger('E | Sin gestor de origen seleccionado');
+      return this.alertCtrl.create({message:"No ha seleccionado Gestor de origen", buttons: ['Ok']}).then(a=>{
+        a.present();
+      });
+    }
+    localStorage.setItem('gestor',JSON.stringify(this.gestor));
+    this.nav.navigateForward('/nueva-recogida/step-two-alt');
   }
 
   buscar()
