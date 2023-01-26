@@ -341,6 +341,7 @@ export class StepTwoRcpPage implements OnInit {
 
   geoFracciones()
   {
+    localStorage.removeItem('geoFracciones');
     this.consultaService.geoFracciones(
       this.usuario.tercero.PidTercero,
       this.usuario.dtercero,
