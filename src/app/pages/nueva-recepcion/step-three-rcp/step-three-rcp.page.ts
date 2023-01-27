@@ -128,11 +128,13 @@ export class StepThreeRcpPage implements OnInit {
           let fracciones = [];
 
           let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
-          for (let i of resp) {
-            if (i.SidFraccion) {
-              fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
-            }else{
-              fracciones.push({id:i.sidFraccion,operacion:i.tipoOperacion, contenedor:i.sidTipoContenedor});
+          if (resp) {
+            for (let i of resp) {
+              if (i.SidFraccion) {
+                fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
+              }else{
+                fracciones.push({id:i.sidFraccion,operacion:i.tipoOperacion, contenedor:i.sidTipoContenedor});
+              }
             }
           }
 
@@ -147,10 +149,9 @@ export class StepThreeRcpPage implements OnInit {
 
           if (data.raee) {
 
-            if (localStorage.getItem('geoFracciones')) {
+            if (localStorage.getItem('geoFracciones') && localStorage.getItem('geoFracciones') != "[]") {
               fracciones = fracciones.filter(x=>JSON.parse(localStorage.getItem('geoFracciones')).includes(x.id));
             }
-
 
             let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion && x.operacion == localStorage.getItem('tipo_operativa'));
 
@@ -259,6 +260,7 @@ export class StepThreeRcpPage implements OnInit {
         this.usuario.dtercero).subscribe((data:any)=>{
         // console.log(data.resp,this.usuario.responsabilidades)
         console.log(data.resp);
+
         localStorage.setItem('other_resp',JSON.stringify(data.resp));
       })
     }else{
@@ -300,11 +302,14 @@ export class StepThreeRcpPage implements OnInit {
           let fracciones = [];
 
           let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
-          for (let i of resp) {
-            if (i.SidFraccion) {
-              fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
-            }else{
-              fracciones.push({id:i.sidFraccion,operacion:i.tipoOperacion, contenedor:i.sidTipoContenedor});
+          if (resp)
+          {
+            for (let i of resp) {
+              if (i.SidFraccion) {
+                fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});
+              }else{
+                fracciones.push({id:i.sidFraccion,operacion:i.tipoOperacion, contenedor:i.sidTipoContenedor});
+              }
             }
           }
 
@@ -316,7 +321,7 @@ export class StepThreeRcpPage implements OnInit {
 
           if (data.raee) {
 
-            if (localStorage.getItem('geoFracciones')) {
+            if (localStorage.getItem('geoFracciones') && localStorage.getItem('geoFracciones') != "[]") {
               fracciones = fracciones.filter(x=>JSON.parse(localStorage.getItem('geoFracciones')).includes(x.id));
             }
             

@@ -65,6 +65,8 @@ export class StepTwoRrePage implements OnInit {
 
       sidTercero: [''],
       sidDireccionTercero: [''],
+      codigoIsla: [''],
+      idProvincia: [''],
 
       nombre_comercial: ['',Validators.required],
 
@@ -127,6 +129,8 @@ export class StepTwoRrePage implements OnInit {
         
         sidTercero: null,
         sidDireccionTercero: null,
+        codigoIsla: null,
+        idProvincia: null,
 
         centro: null,// this.direcciones[last].nombre,
         localidad: null,// this.direcciones[last].nombreMunicipio,
@@ -162,6 +166,8 @@ export class StepTwoRrePage implements OnInit {
             
             // sidTercero: direccion.pidTercero,
             sidDireccionTercero: direccion.pidDireccionTercero,
+            codigoIsla: direccion.codigoIsla,
+            idProvincia: direccion.sidProvincia,
 
             centro: direccion.nombre,
             localidad: data1['ubicacion']['_municipio'].nombre,
@@ -246,6 +252,8 @@ export class StepTwoRrePage implements OnInit {
             // nif: "",
             sidTercero: "",
             sidDireccionTercero: "",
+            codigoIsla: "",
+            idProvincia: "",
 
             nombre_comercial: "",
             centro: "",
@@ -364,6 +372,8 @@ export class StepTwoRrePage implements OnInit {
 
             sidTercero: centro.pidTercero,
             sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+            codigoIsla: this.direcciones[0].codigoIsla,
+            idProvincia: this.direcciones[0].sidProvincia,
 
             nombre_comercial: centro.nombreComercial,
             centro: null, // this.direcciones[0].nombre,
@@ -400,6 +410,8 @@ export class StepTwoRrePage implements OnInit {
 
                 sidTercero: centro.pidTercero,
                 sidDireccionTercero: direccion.pidDireccionTercero,
+                codigoIsla: direccion.codigoIsla,
+                idProvincia: direccion.sidProvincia,
 
                 nombre_comercial: centro.nombreComercial,
                 centro: direccion.nombre,
@@ -421,6 +433,8 @@ export class StepTwoRrePage implements OnInit {
 
                   sidTercero: centro.pidTercero,
                   sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+                  codigoIsla: this.direcciones[0].codigoIsla,
+                  idProvincia: this.direcciones[0].sidProvincia,
 
                   nombre_comercial: centro.nombreComercial,
                   centro: null, // this.direcciones[0].nombre,
@@ -440,6 +454,8 @@ export class StepTwoRrePage implements OnInit {
 
                   sidTercero: centro.pidTercero,
                   sidDireccionTercero: this.direcciones[0].pidDireccionTercero,
+                  codigoIsla: this.direcciones[0].codigoIsla,
+                  idProvincia: this.direcciones[0].sidProvincia,
 
                   nombre_comercial: centro.nombreComercial,
                   centro: null, // this.direcciones[0].nombre,

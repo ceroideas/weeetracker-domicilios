@@ -137,7 +137,7 @@ export class StepThreePage implements OnInit {
 
           if (data.raee) {
 
-            if (localStorage.getItem('geoFracciones')) {
+            if (localStorage.getItem('geoFracciones') && localStorage.getItem('geoFracciones') != "[]") {
               fracciones = fracciones.filter(x=>JSON.parse(localStorage.getItem('geoFracciones')).includes(x.id));
             }
 
@@ -270,7 +270,7 @@ export class StepThreePage implements OnInit {
 
           if (data.raee) {
 
-            if (localStorage.getItem('geoFracciones')) {
+            if (localStorage.getItem('geoFracciones') && localStorage.getItem('geoFracciones') != "[]") {
               fracciones = fracciones.filter(x=>JSON.parse(localStorage.getItem('geoFracciones')).includes(x.id));
             }
             

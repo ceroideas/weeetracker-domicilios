@@ -20,7 +20,7 @@ export class ConsultasService {
 
   url = environment.apiUrl;
 
-  public actualV = '1.0.40';
+  public actualV = '1.0.42';
 
   constructor(private http: HttpClient, private file: _File, private platform: Platform, private keyboard: Keyboard) {
   }
