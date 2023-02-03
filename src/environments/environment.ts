@@ -5,9 +5,9 @@
 export const environment = {
   production: false,
   message : 'Demo',
-  // apiUrl : 'https://test-gestores.weee-tracker.com'
+  apiUrl : 'https://test-gestores.weee-tracker.com'
   // apiUrl : 'https://test.weee-tracker.com'
-  apiUrl : 'http://localhost:4000'
+  // apiUrl : 'http://localhost:4000'
 };
 
 /*

@@ -190,8 +190,7 @@ export class EditReadPage implements OnInit {
     {
       marcas.push({id:i.PidMarca,text:i.Nombre});
     }
-    this.marcas = marcas;
-
+    this.marcas = marcas.sort((a, b) => a.text.localeCompare(b.text));
 
     if (!this.read) {
       this.especificos();
@@ -249,6 +248,9 @@ export class EditReadPage implements OnInit {
       }
     }
 
+    this.residuos = this.residuos.sort((a, b) => a.text.localeCompare(b.text));
+    this.contenedores = this.contenedores.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
     this.myForm.patchValue({
       tipo_contenedor: null,
       residuo: this.read.values.residuo
@@ -269,6 +271,8 @@ export class EditReadPage implements OnInit {
       let data = JSON.parse(localStorage.getItem('todos_especificos'));
 
       this.residuos_especificos = data.filter(x=>x.sidResiduo == this.myForm.value.residuo);
+
+      this.residuos_especificos = this.residuos_especificos.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
       this.myForm.patchValue({residuo_especifico: null});
 

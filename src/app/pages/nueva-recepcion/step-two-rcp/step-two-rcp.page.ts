@@ -568,7 +568,7 @@ export class StepTwoRcpPage implements OnInit {
     this.loadingCtrl.create({message: "Obteniendo información de centro..."}).then(l=>{
       l.present();
 
-      this.consultaService.centroData2(id,this.usuario.tercero.PidTercero,this.usuario.dtercero,'REF').subscribe((data:any)=>{
+      this.consultaService.centroData(id,this.usuario.tercero.PidTercero,this.usuario.dtercero,'REF').subscribe((data:any)=>{
 
         this.consultaService.createLogger('Informacion del Centro Success');
 
