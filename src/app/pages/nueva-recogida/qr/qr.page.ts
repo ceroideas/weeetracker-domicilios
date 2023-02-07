@@ -13,7 +13,7 @@ import { BarcodeProvider } from '../../../providers/barcode/barcode';
 
 import { Storage } from '@ionic/storage-angular';
 
-import { NativeAudio } from '@awesome-cordova-plugins/native-audio/ngx';
+// import { NativeAudio } from '@awesome-cordova-plugins/native-audio/ngx';
 import { ConsultasService } from 'src/app/services/consultas.service';
 
 @Component({
@@ -50,7 +50,7 @@ export class QrPage implements OnInit {
     return self.indexOf(value) === index;
   }
 
-  constructor(/*private qrScanner: QRScanner,*/ private nativeAudio: NativeAudio, private barcodeScanner: BarcodeScanner, public nav: NavController, public alertCtrl: AlertController,
+  constructor(/*private qrScanner: QRScanner, private nativeAudio: NativeAudio,*/ private barcodeScanner: BarcodeScanner, public nav: NavController, public alertCtrl: AlertController,
     public events: EventsService, public events1: Events, private menu: MenuController, public loading: LoadingController,
     private storage: Storage, private params: ParamsService, public consultas: ConsultasService,
     private barcodeProvider: BarcodeProvider, public _location: Location,
@@ -415,7 +415,7 @@ export class QrPage implements OnInit {
 
   playAudio()
   {
-    this.nativeAudio.play('uniqueId1', () => console.log('uniqueId1 is done playing'));
+    // this.nativeAudio.play('uniqueId1', () => console.log('uniqueId1 is done playing'));
   }
 
 }

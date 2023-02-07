@@ -14,7 +14,8 @@ export class ModalOrigenesPage implements OnInit {
   constructor(public modal: ModalController, private events: EventsService) { }
 
   ngOnInit() {
-    console.log(this.origenes);
+    this.origenes = this.origenes.sort((a, b) => a.nombre.localeCompare(b.nombre));
+    // console.log(this.origenes);
   }
 
   select(c)

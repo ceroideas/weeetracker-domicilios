@@ -29,7 +29,7 @@ import { File } from '@awesome-cordova-plugins/file/ngx';
 
 import { NgSelect2Module } from 'ng-select2';
 
-import { NativeAudio } from '@awesome-cordova-plugins/native-audio/ngx';
+// import { NativeAudio } from '@awesome-cordova-plugins/native-audio/ngx';
 
 import { Device } from '@awesome-cordova-plugins/device/ngx';
 
@@ -71,7 +71,7 @@ registerLocaleData(localeEs, 'es');
   providers: [
     {provide: LOCALE_ID, useValue: 'es'},
     Device,
-    NativeAudio,
+    // NativeAudio,
     File,
     StatusBar,
     SplashScreen,

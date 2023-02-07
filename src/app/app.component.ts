@@ -20,7 +20,7 @@ import { WebView } from '@awesome-cordova-plugins/ionic-webview/ngx';
 
 import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
 
-import { NativeAudio } from '@awesome-cordova-plugins/native-audio/ngx';
+// import { NativeAudio } from '@awesome-cordova-plugins/native-audio/ngx';
 
 import { BarcodeProvider } from './providers/barcode/barcode';
 
@@ -61,7 +61,7 @@ export class AppComponent {
   constructor(
     private device: Device,
     private changeDetectorRef: ChangeDetectorRef,
-    private nativeAudio: NativeAudio,
+    // private nativeAudio: NativeAudio,
     private barcodeProvider: BarcodeProvider,
     private toastController: ToastController,
     private alertController: AlertController,
@@ -95,11 +95,11 @@ export class AppComponent {
       }
     })
 
-    this.nativeAudio.preloadSimple('uniqueId1', 'assets/beep.mp3').then(()=>{
-      console.log('Beep loaded ok')
-    }, (err)=>{
-      console.log(err)
-    });
+    // this.nativeAudio.preloadSimple('uniqueId1', 'assets/beep.mp3').then(()=>{
+    //   console.log('Beep loaded ok')
+    // }, (err)=>{
+    //   console.log(err)
+    // });
 
 
     this.platform.backButton.subscribe(() => {
@@ -515,7 +515,7 @@ export class AppComponent {
 
   playAudio()
   {
-    this.nativeAudio.play('uniqueId1', () => console.log('uniqueId1 is done playing'));
+    // this.nativeAudio.play('uniqueId1', () => console.log('uniqueId1 is done playing'));
   }
   
 }

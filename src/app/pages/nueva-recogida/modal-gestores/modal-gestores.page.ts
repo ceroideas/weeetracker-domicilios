@@ -14,7 +14,8 @@ export class ModalGestoresPage implements OnInit {
   constructor(public modal: ModalController, private events: EventsService) { }
 
   ngOnInit() {
-    console.log(this.centros);
+    this.centros = this.centros.sort((a, b) => a.nombre.localeCompare(b.nombre));
+    // console.log(this.centros);
   }
 
   select(c)

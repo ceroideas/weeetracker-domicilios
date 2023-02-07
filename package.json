@@ -31,7 +31,6 @@
     "@awesome-cordova-plugins/in-app-browser": "^5.43.0",
     "@awesome-cordova-plugins/ionic-webview": "^5.44.0",
     "@awesome-cordova-plugins/keyboard": "^5.43.0",
-    "@awesome-cordova-plugins/native-audio": "^6.1.0",
     "@awesome-cordova-plugins/screen-orientation": "^5.43.0",
     "@awesome-cordova-plugins/splash-screen": "^5.43.0",
     "@awesome-cordova-plugins/status-bar": "^5.43.0",
@@ -78,7 +77,6 @@
     "cordova-plugin-geolocation": "^4.1.0",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^5.0.0",
-    "cordova-plugin-nativeaudio": "^3.0.9",
     "cordova-plugin-screen-orientation": "^3.0.2",
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
@@ -121,9 +119,10 @@
       "cordova-plugin-camera": {
         "ANDROIDX_CORE_VERSION": "1.6.+"
       },
-      "com-darryncampbell-cordova-plugin-intent": {},
-      "cordova-plugin-nativeaudio": {}
+      "com-darryncampbell-cordova-plugin-intent": {}
     },
-    "platforms": []
+    "platforms": [
+      "android"
+    ]
   }
 }
