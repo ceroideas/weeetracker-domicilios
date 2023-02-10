@@ -28,7 +28,7 @@ export class BarcodeProvider {
       //  Set up a broadcast receiver to listen for incoming scans
       (<any>window).plugins.intentShim.registerBroadcastReceiver({
         filterActions: [
-          'com.ecolec.weeetracker.ACTION',        //  Response from scan (needs to match value in output plugin)
+          'com.gestores.weeetracker.ACTION',        //  Response from scan (needs to match value in output plugin)
           'com.symbol.datawedge.api.ACTION',
           'com.symbol.datawedge.api.RESULT_ACTION'//  Response from DataWedge service (as defined by API)
         ],

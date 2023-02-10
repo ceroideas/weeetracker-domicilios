@@ -106,7 +106,7 @@ export class QrPage implements OnInit {
         // this.consultas.createLogger(data);
         // this.consultas.createLogger(scannedData);
 
-        this.playAudio();
+        // this.playAudio();
 
         // let idx = scannedData.indexOf('00');
 
@@ -160,7 +160,7 @@ export class QrPage implements OnInit {
               if (i !== -1) {
                 return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
                 .then(a=>a.present());
-                this.nav.back();
+                return this.nav.back();
               }
 
             }
@@ -253,7 +253,7 @@ export class QrPage implements OnInit {
 
       this.etiqueta = barcodeData.text;
 
-      this.playAudio();
+      // this.playAudio();
 
       this.consultas.createLogger('NUEVA LECTURA');
 
@@ -302,7 +302,7 @@ export class QrPage implements OnInit {
               if (i !== -1) {
                 return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
                 .then(a=>a.present());
-                this.nav.back();
+                return this.nav.back();
               }
 
             }
@@ -379,7 +379,7 @@ export class QrPage implements OnInit {
           if (i !== -1) {
             return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
             .then(a=>a.present());
-            this.nav.back();
+            return this.nav.back();
           }
 
         }

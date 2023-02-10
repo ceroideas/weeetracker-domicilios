@@ -43,7 +43,7 @@ export class LoginPage implements OnInit {
   constructor(private usuarioService: UsuarioService,
     private translate: TranslateService,
     private navCtrl: NavController,
-    private consultas: ConsultasService,
+    public consultas: ConsultasService,
     private loadingCtrl: LoadingController,
     // public file: File,
     private camera: Camera,

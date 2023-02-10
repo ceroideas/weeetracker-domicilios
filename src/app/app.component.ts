@@ -355,7 +355,7 @@ export class AppComponent {
           "PARAM_LIST": {}
         },
         "APP_LIST": [{
-          "PACKAGE_NAME": "com.ecolec.weeetracker",
+          "PACKAGE_NAME": "com.gestores.weeetracker",
           "ACTIVITY_LIST": ["*"]
         }]
       };
@@ -371,7 +371,7 @@ export class AppComponent {
           "RESET_CONFIG": "true",
           "PARAM_LIST": {
             "intent_output_enabled": "true",
-            "intent_action": "com.ecolec.weeetracker.ACTION",
+            "intent_action": "com.gestores.weeetracker.ACTION",
             "intent_delivery": "2"
           }
         }

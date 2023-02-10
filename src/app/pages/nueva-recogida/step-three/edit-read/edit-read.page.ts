@@ -272,7 +272,7 @@ export class EditReadPage implements OnInit {
 
       this.residuos_especificos = data.filter(x=>x.sidResiduo == this.myForm.value.residuo);
 
-      this.residuos_especificos = this.residuos_especificos.sort((a, b) => a.nombre.localeCompare(b.nombre));
+      this.residuos_especificos = this.residuos_especificos.sort((a, b) => a.prioridad.localeCompare(b.prioridad));
 
       this.myForm.patchValue({residuo_especifico: null});
 
