@@ -319,6 +319,11 @@ export class EditReadPage implements OnInit {
     this.configureLecturas();
   }
 
+  ionViewWillLeave()
+  {
+    this.events.destroy('data:scan');
+  }
+
   left;
   right;
   idx;

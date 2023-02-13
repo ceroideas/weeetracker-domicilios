@@ -308,6 +308,11 @@ export class ReadedPage implements OnInit {
     this._storage = storage;
   }
 
+  ionViewWillLeave()
+  {
+    this.events.destroy('data:scan');
+  }
+
   loadFracciones(f)
   {
     let operacion = localStorage.getItem('tipo_operativa');
