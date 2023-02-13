@@ -73,6 +73,12 @@ export class StepThreePage implements OnInit {
     return self.indexOf(value) === index;
   }
 
+  prueba()
+  {
+    console.log('hola');
+    this.events.publish('data:scan',{scanData: "intent", time: new Date().toLocaleTimeString()});
+  }
+
   async ngOnInit() {
 
     this.consultaService.createLogger('Seleccionar Tipo de Lectura Success');

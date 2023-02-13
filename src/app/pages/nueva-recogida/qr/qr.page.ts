@@ -9,6 +9,8 @@ import { MenuController } from '@ionic/angular';
 import { Device } from '@awesome-cordova-plugins/device/ngx';
 import { Location } from '@angular/common';
 
+import { Router,NavigationEnd  } from '@angular/router';
+
 import { BarcodeProvider } from '../../../providers/barcode/barcode';
 
 import { Storage } from '@ionic/storage-angular';
@@ -50,13 +52,16 @@ export class QrPage implements OnInit {
     return self.indexOf(value) === index;
   }
 
-  constructor(/*private qrScanner: QRScanner, private nativeAudio: NativeAudio,*/ private barcodeScanner: BarcodeScanner, public nav: NavController, public alertCtrl: AlertController,
+  constructor(/*private qrScanner: QRScanner, private nativeAudio: NativeAudio,*/
+    private router: Router, private barcodeScanner: BarcodeScanner, public nav: NavController, public alertCtrl: AlertController,
     public events: EventsService, public events1: Events, private menu: MenuController, public loading: LoadingController,
     private storage: Storage, private params: ParamsService, public consultas: ConsultasService,
     private barcodeProvider: BarcodeProvider, public _location: Location,
     private changeDetectorRef: ChangeDetectorRef, private device: Device,
     private alertController: AlertController, private platform: Platform, private toastController: ToastController
     ) {
+
+    console.log(this.router.url);
 
     // this.events.destroy('etiquetaLeida');
 
@@ -86,6 +91,11 @@ export class QrPage implements OnInit {
 
       // A scan has been received
       this.events.subscribe('data:scan', async (data: any) => {
+
+        if (this.router.url != '/nueva-recogida/qr')
+        {
+          return false;
+        }
 
         console.log('scanned data ok');
         // Update the list of scanned barcodes
@@ -160,9 +170,8 @@ export class QrPage implements OnInit {
               if (i !== -1) {
                 return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
                 .then(a=>a.present());
-                return this.nav.back();
+                this.nav.back();
               }
-
             }
 
             this.nav.back();
@@ -302,7 +311,7 @@ export class QrPage implements OnInit {
               if (i !== -1) {
                 return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
                 .then(a=>a.present());
-                return this.nav.back();
+                this.nav.back();
               }
 
             }
@@ -326,6 +335,7 @@ export class QrPage implements OnInit {
     (window.document.querySelector('ion-app') as HTMLElement).classList.add('cameraView2');
     this.scanner = false;
     this.semitrans = false;
+    this.events.destroy('data:scan');
   }
 
   async buscar()
@@ -379,7 +389,7 @@ export class QrPage implements OnInit {
           if (i !== -1) {
             return this.alertCtrl.create({message:"La etiqueta ya se encuentra presente en ésta recogida", buttons: ["Ok"]})
             .then(a=>a.present());
-            return this.nav.back();
+            this.nav.back();
           }
 
         }
