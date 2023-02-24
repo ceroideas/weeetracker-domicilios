@@ -251,6 +251,14 @@ ion-input , ion-select, ion-textarea {
     font-size: 4vw !important;
 }
 
+textarea {
+    width: 100%;
+    background-color: #fff;
+    color: #000 !important;
+    border-radius: 4px;
+    padding: 1px;
+}
+
 //Corregir scroll ios 
 .action-sheet-group.sc-ion-action-sheet-ios {
     overflow: auto !important;

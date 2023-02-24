@@ -480,7 +480,26 @@ export class ReadedPage implements OnInit {
     this.consultaService.createLogger('Rellenados datos de RAEE Success');
 
     if (!this.photos.length) {
-      return this.alertCtrl.create({message:"¿Quiere continuar sin cargar ninguna imagen a la recogida?.",
+      let msg = "";
+
+      if (localStorage.getItem('alt_title_rd_2')) {
+        msg = ('ENTREGA').toLowerCase();
+      }else if (localStorage.getItem('alt_title_rd_3')) {
+        msg = ('ENTREGA DIRECTA').toLowerCase();
+      }else if (localStorage.getItem('alt_title_rd_4')) {
+        msg = ('REUTILIZACIÓN').toLowerCase();
+      }else if (localStorage.getItem('alt_title_rd_5')) {
+        msg = ('RECOGIDA DE REUTILIZACIÓN').toLowerCase();
+      }else if (localStorage.getItem('alt_title_rd_6')) {
+        msg = ('REUTILIZACIÓN DE ENTREGA').toLowerCase();
+      }else if (localStorage.getItem('alt_title_rd_7')) {
+        msg = ('REUTILIZACIÓN DE ENTREGA DIRECTA').toLowerCase();
+      }else if (localStorage.getItem('alt_title_rd')) {
+        msg = ('RECEPCIÓN').toLowerCase();
+      }else{
+        localStorage.removeItem('alt_title_sm');
+      }
+      return this.alertCtrl.create({message:"¿Quiere continuar sin cargar ninguna imagen a la "+msg+"?.",
         buttons: [{
           text:"Si",
           handler:()=>{

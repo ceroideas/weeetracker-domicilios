@@ -127,7 +127,7 @@ export class LoginPage implements OnInit {
         .subscribe((data:any)=>{
           console.log(data);
           this.terminal = config.pda;
-          this.direccion = data.config._centro.direccion;
+          this.direccion = data.config._centro.nombre;
           this.nombre = data.config._gestor.nombre;
           this.loaded = true;
 

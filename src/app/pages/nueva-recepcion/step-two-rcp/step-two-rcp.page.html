@@ -61,7 +61,7 @@
           </ion-select>
         </ion-col> -->
 
-        <ion-col size="12" *ngIf="direcciones">
+        <ion-col size="12" *ngIf="direcciones && !solicitud">
           <ion-label>Provincias Disponibles:</ion-label>
 
           <ng-select2 
@@ -71,14 +71,12 @@
             [placeholder]="'Seleccione una provincia'"
             (ngModelChange)="modifOrigen()">
           </ng-select2>
+        </ion-col>
 
-          <!-- <ion-input class="ion-no-margin mb-2" formControlName="text_provincia" (ionFocus)="showAllProvinces()" (ionBlur)="hideProvinces()" (ionChange)="openProvinciaSelector()"></ion-input>
-          
-          <div *ngIf="showprovincias" style="background-color: #fff; position: absolute; z-index: 9999; color: #000; max-height: 300px; overflow: auto;">
-            <ion-list>
-              <ion-item lines="none" *ngFor="let p of filterprovincias" (click)="selectProvincia(p)">{{p}}</ion-item>
-            </ion-list>
-          </div> -->
+        <ion-col size="12" *ngIf="direcciones && solicitud">
+          <ion-label>Provincia:</ion-label>
+
+          <ion-input class="ion-no-margin mb-2" [readonly]="true" formControlName="selecciona_provincia"></ion-input>
         </ion-col>
       </ion-row>
 
@@ -132,7 +130,7 @@
       <br>
 
       <div style="text-align: center;">
-        <ion-button *ngIf="direcciones && myForm.value.centro" (click)="modifOrigen()" class="ecobtn">Modif. Origen</ion-button>
+        <!-- <ion-button *ngIf="direcciones && myForm.value.centro" (click)="modifOrigen()" class="ecobtn">Modif. Origen</ion-button> -->
 
         <ion-button (click)="nuevoOrigen()" *ngIf="mostrarNuevo" class="ecobtn">Nuevo Origen</ion-button>
       </div>

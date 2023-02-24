@@ -12,7 +12,7 @@
               UNIDAD
             </ion-col>
             <ion-col text-right>
-              TIPO RESIDUO
+              FRACCIÓN
             </ion-col>
           </ion-row>
           <ion-row class="filas" [ngClass]="{'marcada': i == detalleStock}"
@@ -43,9 +43,9 @@
                 <thead style="font-size: 14px;">
                     <tr>
                         <th>Etiqueta</th>
-                        <th>Fr</th>
-                        <th>Can</th>
-                        <th>R. Espécifico</th>
+                        <th>FR</th>
+                        <th>Canib</th>
+                        <th>R. Específico</th>
                         <th>Cont</th>
                     </tr>
                 </thead>
@@ -54,7 +54,7 @@
                     <tr *ngFor="let l of details">
                         <td>{{l.sidRaee}}</td>
                         <td>{{l.fraccion}}</td>
-                        <td>{{l.canibalizado ? 'S' : 'N'}}</td>
+                        <td>{{l.canibalizado ? 'Si' : 'No'}}</td>
                         <td>{{l.residuoEspecifico}}</td>
                         <td>{{l.nombre}}</td>
                     </tr>

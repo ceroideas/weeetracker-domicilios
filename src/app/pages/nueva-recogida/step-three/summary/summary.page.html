@@ -13,8 +13,8 @@
                 <thead style="font-size: 14px;">
                     <tr>
                         <th>Etiqueta</th>
-                        <th>Can</th>
-                        <th>R. Espécifico</th>
+                        <th>Canib</th>
+                        <th>R. Específico</th>
                         <th>Cont</th>
                     </tr>
                 </thead>
@@ -22,7 +22,7 @@
                 <tbody style="font-size: 10px;">
                     <tr *ngFor="let l of lecturas" [ngClass]="{'trselected': (selected == l.values.etiqueta)}" (click)="seleccionar(l)">
                         <td>{{l.values.etiqueta}}</td>
-                        <td>{{l.values.canibalizado ? 'S' : 'N'}}</td>
+                        <td>{{l.values.canibalizado ? 'Si' : 'No'}}</td>
                         <td>{{l.values.residuo_especifico | listadoRaee:especificos:'residuo'}}</td>
                         <td>{{l.values.tipo_contenedor | listadoRaee:contenedores:'contenedor'}}</td>
                     </tr>

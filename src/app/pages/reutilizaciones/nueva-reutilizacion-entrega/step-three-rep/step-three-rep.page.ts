@@ -147,7 +147,7 @@ export class StepThreeRepPage implements OnInit {
             // return this.alertCtrl.create({message:"El Residuo ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
           }else{
             this.consultaService.createLogger('Residuo aún no recogido Success');
-            return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+" ya ha sido entregada",buttons: ['Ok']}).then(a=>a.present());
+            return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+" no puede entregarse porque no ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
           }
 
           if (data.raee) {
@@ -316,7 +316,7 @@ export class StepThreeRepPage implements OnInit {
             this.consultaService.createLogger('Residuo ya recogido Success');
           }else{
             this.consultaService.createLogger('Residuo aún no recogido Success');
-            this.alertCtrl.create({message:"La etiqueta "+i+" ya ha sido entregada",buttons: ['Ok']}).then(a=>a.present());
+            this.alertCtrl.create({message:"La etiqueta "+i+" no puede entregarse porque no ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
             return resolve(false);
           }
 
