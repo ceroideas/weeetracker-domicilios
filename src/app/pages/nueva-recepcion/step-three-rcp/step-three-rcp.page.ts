@@ -144,7 +144,7 @@ export class StepThreeRcpPage implements OnInit {
 
           if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
-            return this.alertCtrl.create({message:"El Residuo "+localStorage.getItem('etiqueta')+" ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
+            return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+" no puede ser leida",buttons: ['Ok']}).then(a=>a.present());
           }
 
           if (data.raee) {
@@ -315,7 +315,7 @@ export class StepThreeRcpPage implements OnInit {
 
           if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
-            this.alertCtrl.create({message:"La etiqueta "+i+" ya ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
+            this.alertCtrl.create({message:"La etiqueta "+i+" no puede ser leida",buttons: ['Ok']}).then(a=>a.present());
             return resolve(true);
           }
 

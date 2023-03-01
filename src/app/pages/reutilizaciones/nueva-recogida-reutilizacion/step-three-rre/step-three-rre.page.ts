@@ -118,7 +118,7 @@ export class StepThreeRrePage implements OnInit {
       this.loadingCtrl.create({message:"Comprobando etiqueta..."}).then(l=>{
         l.present();
         
-        this.consultaService.GetRaeeReutilizacion(data,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
+        this.consultaService.GetRaee(data,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
           let fracciones = [];
 
@@ -132,7 +132,7 @@ export class StepThreeRrePage implements OnInit {
 
           if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
-            return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+" ya ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
+            return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+" no puede ser leida",buttons: ['Ok']}).then(a=>a.present());
           }
 
           if (data.raee) {
@@ -253,7 +253,7 @@ export class StepThreeRrePage implements OnInit {
   {
     return new Promise(resolve => {
 
-      this.consultaService.GetRaeeReutilizacion(i,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
+      this.consultaService.GetRaee(i,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
           var lectura = {
               etiqueta: i,
@@ -276,7 +276,7 @@ export class StepThreeRrePage implements OnInit {
 
           if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
-            this.alertCtrl.create({message:"La etiqueta "+i+" ya ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
+            this.alertCtrl.create({message:"La etiqueta "+i+" no puede ser leida",buttons: ['Ok']}).then(a=>a.present());
             return resolve(true);
           }
 

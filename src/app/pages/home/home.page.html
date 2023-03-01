@@ -10,45 +10,45 @@
             (usuario?.responsabilidades | checkResp:'SSR')"
         >
             <ion-button [routerLink]="['/nueva-recogida']" class="ecobtn"
-            size="large" style="font-size: 12px;" expand="block">NUEVA RECOGIDA</ion-button>
+            size="large" style="font-size: 10px;" expand="block">NUEVA RECOGIDA</ion-button>
         </ion-col>
 
         <ion-col size="6"
         *ngIf="(usuario?.responsabilidades | checkResp:'RED') ||
             (usuario?.responsabilidades | checkResp:'REF')">
             <ion-button [routerLink]="['/nueva-recepcion']" class="ecobtn"
-            size="large" style="font-size: 12px;" expand="block">NUEVA RECEPCIÓN</ion-button>
+            size="large" style="font-size: 10px;" expand="block">NUEVA RECEPCIÓN</ion-button>
         </ion-col>
 
         <ion-col size="6"
         *ngIf="usuario?.responsabilidades | checkResp:'REX'"
         >
             <ion-button [routerLink]="['/nueva-entrega']" class="ecobtn"
-            size="large" style="font-size: 12px;" expand="block">NUEVA ENTREGA</ion-button>
+            size="large" style="font-size: 10px;" expand="block">NUEVA ENTREGA</ion-button>
         </ion-col>
 
         <ion-col size="6"
         *ngIf="usuario?.responsabilidades | checkResp:'END'"
         >
             <ion-button [routerLink]="['/nueva-entrega-directa']" class="ecobtn"
-            size="large" style="font-size: 12px;" expand="block">N. ENTREGA <br> DIRECTA</ion-button>
+            size="large" style="font-size: 10px;" expand="block">N. ENTREGA <br> DIRECTA</ion-button>
         </ion-col>
 
         <ion-col size="6">
             <ion-button [routerLink]="['/consulta-stock']" class="ecobtn"
-            size="large" style="font-size: 12px;" expand="block">CONSULTAR STOCK</ion-button>
+            size="large" style="font-size: 10px;" expand="block">CONSULTAR STOCK</ion-button>
         </ion-col>
 
         <ion-col size="6" *ngIf="pesarBtn">
             <ion-button [routerLink]="['/pesar-raees']" class="ecobtn"
-            size="large" style="font-size: 12px;" expand="block">PESAR RAEE</ion-button>
+            size="large" style="font-size: 10px;" expand="block">PESAR RAEE</ion-button>
         </ion-col>
 
         <ion-col size="6">
         <!-- *ngIf="(usuario?.responsabilidades | checkResp:'CSR') ||
             (usuario?.responsabilidades | checkResp:'SSR')" -->
             <ion-button class="ecobtn" [routerLink]="['/operativas-realizadas']"
-            size="large" style="font-size: 12px;" expand="block">OPERATIVAS <br> REALIZADAS</ion-button>
+            size="large" style="font-size: 10px;" expand="block">OPERATIVAS <br> REALIZADAS</ion-button>
         </ion-col>
 
         <ion-col size="6"
@@ -61,12 +61,12 @@
             (usuario?.responsabilidades | checkResp:'REN')"
         >
             <ion-button class="ecobtn" [routerLink]="['/reutilizaciones']"
-            size="large" style="font-size: 12px;" expand="block">REUTILIZAR RAEE</ion-button>
+            size="large" style="font-size: 10px;" expand="block">REUTILIZAR RAEE</ion-button>
         </ion-col>
 
         <ion-col size="6">
             <ion-button class="ecobtn" [routerLink]="['/cambio-password']"
-            size="large" style="font-size: 12px;" expand="block">CAMBIAR <br> CONTRASEÑA</ion-button>
+            size="large" style="font-size: 10px;" expand="block">CAMBIAR <br> CONTRASEÑA</ion-button>
         </ion-col>
     </ion-row>
 

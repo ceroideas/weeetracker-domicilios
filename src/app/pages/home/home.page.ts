@@ -36,11 +36,11 @@ export class HomePage implements OnInit {
     private events: EventsService,
     private platform : Platform) {
 
-    if (!localStorage.getItem('todos_especificos')) {
+    // if (!localStorage.getItem('todos_especificos')) {
       this.consultas.todosEspecificos().subscribe(async (data:any)=>{
         localStorage.setItem('todos_especificos',JSON.stringify(data));
       });
-    }
+    // }
 
   }
 

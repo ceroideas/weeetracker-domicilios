@@ -126,6 +126,11 @@ export class StepThreePage implements OnInit {
         
         this.consultaService.GetRaee(data,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
+          if (data.statusCode && data.statusCode == 422) {
+            l.dismiss();
+            return this.alertCtrl.create({message:data.value,buttons: ['Ok']}).then(a=>a.present());
+          }
+
           let fracciones = [];
 
           for (let i of this.usuario.responsabilidades) {
@@ -136,10 +141,10 @@ export class StepThreePage implements OnInit {
 
           l.dismiss();
 
-          if (data.recogido.length) {
-            this.consultaService.createLogger('Residuo ya recogido Success');
-            return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+" ya ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
-          }
+          // if (data.recogido.length) {
+          //   this.consultaService.createLogger('Residuo ya recogido Success');
+          //   return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+" ya ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
+          // }
 
           if (data.raee) {
 
@@ -249,6 +254,11 @@ export class StepThreePage implements OnInit {
 
       this.consultaService.GetRaee(i,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
+        if (data.statusCode && data.statusCode == 422) {
+            this.alertCtrl.create({message:data.value,buttons: ['Ok']}).then(a=>a.present());
+            return resolve(true);
+          }
+
           var lectura = {
               etiqueta: i,
               fraccion: null,
@@ -268,11 +278,11 @@ export class StepThreePage implements OnInit {
             fracciones.push({id:j.SidFraccion,operacion:j.TipoOperacion, contenedor:j.SidTipoContenedor});
           }
 
-          if (data.recogido.length) {
+          /*if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
             this.alertCtrl.create({message:"La etiqueta "+i+" ya ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
             return resolve(true);
-          }
+          }*/
 
           if (data.raee) {
 
@@ -304,55 +314,6 @@ export class StepThreePage implements OnInit {
 
           this.lecturas.push({values:lectura, photos:null});
           return resolve(true);
-
-          /*if (data) {
-            this.consultaService.createLogger('Residui ya recogido Success');
-            this.alertCtrl.create({message:"El Residuo "+i+" ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
-            return resolve(true);
-          }
-
-          if (!data) {
-            // this.nav.navigateForward('/nueva-recogida/step-three/readed');
-            this.lecturas.push({values:lectura, photos:null});
-            return resolve(true);
-          }
-
-          this.loadingCtrl.create().then(async l=>{
-
-            this.consultaService.getIdentificacion(data[0].sidRaee).subscribe((data:any)=>{
-              l.dismiss();
-
-              this.consultaService.createLogger('E | Error al obtener RAEE');
-
-              console.log(data);
-
-              if (data.length) {
-
-                let raee = data[0];
-
-                lectura = {
-                  etiqueta: raee.pidRaee,
-                  fraccion: raee.sidFraccion,
-                  residuo: raee.sidResiduo,
-                  residuo_especifico: raee.sidResiduoEspecifico,
-                  marca: raee.sidMarca,
-                  tipo_contenedor: raee.sidTipoContenedor,
-                  canibalizado: raee.canibalizado,
-                  estado_raee: raee.sidEstadoRaee,
-                  ref: null
-                };
-                // this.params.setParam({values:lectura, photos:null});
-              }
-
-              this.lecturas.push({values:lectura, photos:null});
-              resolve(true);
-              // this.nav.navigateForward('/nueva-recogida/step-three/readed');
-            },err=>{
-              l.dismiss();
-              // this.nav.navigateForward('/nueva-recogida/step-three/readed');
-            });
-
-          });*/
         },err=>{
           resolve(false);
           this.loadingCtrl.dismiss();

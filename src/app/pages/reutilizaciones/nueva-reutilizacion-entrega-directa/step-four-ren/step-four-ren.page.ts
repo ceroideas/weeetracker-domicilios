@@ -120,7 +120,12 @@ export class StepFourRenPage implements OnInit {
       this.loadingCtrl.create({message:"Comprobando etiqueta..."}).then(l=>{
         l.present();
         
-        this.consultaService.GetRaee3(data,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
+        this.consultaService.GetRaee(data,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
+
+          if (data.statusCode && data.statusCode == 422) {
+            l.dismiss();
+            return this.alertCtrl.create({message:data.value,buttons: ['Ok']}).then(a=>a.present());
+          }
 
           let fracciones = [];
 
@@ -149,15 +154,11 @@ export class StepFourRenPage implements OnInit {
 
           if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
-            // return this.alertCtrl.create({message:"El Residuo ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
           }else{
             this.consultaService.createLogger('Residuo aún no recogido Success');
           }
 
           if (data.raee && data.raee.length != 0) {
-            // if (data.raee.sidFraccion != this.fraccion.pidFraccion ) {
-            //   return this.alertCtrl.create({message:"La fracción de la etiqueta no corresponde con la seleccionada",buttons: ['Ok']}).then(a=>a.present());
-            // }
             let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion /*&& x.operacion == localStorage.getItem('tipo_operativa')*/);
 
             if (!result) {
@@ -307,7 +308,12 @@ export class StepFourRenPage implements OnInit {
   {
     return new Promise(resolve => {
 
-      this.consultaService.GetRaee3(i,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
+      this.consultaService.GetRaee(i,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
+
+        if (data.statusCode && data.statusCode == 422) {
+          this.alertCtrl.create({message:data.value,buttons: ['Ok']}).then(a=>a.present());
+          return resolve(true)
+        }
 
         this.loadingCtrl.dismiss();
 
@@ -352,15 +358,10 @@ export class StepFourRenPage implements OnInit {
             this.consultaService.createLogger('Residuo ya recogido Success');
           }else{
             this.consultaService.createLogger('Residuo aún no recogido Success');
-            // this.alertCtrl.create({message:"El Residuo "+i+" aún no ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
-            // return resolve(false);
           }
 
           if (data.raee && data.raee.length != 0) {
 
-            // if (data.raee.sidFraccion != this.fraccion.pidFraccion ) {
-            //   return this.alertCtrl.create({message:"La fracción de la etiqueta no corresponde con la seleccionada",buttons: ['Ok']}).then(a=>a.present());
-            // }
             let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion /* && x.operacion == localStorage.getItem('tipo_operativa')*/);
 
             if (!result) {

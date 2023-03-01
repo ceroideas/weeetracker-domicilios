@@ -512,6 +512,7 @@ export class EditReadPage implements OnInit {
       }else if (localStorage.getItem('alt_title_rd')) {
         msg = ('RECEPCIÓN').toLowerCase();
       }else{
+        msg = ('RECOGIDA').toLowerCase();
         localStorage.removeItem('alt_title_sm');
       }
       return this.alertCtrl.create({message:"¿Quiere continuar sin cargar ninguna imagen a la "+msg+"?.",

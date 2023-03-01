@@ -120,7 +120,12 @@ export class StepFourEndPage implements OnInit {
       this.loadingCtrl.create({message:"Comprobando etiqueta..."}).then(l=>{
         l.present();
         
-        this.consultaService.GetRaee3(data,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
+        this.consultaService.GetRaee(data,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
+
+          if (data.statusCode && data.statusCode == 422) {
+            l.dismiss();
+            return this.alertCtrl.create({message:data.value,buttons: ['Ok']}).then(a=>a.present());
+          }
 
           let fracciones = [];
 
@@ -147,17 +152,8 @@ export class StepFourEndPage implements OnInit {
             return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+" ya ha sido recogida y se encuentra en éste centro",buttons: ['Ok']}).then(a=>a.present());
           }
 
-          if (data.recogido.length) {
-            this.consultaService.createLogger('Residuo ya recogido Success');
-            // return this.alertCtrl.create({message:"El Residuo ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
-          }else{
-            this.consultaService.createLogger('Residuo aún no recogido Success');
-          }
+          if (data.raee) {
 
-          if (data.raee && data.raee.length != 0) {
-            // if (data.raee.sidFraccion != this.fraccion.pidFraccion ) {
-            //   return this.alertCtrl.create({message:"La fracción de la etiqueta no corresponde con la seleccionada",buttons: ['Ok']}).then(a=>a.present());
-            // }
             let result = fracciones.filter(this.onlyUnique).find(x=>x.id == data.raee.sidFraccion /*&& x.operacion == localStorage.getItem('tipo_operativa')*/);
 
             if (!result) {
@@ -179,14 +175,8 @@ export class StepFourEndPage implements OnInit {
               prevent_overwrite: true,
               ref: null
             };
-            /*this.lecturas.push({values: lectura, photos: null});
-            localStorage.setItem('lecturas',JSON.stringify(this.lecturas));*/
 
-            // localStorage.setItem('etiqueta_objeto',JSON.stringify(data[0]));
-            // this.alertCtrl.create({message:"La etiqueta ya existe"}).then(a=>a.present());
             this.params.setParam({values:lectura, photos:null});
-
-            // this.nav.navigateForward('/nueva-recogida/step-three/readed');
           }
           localStorage.setItem('alt_title_rd','NUEVA ENTREGA DIRECTA 4 - RAEE: Nuevo RAEE');
           localStorage.setItem('alt_title_rd_3','1');
@@ -307,7 +297,12 @@ export class StepFourEndPage implements OnInit {
   {
     return new Promise(resolve => {
 
-      this.consultaService.GetRaee3(i,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
+      this.consultaService.GetRaee(i,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
+
+        if (data.statusCode && data.statusCode == 422) {
+            this.alertCtrl.create({message:data.value,buttons: ['Ok']}).then(a=>a.present());
+            return resolve(true);
+          }
 
         this.loadingCtrl.dismiss();
 

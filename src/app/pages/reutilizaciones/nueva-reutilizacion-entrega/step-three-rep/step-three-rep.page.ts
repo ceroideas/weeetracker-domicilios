@@ -120,7 +120,7 @@ export class StepThreeRepPage implements OnInit {
       this.loadingCtrl.create({message:"Comprobando etiqueta..."}).then(l=>{
         l.present();
         
-        this.consultaService.GetRaee2(data,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
+        this.consultaService.GetRaee(data,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
           let fracciones = [];
 
@@ -144,7 +144,6 @@ export class StepThreeRepPage implements OnInit {
 
           if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
-            // return this.alertCtrl.create({message:"El Residuo ya ha sido recogido",buttons: ['Ok']}).then(a=>a.present());
           }else{
             this.consultaService.createLogger('Residuo aún no recogido Success');
             return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+" no puede entregarse porque no ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
@@ -277,7 +276,7 @@ export class StepThreeRepPage implements OnInit {
   {
     return new Promise(resolve => {
 
-      this.consultaService.GetRaee2(i,parseInt(this.usuario.dtercero)).subscribe((data:any)=>{
+      this.consultaService.GetRaee(i,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
         this.loadingCtrl.dismiss();
 

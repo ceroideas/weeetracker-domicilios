@@ -20,7 +20,7 @@ export class ConsultasService {
 
   url = environment.apiUrl;
 
-  public actualV = '1.0.47';
+  public actualV = '1.0.48';
 
   constructor(private http: HttpClient, private file: _File, private platform: Platform, private keyboard: Keyboard) {
   }
@@ -34,22 +34,6 @@ export class ConsultasService {
   getIdentificacion(etiqueta: string) {
     let etiquetaObj = { Etiqueta: etiqueta };
     return this.http.post(apiUrl + '/residuo', etiquetaObj);
-  }
-  GetRaee(etiqueta: string, centro: number, operativa = '') {
-    let etiquetaObj = { Etiqueta: etiqueta, IdCentro: centro, Operativa: operativa };
-    return this.http.post(apiUrl + '/residuo/GetRaee', etiquetaObj);
-  }
-  GetRaeeReutilizacion(etiqueta: string, centro: number, operativa = '') {
-    let etiquetaObj = { Etiqueta: etiqueta, IdCentro: centro, Operativa: operativa };
-    return this.http.post(apiUrl + '/residuo/GetRaeeReutilizacion', etiquetaObj);
-  }
-  GetRaee2(etiqueta: string, centro: number) {
-    let etiquetaObj = { Etiqueta: etiqueta, IdCentro: centro };
-    return this.http.post(apiUrl + '/residuo/GetRaee2', etiquetaObj);
-  }
-  GetRaee3(etiqueta: string, centro: number) {
-    let etiquetaObj = { Etiqueta: etiqueta, IdCentro: centro };
-    return this.http.post(apiUrl + '/residuo/GetRaee3', etiquetaObj);
   }
   GetRaees(certificado: string) {
     return this.http.get(apiUrl + '/residuo/GetRaees/'+certificado);
@@ -506,4 +490,25 @@ export class ConsultasService {
     },200)
   }
 
+
+
+  /*Solo etiquetas virgenes*/
+  GetRaee(etiqueta: string, centro: number, operativa = '') {
+    let etiquetaObj = { Etiqueta: etiqueta, IdCentro: centro, Operativa: operativa };
+    return this.http.post(apiUrl + '/residuo/GetRaee', etiquetaObj);
+  }
+  /**/
+  
+  /*GetRaeeReutilizacion(etiqueta: string, centro: number, operativa = '') {
+    let etiquetaObj = { Etiqueta: etiqueta, IdCentro: centro, Operativa: operativa };
+    return this.http.post(apiUrl + '/residuo/GetRaeeReutilizacion', etiquetaObj);
+  }
+  GetRaee2(etiqueta: string, centro: number) {
+    let etiquetaObj = { Etiqueta: etiqueta, IdCentro: centro };
+    return this.http.post(apiUrl + '/residuo/GetRaee2', etiquetaObj);
+  }
+  GetRaee3(etiqueta: string, centro: number) {
+    let etiquetaObj = { Etiqueta: etiqueta, IdCentro: centro };
+    return this.http.post(apiUrl + '/residuo/GetRaee3', etiquetaObj);
+  }*/
 }

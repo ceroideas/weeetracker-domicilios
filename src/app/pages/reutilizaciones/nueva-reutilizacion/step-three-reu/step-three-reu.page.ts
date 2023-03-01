@@ -118,7 +118,7 @@ export class StepThreeReuPage implements OnInit {
       this.loadingCtrl.create({message:"Comprobando etiqueta..."}).then(l=>{
         l.present();
         
-        this.consultaService.GetRaeeReutilizacion(data,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
+        this.consultaService.GetRaee(data,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
           if (data.statusCode && data.statusCode == 422) {
             l.dismiss();
@@ -145,7 +145,7 @@ export class StepThreeReuPage implements OnInit {
 
           if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
-            return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+" ya ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
+            return this.alertCtrl.create({message:"La etiqueta "+localStorage.getItem('etiqueta')+" ya ha sido leida",buttons: ['Ok']}).then(a=>a.present());
           }
 
           if (data.raee) {
@@ -281,7 +281,7 @@ export class StepThreeReuPage implements OnInit {
   {
     return new Promise(resolve => {
 
-      this.consultaService.GetRaeeReutilizacion(i,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
+      this.consultaService.GetRaee(i,parseInt(this.usuario.dtercero),localStorage.getItem('tipo_operativa')).subscribe((data:any)=>{
 
           if (data.statusCode && data.statusCode == 422) {
             this.alertCtrl.create({message:data.value,buttons: ['Ok']}).then(a=>a.present());
@@ -317,7 +317,7 @@ export class StepThreeReuPage implements OnInit {
 
           if (data.recogido.length) {
             this.consultaService.createLogger('Residuo ya recogido Success');
-            this.alertCtrl.create({message:"La etiqueta "+i+" ya ha sido recogida",buttons: ['Ok']}).then(a=>a.present());
+            this.alertCtrl.create({message:"La etiqueta "+i+" ya ha sido leida",buttons: ['Ok']}).then(a=>a.present());
             return resolve(true);
           }
 
