@@ -37,18 +37,26 @@ export class UsuarioService {
 
   getCentro()
   {
-    this.http.get(apiUrl + '/estado/centro/'+this.usuario.dtercero).subscribe((data:any)=>{
-      console.log(data.centro);
-      this.usuario.centro = data.centro.nombre; // puede ser nombre, verificar luego
-      this.usuario.direccion = data.centro.direccion; // puede ser nombre, verificar luego
-    },err=>{
-      this.getCentro();
+    return new Promise((resolve)=>{
+
+        this.http.get(apiUrl + '/estado/centro/'+this.usuario.dtercero).subscribe((data:any)=>{
+          console.log(data.centro);
+          if (!data.centro) {
+            return this.getCentro();
+          }
+          this.usuario.centro = data.centro.nombre; // puede ser nombre, verificar luego
+          this.usuario.direccion = data.centro.direccion; // puede ser nombre, verificar luego
+
+          return resolve(true);
+        },err=>{
+          this.getCentro();
+        })
     })
   }
 
   async guardarUsuario(token) {
 
-    return new Promise((resolve)=>{
+    return new Promise(async (resolve)=>{
 
       if (localStorage.getItem('config')) {
         let cf = JSON.parse(localStorage.getItem('config'));
@@ -62,7 +70,7 @@ export class UsuarioService {
         this.usuario.sidsig = JSON.parse(token.SidSIG);
       }
 
-      this.getCentro();
+      await this.getCentro();
 
       this.http.get(apiUrl + '/residuo/getResiduos/'+this.usuario.dtercero).subscribe((data:any)=>{
         console.log('residuos',data);
