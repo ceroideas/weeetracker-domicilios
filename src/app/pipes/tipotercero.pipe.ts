@@ -22,7 +22,12 @@ export class TipoterceroPipe implements PipeTransform {
     {id:44,cod:'AGES'},
     {id:45,cod:'AGO'},
     {id:47,cod:'CPR'},
-    {id:48,cod:'REC'}
+    {id:48,cod:'REC'},
+    {id:50,cod:'CDIS'},
+    {id:51,cod:'OPnS'},
+    {id:52,cod:'ADHC'},
+    {id:53,cod:'ADHS'},
+    {id:54,cod:'PRnMG'},
   ];
 
   transform(value: any) {

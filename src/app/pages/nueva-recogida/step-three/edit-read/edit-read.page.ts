@@ -222,11 +222,11 @@ export class EditReadPage implements OnInit {
     let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
     for (let i of resp) {
       if (i.SidFraccion) {
-        if (i.SidFraccion == this.myForm.value.fraccion) {
+        if (i.SidFraccion == this.myForm.value.fraccion && i.TipoOperacion == localStorage.getItem('tipo_operativa')) {
           contenedores.push(i.SidTipoContenedor)
         }
       }else{
-        if (i.sidFraccion == this.myForm.value.fraccion) {
+        if (i.sidFraccion == this.myForm.value.fraccion && i.tipoOperacion == localStorage.getItem('tipo_operativa')) {
           contenedores.push(i.sidTipoContenedor)
         }
       }

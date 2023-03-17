@@ -393,8 +393,15 @@ export class StepTwoPage implements OnInit {
         this.loadingCtrl.create({message: "Obteniendo ubicación de centro"}).then(l=>{
           l.present();
 
-          this.consultaService.ubicacionCentro(
-            {pais:this.direcciones[0].sidPais, provincia: this.direcciones[0].sidProvincia, municipio:this.direcciones[0].sidMunicipio}).subscribe((data1:any)=>{
+          let data:any;
+
+          if (this.solicitud) {
+            data = {pais:this.solicitud.sidPais, provincia: this.solicitud.sidProvincia, municipio:this.solicitud.sidMunicipio}
+          }else{
+            data = {pais:this.direcciones[0].sidPais, provincia: this.direcciones[0].sidProvincia, municipio:this.direcciones[0].sidMunicipio};
+          }
+
+          this.consultaService.ubicacionCentro(data).subscribe((data1:any)=>{
 
             this.consultaService.createLogger('Ubicacion Centro conseguida Success');
 
