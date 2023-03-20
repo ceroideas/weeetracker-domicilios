@@ -219,7 +219,8 @@ export class EditReadPage implements OnInit {
     this.contenedores = [];
     this.residuos = [];
 
-    let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
+    let resp = this.usuario.responsabilidades;
+    // let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
     for (let i of resp) {
       if (i.SidFraccion) {
         if (i.SidFraccion == this.myForm.value.fraccion && i.TipoOperacion == localStorage.getItem('tipo_operativa')) {
@@ -431,7 +432,8 @@ export class EditReadPage implements OnInit {
       if (!this.loadedContenedor) {
         this.loadedContenedor = true;
         let fracciones = [];
-        let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
+        let resp = this.usuario.responsabilidades;
+        // let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
         for (let i of resp) {
           if (i.SidFraccion) {
             fracciones.push({id:i.SidFraccion,operacion:i.TipoOperacion, contenedor:i.SidTipoContenedor});

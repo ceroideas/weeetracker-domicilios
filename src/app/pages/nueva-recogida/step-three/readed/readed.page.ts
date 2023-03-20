@@ -209,7 +209,7 @@ export class ReadedPage implements OnInit {
     this.contenedores = [];
     this.residuos = [];
 
-    let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
+    let resp = this.usuario.responsabilidades;
     for (let i of resp) {
       if (i.SidFraccion) {
         if (i.SidFraccion == this.myForm.value.fraccion && i.TipoOperacion == localStorage.getItem('tipo_operativa')) {
@@ -371,7 +371,7 @@ export class ReadedPage implements OnInit {
       if (!this.loadedContenedor) {
         this.loadedContenedor = true;
         let fracciones = [];
-        let resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
+        let resp = this.usuario.responsabilidades;
         console.log(resp);
         for (let i of resp) {
           if (i.SidFraccion) {
