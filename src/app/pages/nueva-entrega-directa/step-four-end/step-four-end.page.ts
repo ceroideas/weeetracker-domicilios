@@ -265,19 +265,21 @@ export class StepFourEndPage implements OnInit {
           fracciones.push(i.pidFraccion)
         }
 
-        this.consultaService.getResponsabilities2(
+        let resp = [];
+          
+        for (let i of fracciones)
+        {
+          resp = resp.concat(this.usuario.responsabilidades.filter(x=>x.SidFraccion == i && x.TipoOperacion == localStorage.getItem('tipo_operativa')));
+        }
+
+        localStorage.setItem('other_resp',JSON.stringify(resp));
+
+        /*this.consultaService.getResponsabilities2(
           destino.sidTercero,
           destino.sidDireccionTercero).subscribe((data:any)=>{
 
-          let resp = [];
           
-          for (let i of fracciones)
-          {
-            resp = resp.concat(data.resp.filter(x=>x.sidFraccion == i));
-          }
-
-          localStorage.setItem('other_resp',JSON.stringify(resp));
-        })
+        })*/
 
       })
 

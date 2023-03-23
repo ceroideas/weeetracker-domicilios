@@ -269,6 +269,8 @@ export class StepFourRenPage implements OnInit {
         this.usuario.dtercero,
         destino.sidTercero,
         destino.sidDireccionTercero).subscribe((data:any)=>{
+
+          console.log(this.usuario.responsabilidades)
         // ....
         let fracciones = [];
 
@@ -276,19 +278,19 @@ export class StepFourRenPage implements OnInit {
           fracciones.push(i.pidFraccion)
         }
 
-        this.consultaService.getResponsabilities2(
-          destino.sidTercero,
-          destino.sidDireccionTercero).subscribe((data:any)=>{
+        let resp = [];
+        
+        for (let i of fracciones)
+        {
+          resp = resp.concat(this.usuario.responsabilidades.filter(x=>x.SidFraccion == i && x.TipoOperacion == localStorage.getItem('tipo_operativa')));
+        }
 
-          let resp = [];
-          
-          for (let i of fracciones)
-          {
-            resp = resp.concat(data.resp.filter(x=>x.sidFraccion == i));
-          }
+        localStorage.setItem('other_resp',JSON.stringify(resp));
+        // this.consultaService.getResponsabilities2(
+        //   destino.sidTercero,
+        //   destino.sidDireccionTercero).subscribe((data:any)=>{
 
-          localStorage.setItem('other_resp',JSON.stringify(resp));
-        })
+        // })
 
       })
 

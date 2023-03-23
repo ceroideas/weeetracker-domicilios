@@ -211,12 +211,12 @@ export class ReadedPage implements OnInit {
 
     let resp = null;
 
-    if (localStorage.getItem('tipo_operativa') == 'END' || localStorage.getItem('tipo_operativa') == 'REN' || 
-      localStorage.getItem('tipo_operativa') == 'REX' || localStorage.getItem('tipo_operativa') == 'REP') {
-      resp = this.usuario.responsabilidades;
-    }else{
+    // if (localStorage.getItem('tipo_operativa') == 'END' || localStorage.getItem('tipo_operativa') == 'REN' || 
+    //   localStorage.getItem('tipo_operativa') == 'REX' || localStorage.getItem('tipo_operativa') == 'REP') {
+    //   resp = this.usuario.responsabilidades;
+    // }else{
       resp = localStorage.getItem('other_resp') ? JSON.parse(localStorage.getItem('other_resp')) : this.usuario.responsabilidades;
-    }
+    // }
     for (let i of resp) {
       if (i.SidFraccion) {
         if (i.SidFraccion == this.myForm.value.fraccion && i.TipoOperacion == localStorage.getItem('tipo_operativa')) {
