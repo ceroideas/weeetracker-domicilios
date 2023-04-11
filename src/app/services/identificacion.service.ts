@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Identificacion } from '../models/identificacion';
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage-angular';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -20,6 +20,7 @@ export class IdentificacionService {
 
   constructor(private storage: Storage,
     private consultaService: ConsultasService) {
+    this.storage.create();
 
     this.cargarIdentificaciones();
 

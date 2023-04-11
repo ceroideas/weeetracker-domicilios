@@ -5,10 +5,6 @@ import { Router, NavigationExtras } from '@angular/router';
 import { NavController, Platform } from '@ionic/angular';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { Usuario } from 'src/app/models/usuario';
-import { EventsService } from 'src/app/services/events.service';
-import { ConsultasService } from 'src/app/services/consultas.service';
-
-declare var moment:any;
 
 @Component({
   selector: 'app-home',
@@ -26,41 +22,22 @@ export class HomePage implements OnInit {
   usuario: Usuario = new Usuario();
   titulo: string;
 
-  pesarBtn;
-
   constructor(private menuService: MenuService,
-    private consultas: ConsultasService,
     private router: Router,
     private navCtrl: NavController,
     private usuarioService: UsuarioService,
-    private events: EventsService,
     private platform : Platform) {
-
-    // if (!localStorage.getItem('todos_especificos')) {
-      this.consultas.todosEspecificos().subscribe(async (data:any)=>{
-        localStorage.setItem('todos_especificos',JSON.stringify(data));
-      });
-    // }
 
   }
 
   ngOnInit() {
     this.cargarDatos();
-    localStorage.removeItem('lecturas');
   }
 
   async cargarDatos() {
     this.usuario = await this.usuarioService.cargarToken();
-    if (!this.usuario) {
-      this.navCtrl.navigateRoot("/login");
-      setTimeout(()=>{
-        return this.events.publish('setLoaded');
-      },50)
-    }
-
-    this.pesarBtn = this.usuario.direccionTercero.pesado > 0;
     this.titulo = this.usuario.tercero.Nombre;
-    // console.log(this.usuario.responsabilidades);
+    console.log(this.usuario);
     this.menuService.getMenuOpts().subscribe(res => {
       this.menu = res;
       this.menuAux = this.menu;
@@ -68,11 +45,11 @@ export class HomePage implements OnInit {
   }
 
   tienePermiso(menu: Menu) {
-    /*for (let i = 0; i < this.usuario.perfiles.length; i++) {
+    for (let i = 0; i < this.usuario.perfiles.length; i++) {
       if (menu.SidPerfil.includes(this.usuario.perfiles[i].SidPerfil)) {
         return true;
       }
-    }*/
+    }
     return false;
     // return true;
   }
@@ -109,16 +86,9 @@ export class HomePage implements OnInit {
     this.navHijo = !this.navHijo;
   }
 
-  async logOut() {
-
-    let name_logs = moment().format('YYMMDDHHmmss')+'_'+String(this.usuario.terminal).padStart(4, '0')+'_LOG.txt';
-
+  logOut() {
     this.usuarioService.eliminarToken();
     this.navCtrl.navigateRoot("/login");
-    localStorage.removeItem('centro');
-    this.events.publish('loadPostLogout');
-    
-    let result = await this.consultas.uploadLog(name_logs,'/Logs');
   }
 
 }

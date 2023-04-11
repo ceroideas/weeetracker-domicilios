@@ -2,54 +2,10 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'login', loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule) },
-  { path: 'home', loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule) },
-  // { path: 'entradas-salidas', loadChildren: () => import('./pages/entradas-salidas/entradas-salidas.module').then(m => m.EntradasSalidasPageModule) },
-  // { path: 'busqueda-etiquetas', loadChildren: () => import('./pages/busqueda-etiquetas/busqueda-etiquetas.module').then(m => m.BusquedaEtiquetasPageModule) },
-  { path: 'consulta-stock', loadChildren: () => import('./pages/consulta-stock/consulta-stock.module').then(m => m.ConsultaStockPageModule) },
-  // { path: 'nueva-solicitud', loadChildren: () => import('./pages/nueva-solicitud/nueva-solicitud.module').then(m => m.NuevaSolicitudPageModule) },
-  // { path: 'consulta-solicitud', loadChildren: () => import('./pages/consulta-solicitud/consulta-solicitud.module').then(m => m.ConsultaSolicitudPageModule) },
-  // { path: 'identificacion-residuos', loadChildren: () => import('./pages/identificacion-residuos/identificacion-residuos.module').then(m => m.IdentificacionResiduosPageModule) },
-  // { path: 'detalle-etiqueta', loadChildren: () => import('./pages/detalle-etiqueta/detalle-etiqueta.module').then(m => m.DetalleEtiquetaPageModule) },
-  // { path: 'detalle-solicitud', loadChildren: () => import('./pages/detalle-solicitud/detalle-solicitud.module').then(m => m.DetalleSolicitudPageModule) },
-  { path: 'nueva-recogida', loadChildren: () => import('./pages/nueva-recogida/nueva-recogida.module').then( m => m.NuevaRecogidaPageModule) },
-  { path: 'operativas-realizadas', loadChildren: () => import('./pages/operativas-realizadas/operativas-realizadas.module').then( m => m.OperativasRealizadasPageModule) },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
-    path: 'pesar-raees',
-    loadChildren: () => import('./pages/pesar-raees/pesar-raees.module').then( m => m.PesarRaeesPageModule)
-  },
-  {
-    path: 'nueva-recepcion',
-    loadChildren: () => import('./pages/nueva-recepcion/nueva-recepcion.module').then( m => m.NuevaRecepcionPageModule)
-  },
-  {
-    path: 'nueva-entrega',
-    loadChildren: () => import('./pages/nueva-entrega/nueva-entrega.module').then( m => m.NuevaEntregaPageModule)
-  },
-  {
-    path: 'nueva-entrega-directa',
-    loadChildren: () => import('./pages/nueva-entrega-directa/nueva-entrega-directa.module').then( m => m.NuevaEntregaDirectaPageModule)
-  },
-  {
-    path: 'reutilizaciones',
-    loadChildren: () => import('./pages/reutilizaciones/reutilizaciones.module').then( m => m.ReutilizacionesPageModule)
-  },
-  {
-    path: 'cambio-password',
-    loadChildren: () => import('./pages/cambio-password/cambio-password.module').then( m => m.CambioPasswordPageModule)
-  },
-];
-
-/*const routes: Routes = [
-  {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
-  },
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
+    path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
   {
     path: 'busqueda-etiquetas',
@@ -75,10 +31,10 @@ const routes: Routes = [
     path: 'entradas-salidas',
     loadChildren: () => import('./pages/entradas-salidas/entradas-salidas.module').then( m => m.EntradasSalidasPageModule)
   },
-  {
-    path: 'firma',
-    loadChildren: () => import('./pages/firma/firma.module').then( m => m.FirmaPageModule)
-  },
+  // {
+  //   path: 'firma',
+  //   loadChildren: () => import('./pages/firma/firma.module').then( m => m.FirmaPageModule)
+  // },
   {
     path: 'home',
     loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
@@ -88,10 +44,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/identificacion-residuos/identificacion-residuos.module').then( m => m.IdentificacionResiduosPageModule)
   },
   {
-    path: 'login',
-    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
-  },
-  {
     path: 'nueva-solicitud',
     loadChildren: () => import('./pages/nueva-solicitud/nueva-solicitud.module').then( m => m.NuevaSolicitudPageModule)
   },
@@ -99,7 +51,11 @@ const routes: Routes = [
     path: 'visor-img',
     loadChildren: () => import('./pages/visor-img/visor-img.module').then( m => m.VisorImgPageModule)
   },
-];*/
+  {
+    path: 'stock-usuario',
+    loadChildren: () => import('./pages/stock-usuario/stock-usuario.module').then( m => m.StockUsuarioPageModule)
+  },
+];
 
 @NgModule({
   imports: [

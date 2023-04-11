@@ -2,26 +2,7 @@
 
 <ion-content color="medium" padding="padding" fullscreen="fullscreen">
     <ion-grid fixed="fixed">
-
-
-        <!-- {{file.externalRootDirectory}} <br>
-
-        {{exist}} -->
-        
-
-        <div *ngIf="terminal" style="line-height: 32px; padding: 0 20px;">
-            
-            <label style="color: #fff; font-size: 16px;">Terminal: {{terminal}} <br></label>
-
-            <label style="color: #fff; font-size: 16px;">Gestor: {{nombre}} <br></label>
-
-            <label style="color: #fff; font-size: 16px;">Centro: {{direccion}} <br></label>
-
-        </div>
-
-        <!-- <ion-button (click)="takephoto()">CAMARA</ion-button> -->
-
-        <form #formulario="ngForm" *ngIf="!terminal && loaded">
+        <form #formulario="ngForm">
             <ion-row>
 
                 <ion-col size="12">
@@ -42,73 +23,16 @@
             <ion-row>
                 <ion-col size="12" text-center>
                     <ion-button (click)="login()" class="boton" [disabled]="formulario.invalid">
-                        <ion-icon ios="people" md="people"></ion-icon>Acceder</ion-button>
-
-
-                        <!-- <ion-button (click)="photo()" class="boton">
-                        <ion-icon ios="camera" md="camera"></ion-icon>Foto</ion-button> -->
+                        <ion-icon ios="md-people" md="md-people"></ion-icon>Acceder</ion-button>
                 </ion-col>
             </ion-row>
         </form>
-
-
-        <div *ngIf="terminal && loaded">
-            <ion-row>
-
-                <ion-col size="12">
-                    <ion-item lines="none">
-                        <ion-label position="floating">Usuario</ion-label>
-                        <ion-select (ionChange)="changeEvent($event)" [(ngModel)]="usuario_centro">
-                            <ion-select-option *ngFor="let u of usuarios" [value]="u.pidContactoDireccionTercero">{{u.nombre+' '+u.apellidos}}</ion-select-option>
-                        </ion-select>
-                    </ion-item>
-                </ion-col>
-
-                <ion-col size="12">
-                    <ion-item lines="none">
-                        <ion-label position="floating">Contraseña</ion-label>
-                        <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
-                    </ion-item>
-                </ion-col>
-
-            </ion-row>
-            <ion-row>
-                <ion-col size="12" text-center>
-                    <ion-button (click)="acceso()" class="boton">
-                        <ion-icon ios="people" md="people"></ion-icon>Acceder</ion-button>
-
-
-                        <!-- <ion-button (click)="photo()" class="boton">
-                        <ion-icon ios="people" md="people"></ion-icon>Foto</ion-button> -->
-                </ion-col>
-            </ion-row>
-        </div>
     </ion-grid>
-
-    <!-- <div *ngFor="let p of photos; let i = index;">
-        <img [src]="p.render" alt="" style="width: 100px;"> <br>
-
-        <button (click)="deletephoto(i)"></button>
-    </div> -->
-
-    <!-- <ion-row *ngFor="let p of photos; let i = index">
-
-        <ion-col size="12" style="text-align: left;">
-          <img [src]="'data:image/jpeg;base64,'+p.path" alt="" style="border-radius: 65px; height:65px; width:65px"><br>
-          
-        </ion-col>
-      
-    </ion-row>
-
-
-    <input type="file" (change)="upload($event)"> -->
-
-
 </ion-content>
 
 
 <ion-footer no-border>
     <ion-icon class="izquierda" name="help-circle-outline" (click)="abrir()"></ion-icon>
     <img class="imgLogin" src="../../../assets/img/logo-ecolec.png">
-    <p style="position: absolute;top: 2px;right: 15px;"> V {{consultas.actualV}}</p>
+    <p style="position: absolute;top: 2px;right: 15px;">{{message}} V 1.0.0</p>
 </ion-footer>

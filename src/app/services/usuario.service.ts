@@ -24,76 +24,27 @@ export class UsuarioService {
     private alertCtrl: AlertController,
     private translate: TranslateService,
     private loadingCtrl: LoadingController) {
-      this.storage.create();
-    }
+    this.storage.create();
+  }
 
   login(usuario: string, password: string) {
     return this.http.post(apiUrl + '/users/login', { Login: usuario, Password: password }, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
   }
-  loginWithId(id: number, password:string, dt: number) {
-    return this.http.post(apiUrl + '/users/loginWithId', { Id: id, Password: password, Dt: dt }, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
-      // +id+'/'+dt);
-  }
-
-  getCentro()
-  {
-    return new Promise((resolve)=>{
-
-        this.http.get(apiUrl + '/estado/centro/'+this.usuario.dtercero).subscribe((data:any)=>{
-          console.log(data.centro);
-          if (!data.centro) {
-            return this.getCentro();
-          }
-          this.usuario.centro = data.centro.nombre; // puede ser nombre, verificar luego
-          this.usuario.direccion = data.centro.direccion; // puede ser nombre, verificar luego
-
-          return resolve(true);
-        },err=>{
-          this.getCentro();
-        })
-    })
-  }
 
   async guardarUsuario(token) {
+    this.usuario.id = token.Id;
+    this.usuario.estado = token.Estado;
+    this.usuario.login = token.Login;
+    this.usuario.tipoTercero = token.TipoTercero;
+    this.usuario.tercero = JSON.parse(token.Tercero);
+    this.usuario.centros = JSON.parse(token.Centros);
+    this.usuario.marcas = JSON.parse(token.Marcas);
+    this.usuario.perfiles = JSON.parse(token.Perfiles);
+    this.usuario.residuos = JSON.parse(token.Residuos);
+    this.storage.set('usuario', this.usuario);
+    this.storage.set('login', this.usuario.login);
 
-    return new Promise(async (resolve)=>{
-
-      if (localStorage.getItem('config')) {
-        let cf = JSON.parse(localStorage.getItem('config'));
-
-        this.usuario.dtercero = cf.centro;
-        this.usuario.terminal = cf.pda.padStart(4, '0');
-        this.usuario.sidsig = cf.sidsig;
-      }else{
-        this.usuario.dtercero = JSON.parse(token.DTercero);
-        this.usuario.terminal = token.Terminal.padStart(4, '0');
-        this.usuario.sidsig = JSON.parse(token.SidSIG);
-      }
-
-      await this.getCentro();
-
-      this.http.get(apiUrl + '/residuo/getResiduos/'+this.usuario.dtercero).subscribe((data:any)=>{
-        console.log('residuos',data);
-
-        this.usuario.id = token.Id;
-        this.usuario.estado = token.Estado;
-        this.usuario.login = token.Login;
-        // this.usuario.tipoTercero = token.TipoTercero;
-
-        this.usuario.tercero = JSON.parse(token.Tercero);    
-        this.usuario.responsabilidades = JSON.parse(token.Resps);
-        this.usuario.centros = JSON.parse(token.Centros);
-        this.usuario.marcas = JSON.parse(token.Marcas);
-        // this.usuario.perfiles = JSON.parse(token.Perfiles);
-        this.usuario.residuos = data.residuos;
-        this.usuario.direccionTercero = data.direccion;
-        // this.usuario.direcciones = JSON.parse(token.Direcciones).DireccionesTerceros;
-        this.storage.set('usuario', this.usuario);
-        this.storage.set('login', this.usuario.login);
-
-        resolve(true);
-      })
-    })
+    console.log(this.usuario);
   }
 
   async guardarToken(token) {

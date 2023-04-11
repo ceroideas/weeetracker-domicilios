@@ -15,15 +15,6 @@ export class Usuario{
 
     tercero:Tercero;
 
-    centro:string;
-    direccion:string;
-
-    dtercero:string;
-    terminal:string;
-    sidsig:string;
-
-    responsabilidades:any;
-
     tipoTercero:number;
 
     estado:number;
@@ -35,8 +26,4 @@ export class Usuario{
     centros:Centro[];
 
     residuos:ResiduoEspecifico[];    
-
-    direcciones:any;
-    
-    direccionTercero:any;
 }

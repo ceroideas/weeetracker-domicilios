@@ -1,0 +1,97 @@
+<app-header titulo="Busqueda de etiquetas"></app-header>
+
+<ion-content padding color="medium"  fullscreen="fullscreen">
+
+<!-- Busqueda -->
+<form  [formGroup]="myForm" #formulario="ngForm" novalidate>
+  <ion-grid *ngIf="!etiquetasAlbaran">
+      <ion-row>
+        
+        <ion-col size="9">
+          <ion-item lines="none">
+            <ion-label position="floating">Etiqueta:</ion-label>
+            <ion-input [disabled]="myForm.get('albaran').status == 'VALID'" type="text" formControlName="etiqueta"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="3">
+            <ion-buttons >
+              <ion-button [disabled]="myForm.get('albaran').status == 'VALID'"  (click)="limpiar('etiqueta')">
+                <i class="far fa-trash-alt"></i>
+              </ion-button>
+              <ion-button [disabled]="myForm.get('albaran').status == 'VALID'" (click)="lector('etiqueta')">
+                <i class="fas fa-barcode"></i>
+              </ion-button>
+            </ion-buttons> 
+        </ion-col>
+        <p class="error" ion-text *ngIf="myForm.get('etiqueta').hasError('pattern')">{{ 'FORMULARIO.LONGITUD' | translate:{value : '17'} }}</p>
+        <p class="error" ion-text *ngIf="myForm.get('etiqueta').hasError('required') && myForm.get('etiqueta').touched;">{{ 'FORMULARIO.REQUERIDO' | translate }}</p>   
+
+        <ion-col size="9">
+            <ion-item lines="none">
+              <ion-label position="floating">Albarán:</ion-label>
+              <ion-input [disabled]="myForm.get('etiqueta').status == 'VALID'" type="text" formControlName="albaran"></ion-input>
+            </ion-item>
+        </ion-col>
+        <ion-col size="3">
+            <ion-buttons >
+              <ion-button [disabled]="myForm.get('etiqueta').status == 'VALID'" (click)="limpiar('albaran')">
+                <i class="far fa-trash-alt"></i>
+              </ion-button>
+              <ion-button [disabled]="myForm.get('etiqueta').status == 'VALID'" (click)="lector('albaran')">
+                <i class="fas fa-barcode"></i>
+              </ion-button>
+            </ion-buttons> 
+        </ion-col>
+        
+      </ion-row>
+      
+      <ion-row class="buscar">
+        <ion-col >
+          <ion-button class="boton" [disabled]="myForm.get('etiqueta').status != 'VALID' && myForm.get('albaran').status != 'VALID'" (click)="buscar()">Buscar</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+</form>
+ 
+<ion-grid *ngIf="etiquetasAlbaran">
+    <ion-row>
+        <ion-col size="12">
+          <ion-item lines="none">
+            <ion-label position="floating" style="margin-right: 5%;" >Albarán:</ion-label>
+            <ion-input type="number" disabled>{{ myForm.get('albaran').value }}</ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12">
+            <ion-grid class="tabla">
+              <ion-row class="cabecera">
+                <ion-col>
+                  Etiqueta
+                </ion-col>
+              </ion-row>
+              <!-- Completar con datos reales -->
+              <ion-row class="filas" [ngClass]="{'marcada': i == listaEtiqueta}" *ngFor="let item of residuos; let i = index;" (click)="detalleEtiqueta(i)">
+                <ion-col>
+                   {{ item.pidRaee }}
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-col>
+          <ion-col size="12" text-center>
+            <ion-button class="boton" [disabled]="!detalleEtiquetakBtn" (click)="verEtiqueta()">Ver detalle</ion-button>
+          </ion-col>
+      </ion-row>
+</ion-grid>
+
+</ion-content>
+
+<ion-footer no-border>
+      <ion-buttons >
+        <ion-button class="izquierda" *ngIf="!etiquetasAlbaran" style="padding-left: 15px;" (click)="atras()">
+          <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+        </ion-button>
+        <ion-button class="izquierda" *ngIf="etiquetasAlbaran" style="padding-left: 15px;" (click)="etiquetasAlbaran = false">
+          <span><ion-img src="../../assets/img/Atras.png"></ion-img></span>
+        </ion-button>
+      </ion-buttons>
+      <img src="../../../assets/img/logo-ecolec.png">
+  </ion-footer>

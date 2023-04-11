@@ -8,6 +8,8 @@ export class Identificacion{
 
     Nombre : string;
 
+    DNI : string;
+
     ListaArchivos : ListaArchivos[] = [];
 
     Etiqueta : string;

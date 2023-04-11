@@ -1,0 +1,69 @@
+form ion-buttons{
+    height: 100%;
+    position:relative;
+    margin-left: 10%;
+}
+form .albaran ion-button{
+    position: relative;
+    bottom: -10px;
+    font-size: 25px;
+}
+
+ion-icon{
+    font-size:10vw !important;
+}
+ion-buttons ion-button{
+    font-size: 5vw;
+    height: 5vh;
+}
+
+form .iconos{
+    height: 100%;
+    position:relative;
+    margin-left: 10%;
+}
+form ion-buttons ion-button{
+    position: relative;
+    bottom: -23%;
+    font-size: 5vw;
+    height: 5vh;
+}
+.cantidad ion-input{
+    margin-left: 10px;
+}
+.tablaDatos ion-col {
+    height: 10vw;
+    position: relative;
+}
+ion-button{
+    font-weight: bold;
+}
+ion-item{
+    margin: 2% 0 0 0;
+}
+.boton {
+    min-width: 50%;
+    max-width: 60%;
+    font-size: 4vw !important;
+    min-height: 6vh;
+    margin-top: 2%;
+}
+.boton2{
+    max-width: 100%;
+    font-size: 4vw !important;
+    min-height: 6vh;
+    position: relative;
+    bottom: -45%;
+}
+.tablaDatos span{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.tablaDatos ion-button {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

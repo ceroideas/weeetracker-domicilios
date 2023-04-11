@@ -3,16 +3,16 @@ ion-item{
     --background: transparent !important;
 }
 
-.izquierda{
-    position: absolute;
-    top: 40px !important;
-    left: 15px;
-}
-.derecha{
-    position: absolute;
-    top: 25px !important;
-    right: 15px;
-}
+// .izquierda{
+//     position: absolute;
+//     top: 40px !important;
+//     left: 15px;
+// }
+// .derecha{
+//     position: absolute;
+//     top: 25px !important;
+//     right: 15px;
+// }
 
 ion-label{
     font-size: 4vw !important;
@@ -53,3 +53,4 @@ and (-webkit-device-pixel-ratio : 3) {
         top: 25px !important;
     }
 }
+

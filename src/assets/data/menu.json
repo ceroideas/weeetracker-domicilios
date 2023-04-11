@@ -113,5 +113,14 @@
                 "RedirecTo": "/consulta-solicitud"
             }
         ]
+    },
+    {
+        "Icon": "",
+        "Img": "../../assets/img/Consulta-solicitud.png",
+        "Name": "Stock Usuario",
+        "SidPerfil": [
+            "S"
+        ],
+        "RedirecTo": "/stock-usuario"
     }
 ]
